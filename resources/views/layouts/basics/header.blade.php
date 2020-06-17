@@ -20,4 +20,8 @@
 	<link href="{{ asset('ansta/plugins/toggle-sidebar/css/sidemenu.css') }}" rel="stylesheet">
     <!-- Preloader CSS
 		============================================ -->
-    <link rel="stylesheet" href="{{ asset('css/preloader/preloader-style.css')}}">
+	<link rel="stylesheet" href="{{ asset('css/preloader/preloader-style.css')}}">
+	@guest
+	<link href="{{ asset('fonts/montserrat/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap')}}" rel="stylesheet">
+		<link rel="stylesheet" href="{{ asset('css/login.css')}}">
+	@endguest
