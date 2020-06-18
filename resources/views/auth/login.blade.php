@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-7 col-md-7 col-sm-none">
+<div class="row">
+    <div class="col-lg-8 col-md-7 col-sm-none">
+        <div class="login-r">
             <h1 class="">AMIS</h1>
             <h1 class="amis-lcase">Academic Management Information System</h1>
             <p>Ardhi University Academic Management System is a system created to enable management of various academic management information.</p>
@@ -14,19 +14,19 @@
                 <li>Students Financial Records Management</li>
             </ul>
         </div>
-        <div class="col-lg-5 col-md-7 col-sm-5">
-            <div>
-                <label for="username">Username <span>*</span></label>
-                <input type="text" id="username" class="form-control">
-            </div>
-            <div>
-                <label for="password">Password <span>*</span></label>
-                <input type="password" id="password" class="form-control">
-            </div>
-            <div class="pt-20">
-                <a href="#" class="btn btn-primary">Login <span class="ion-locked"></span></a>
-                <a href="#" class="btn btn-secondary">Student's help <span class="ion-help-circled"></span></a>
-            </div>
+    </div>
+    <div class="col-lg-4 col-md-7 col-sm-5">
+        <div>
+            <label for="username">Username <span class="text-red">*</span></label>
+            <input type="text" id="username" class="form-control">
+        </div>
+        <div>
+            <label for="password">Password <span class="text-red">*</span></label>
+            <input type="password" id="password" class="form-control">
+        </div>
+        <div class="pt-20">
+            <a href="#" class="btn btn-primary">Login <span class="ion-locked"></span></a>
+            <a href="#" class="btn btn-secondary">Student's help <span class="ion-help-circled"></span></a>
         </div>
     </div>
 </div>

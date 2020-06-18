@@ -4,6 +4,7 @@
     <a class="navbar-brand pt-0 d-md-none" href="index-2.html">
         <img src="{{asset('img/logo/aruLogo.png')}}" class="navbar-brand-img" alt="...">
     </a>
+    @auth
     <!-- Form -->
     <form class="navbar-search navbar-search-dark form-inline mr-3  ml-lg-auto">
         <div class="form-group mb-0">
@@ -115,7 +116,6 @@
                 <a href="#" class="dropdown-item text-center">View all Notification</a>
             </div>
         </li>
-        @auth
         <li class="nav-item dropdown">
             <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-md-0" data-toggle="dropdown" href="#" role="button">
             <div class="media align-items-center">
