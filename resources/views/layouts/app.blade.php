@@ -43,7 +43,7 @@
 		<div class="page-main">
 			@auth
             <!-- Sidebar menu-->
-            <aside class="app-sidebar ">
+            <aside class="app-sidebar">
                 @include('layouts.basics.side-nav')
             </aside>
             <!-- Sidebar menu-->
