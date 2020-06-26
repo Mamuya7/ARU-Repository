@@ -68,7 +68,7 @@
 					<div class="main-content">
 
 						<!-- Page content -->
-						<div class="container-fluid pt-8">
+						<div class="container-fluid pt-6">
 							<div class="page-header mt-0 shadow p-3">
 								<ol class="breadcrumb mb-sm-0">
 									<li class="breadcrumb-item"><a href="#">Apps</a></li>

@@ -6011,12 +6011,14 @@ a.bg-darker:hover, a.bg-darker:focus, button.bg-darker:hover, button.bg-darker:f
 .px-5 {
   padding-left: 3rem !important;
 }
-
-.pt-8, .py-8 {
-    padding-top: 8rem !important;
+.pt-6, .py-6 {
+    padding-top: 6rem !important;
 }
 .pt-7, .py-7 {
     padding-top: 7rem !important;
+}
+.pt-8, .py-8 {
+    padding-top: 8rem !important;
 }
 .text-monospace {
 	font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;

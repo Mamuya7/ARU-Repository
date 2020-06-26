@@ -6,12 +6,10 @@
     flex-direction: row;
     justify-content: space-evenly;
 }
-/* .navbar-top-title{
-    width: 568px;
-    display: flex;
-    flex-direction: column;
+.navbar-top-title{
+    font-weight: 900;
 }
-.navbar-top-logo{
+/* .navbar-top-logo{
     width: 200px;
 } */
 .top-navbar{
