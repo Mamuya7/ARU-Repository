@@ -15,9 +15,10 @@ class CreateSchoolsTable extends Migration
     {
         Schema::create('schools', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('schl_name');
-            $table->string('schl_code');
-            $table->timestamps();
+            $table->string('name');
+            $table->string('code');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 

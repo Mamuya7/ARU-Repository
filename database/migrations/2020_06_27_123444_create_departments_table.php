@@ -15,11 +15,12 @@ class CreateDepartmentsTable extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('department_name');
-            $table->string('department_code');
+            $table->string('name');
+            $table->string('code');
             $table->bigInteger('school_id')->unsigned();
             $table->foreign('school_id')->references('id')->on('schools');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 

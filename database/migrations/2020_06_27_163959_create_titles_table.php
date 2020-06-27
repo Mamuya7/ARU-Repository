@@ -15,10 +15,11 @@ class CreateTitlesTable extends Migration
     {
         Schema::create('titles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title_name');
-            $table->string('title_rank');
-            $table->string('level');
-            $table->timestamps();
+            $table->string('name');
+            $table->string('rank');
+            $table->integer('level');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 

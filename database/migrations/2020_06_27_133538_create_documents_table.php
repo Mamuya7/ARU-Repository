@@ -17,8 +17,9 @@ class CreateDocumentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('url',255);
             $table->string('type');
-            $table->bigInteger('doc_id')->unsigned()->nullable();
-            $table->timestamps();
+            $table->bigInteger('reference_id')->unsigned()->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 

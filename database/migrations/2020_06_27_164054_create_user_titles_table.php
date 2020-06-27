@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRoleUserTable extends Migration
+class CreateUserTitlesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateRoleUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('role_user', function (Blueprint $table) {
+        Schema::create('user_titles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('role_id')->unsigned();
+            $table->bigInteger('title_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('title_id')->references('id')->on('titles');
             $table->timestamp('created_at')->useCurrent();
-            $table->foreign('user_Id')->references('id')->on('users');
-            $table->foreign('role_id')->references('id')->on('roles');
-            
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 
@@ -31,6 +31,6 @@ class CreateRoleUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('role_user');
+        Schema::dropIfExists('user_titles');
     }
 }
