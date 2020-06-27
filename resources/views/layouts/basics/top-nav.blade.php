@@ -26,7 +26,7 @@
                     <div class="media align-items-center">
                         <span class="avatar avatar-sm rounded-circle"><img alt="Image placeholder" src="assets/img/faces/female/32.jpg"></span>
                         <div class="media-body ml-2 d-none d-lg-block">
-                            <span class="mb-0 ">{{Auth::user()->name}}</span>
+                            <span class="mb-0 ">{{Auth::user()->last_name}}</span>
                         </div>
                     </div></a>
                     <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
