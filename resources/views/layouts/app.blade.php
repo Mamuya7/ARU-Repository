@@ -85,6 +85,7 @@
 									</div>
 								</div>
 							</div>
+							{{Auth::User()}}
                             @yield('content')
 							<!-- Footer -->
 							<footer class="footer">
