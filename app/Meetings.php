@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Meetings extends Model
 {
-    //
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'meeting_title', 'meeting_description', 'document_id',
+    ];
 }
