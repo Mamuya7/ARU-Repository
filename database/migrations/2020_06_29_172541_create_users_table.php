@@ -29,6 +29,8 @@ class CreateUsersTable extends Migration
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('department_id')->references('id')->on('departments');
         });
+
+        DB::update("ALTER TABLE users AUTO_INCREMENT = 1000;");
     }
 
     /**
