@@ -1,0 +1,11 @@
+.cursor-default{
+    cursor: default;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.hover-warning:hover{
+    background-color: #e67e22;
+    color:#fff;
+}

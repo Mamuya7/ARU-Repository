@@ -20,3 +20,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('create_meeting','MeetingsController@create');
+Route::get('view_meeting','MeetingsController@index');
+Route::post('store_meeting','MeetingsController@store');
+Route::post('show_meeting','MeetingsController@show');

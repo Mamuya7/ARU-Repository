@@ -12,6 +12,6 @@ class UserRoles extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id','role_id',
+        'id','user_id','role_id',
     ];
 }

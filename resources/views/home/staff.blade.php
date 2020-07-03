@@ -2,10 +2,10 @@
 
 @section('content')
 @foreach(Auth::User()->roles as $role)
-    <div class="bg-warning">{{$role->role_name}}</div>
+    {{$role->pivot->id}}
 @endforeach
 @if(Auth::User()->hasRole('dean'))
-    <div class="bg-primary">yes</div>
+    
 @endif
 <div class="row">
     <div class="col-md-6 col-lg-6 col-xl-3">
