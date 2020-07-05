@@ -7,6 +7,9 @@
 	<!--Bootstrap.min css-->
 	<link rel="stylesheet" href="{{ asset('ansta/plugins/bootstrap/css/bootstrap.min.css') }}">
 
+    <!-- Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 	<!-- Dashboard CSS -->
 	<link href="{{ asset('ansta/css/dashboard.css') }}" rel="stylesheet" type="text/css">
 
@@ -23,6 +26,10 @@
 	<link rel="stylesheet" href="{{ asset('css/preloader/preloader-style.css')}}">
 	<link rel="stylesheet" href="{{ asset('css/top-nav.css')}}">
 	<link rel="stylesheet" href="{{ asset('css/staff.css')}}">
+
+	<!-- form Uploads -->
+	<link href="{{ asset('ansta/plugins/fileuploads/css/dropify.css')}}" rel="stylesheet" type="text/css" />
+
 	@guest
 	<link href="{{ asset('fonts/montserrat/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap')}}" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('css/login.css')}}">

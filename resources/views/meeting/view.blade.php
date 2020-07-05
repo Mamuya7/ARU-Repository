@@ -7,11 +7,24 @@
     </div>
     <div>
         @foreach($meetings as $meeting)
-            <div class="card border-warning p-2 m-1 cursor-default hover-warning">
-                <div class="text-lg text-uppercase">{{$meeting->meeting_title}}</div>
-                <div>{{$meeting->meeting_description}}</div>
-            </div>
+            <form action="show_meeting/{{$meeting->meeting_id}}" method="post" class="cursor-default meeting">
+                @csrf
+                <div class="card border-warning p-2 m-1 hover-warning">
+                    <div class="text-lg text-uppercase">{{$meeting->meeting_title}}</div>
+                    <div>{{$meeting->meeting_description}}</div>
+                </div>
+            </form>
         @endforeach
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function(){
+            $('.meeting').click(function(){
+                $(this).trigger('submit');
+            });
+        });
+    </script>
 @endsection

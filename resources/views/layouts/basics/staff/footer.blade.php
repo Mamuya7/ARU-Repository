@@ -33,3 +33,6 @@
 
 <!-- Ansta JS -->
 <script src="{{ asset('ansta/js/custom.js') }}"></script>
+
+<!-- file uploads js -->
+<script src="{{ asset('ansta/plugins/fileuploads/js/dropify.min.js')}}"></script>

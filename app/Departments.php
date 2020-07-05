@@ -15,7 +15,7 @@ class Departments extends Model
         'department_name', 'department_code', 'school_id'
     ];
 
-    public function users()
+    public function user()
     {
         return $this->hasMany('App\User');
     }

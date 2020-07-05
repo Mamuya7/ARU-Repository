@@ -30,6 +30,7 @@ class MeetingsController extends Controller
                         ->join('meeting_members','meetings.id','=','meeting_members.meeting_id')
                         ->join('user_roles','meeting_members.member_role_id','=','user_roles.id')
                         ->join('roles','user_roles.role_id','=','roles.id')
+                        ->select('meetings.id as meeting_id','meetings.meeting_title','meetings.meeting_description')
                         ->where('user_roles.user_id','=',Auth::User()->id)
                         ->get();
 
@@ -85,7 +86,26 @@ class MeetingsController extends Controller
      */
     public function show(Meetings $meetings)
     {
-        //
+        $members = DB::table('users')
+                        ->join('user_roles','users.id','=','user_roles.user_id')
+                        ->join('roles','user_roles.role_id','=','roles.id')
+                        ->join('meeting_members','user_roles.id','=','meeting_members.member_role_id')
+                        ->select('users.first_name','users.last_name','roles.role_name','user_roles.user_id', 'meeting_members.position')
+                        ->where('meeting_members.meeting_id',$meetings->id)
+                        ->get();
+        $creator = DB::table('users')
+                        ->select('users.first_name','users.last_name')
+                        ->where('users.id',$meetings->user_id)
+                        ->get();
+
+        $meetings->setMembers($members);
+        $chair = $meetings->getChairman();
+        $secr = $meetings->getSecretary();
+        $chairman = ($chair === null)? 'Not Selected': $chair->last_name.' '.$chair->first_name;
+        $secretary = ($secr === null)? 'Not Selected': $secr->last_name.' '.$secr->first_name;
+
+        return view('meeting.show',["meeting" => $meetings, "members" => $members, "creator" => $creator[0],
+         'chairman' => $chairman, 'secretary' => $secretary]);
     }
 
     /**

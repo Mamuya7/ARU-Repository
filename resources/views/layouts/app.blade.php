@@ -20,8 +20,6 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <!-- Styles -->
-    <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
     @endguest
 	
     @include('layouts.basics.staff.header')
@@ -109,5 +107,9 @@
 		</div>
 	</div>
     @include('layouts.basics.staff.footer')
+
+	@if(View::hasSection('scripts'))
+		@yield('scripts')
+	@endif
 </body>
 </html>

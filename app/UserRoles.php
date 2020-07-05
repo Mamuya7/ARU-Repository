@@ -14,4 +14,10 @@ class UserRoles extends Model
     protected $fillable = [
         'id','user_id','role_id',
     ];
+
+    public function userRoles()
+    {
+        return $this->belongsToMany('App\Meetings','meeting_members','member_role_id','meeting_id')
+                    ->withPivot('id');
+    }
 }

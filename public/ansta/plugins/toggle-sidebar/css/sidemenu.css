@@ -147,7 +147,7 @@
 	transition: background-color 0.3s ease;
 }
 .app-sidebar__toggle:hover, .app-sidebar__toggle:focus{
-	color:#00c3ed;
+	color:#e67e22;
 }
 @media (max-width: 767px) {
 	.app-sidebar__toggle {
@@ -381,7 +381,7 @@
 }
 .side-menu li a.side-menu__item:hover{
 	color:#f8f9fe;
-	background: #00c3ed;
+	background: #e67e22;
 }
 .side-menu li a.side-menu__item:hover .angle{
 	color:#f8f9fe;
@@ -440,7 +440,7 @@
 }
 .slide.is-expanded [data-toggle='slide'] {}
 .slide.is-expanded li a:hover {
-	background: #00c3ed;
+	background: #e67e22;
 	color:#fff;
 }
 .slide.is-expanded li a:hover .side-menu__icon{
@@ -450,7 +450,7 @@
 	color:#fff;
 }
 .slide a:hover{
-	background: #00c3ed;
+	background: #e67e22;
 }
 
 .slide.is-expanded .slide-menu {
@@ -485,7 +485,7 @@
 .slide-item.active, .slide-item:hover, .slide-item:focus {
 	text-decoration: none;
 	color: rgba(255,255,255) !important;
-    background-color:#00c3ed;
+    background-color:#e67e22;
 }
 .slide-item .icon {
 	margin-right: 5px;
