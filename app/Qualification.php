@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Documents extends Model
+class Qualification extends Model
 {
      /**
      * The attributes that are mass assignable.
@@ -12,12 +12,12 @@ class Documents extends Model
      * @var array
      */
     protected $fillable = [
-        'document_type', 'document_url',
+        'name', 'code',
     ];
 
     public function meetings()
     {
-        return $this->belongsToMany('App\Meetings','meeting_documents','document_id','meeting_id');
+        return $this->belongsToMany('App\Meetings','meeting_qualifications','qualification_id','meeting_id');
     }
 
 }

@@ -50,6 +50,12 @@ class User extends Authenticatable
         return $this->belongsTo('App\Departments');
     }
 
+    public function meetings()
+    {
+        return $this->belongsToMany('App\Meetings','meeting_boards','member_id','meeting_id')
+                    ->withPivot('id','position');
+    }
+
     public function hasRole($role)
     {
         foreach (Auth::User()->roles as $value) {

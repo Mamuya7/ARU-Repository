@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDocumentsTable extends Migration
+class CreateMeetingBoardsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class CreateDocumentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('meeting_boards', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->enum('document_type',['minutes']);
-            $table->string('document_url');
+            $table->bigInteger('meeting_id')->unsigned();
+            $table->bigInteger('member_id')->unsigned();
+            $table->enum('position',['chairman','secretary','member'])->default('member');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->foreign('meeting_id')->references('id')->on('meetings');
+            $table->foreign('member_id')->references('id')->on('users');
         });
     }
 
@@ -29,6 +32,6 @@ class CreateDocumentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('meeting_boards');
     }
 }

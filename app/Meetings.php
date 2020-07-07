@@ -17,10 +17,20 @@ class Meetings extends Model
 
     protected $members = null;
 
-    public function userRoles()
+    public function users()
     {
-        return $this->belongsToMany('App\UserRoles','meeting_members','meeting_id','member_role_id')
-                    ->withPivot('id');
+        return $this->belongsToMany('App\User','meeting_boards','meeting_id','member_id')
+                    ->withPivot('id','position');
+    }
+
+    public function qualifications()
+    {
+        return $this->belongsToMany('App\Qualification','meeting_qualifications','meeting_id','qualification_id');
+    }
+
+    public function documents()
+    {
+        return $this->belongsToMany('App\Documents','meeting_documents','meeting_id','document_id');
     }
 
     public function setMembers($value)
