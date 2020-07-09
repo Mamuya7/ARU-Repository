@@ -1,0 +1,22 @@
+.amis-lcase{
+    font-family: 'Montserrat', sans-serif;
+}
+.login-r{
+    padding-left: 60px;
+    padding-right: 60px;
+}
+.login-container{
+    padding-top: 3rem;
+    padding-right: 2rem;
+}
+.login-form{
+    padding-left: 1rem;
+}
+.login-form form div{
+    margin-bottom: .800rem;
+}
+@media(max-width: 768px){
+    .login-r{
+        display: none;
+    }
+}

@@ -24,7 +24,7 @@
     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
     @endguest
 	
-    @include('layouts.basics.staff.header')
+    @include('layouts.basics.admin.header')
 </head>
 <body>
     <div id="global-loader" >
@@ -44,7 +44,7 @@
 			@auth
             <!-- Sidebar menu-->
             <aside class="app-sidebar">
-                @include('layouts.basics.staff.side-nav')
+                @include('layouts.basics.admin.side-nav')
             </aside>
             <!-- Sidebar menu-->
 			@endauth
@@ -108,6 +108,6 @@
     		@endauth
 		</div>
 	</div>
-    @include('layouts.basics.staff.footer')
+    @include('layouts.basics.admin.footer')
 </body>
 </html>

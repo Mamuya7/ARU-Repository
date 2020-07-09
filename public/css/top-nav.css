@@ -1,0 +1,33 @@
+
+.nav-head-bar{
+    width: 769px;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.navbar-top-title{
+    font-weight: 900;
+}
+/* .navbar-top-logo{
+    width: 200px;
+} */
+.top-navbar{
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+@media(max-width: 768px){
+    .nav-head-bar .navbar-top-title{
+        display: none;
+    }
+
+    .nav-head-bar .navbar-top-logo{
+        justify-content: center;
+    }
+
+    .navbar-top {
+        border-bottom: none;
+    }
+}
