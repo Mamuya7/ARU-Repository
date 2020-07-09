@@ -22,4 +22,10 @@ class Roles extends Model
                     ->withPivot('id')
                     ->withTimestamps();
     }
+
+    public function meetings()
+    {
+        return $this->belongsToMany('App\Meeting','meeting_roles','role_id','meeting_id')
+                    ->withPivot('id');
+    }
 }

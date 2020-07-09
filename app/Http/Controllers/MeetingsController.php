@@ -44,7 +44,9 @@ class MeetingsController extends Controller
      */
     public function create()
     {
-        return view('meeting.create');
+        $roles = DB::table('roles')->get();
+
+        return view('meeting.create',['roles' => $roles]);
     }
 
     /**
@@ -66,16 +68,27 @@ class MeetingsController extends Controller
                             )
                     );
 
-            DB::table('meeting_members')->insertGetId(
+            DB::table('meeting_boards')->insertGetId(
                 array(
                     "meeting_id" => $meeting_id,
-                    "member_role_id" => $meeting['role'],
+                    "member_id" => $meeting['role'],
                     "position" => "chairman"
                 )
             );
+
+            $meeting_roles = array();
+            foreach ($meeting['qualifications'] as $value) {
+                $meeting_roles->array_push(
+                    array(
+                    "meeting_id" => $meeting_id,
+                    "role_id" => $value
+                ));
+            }
+            
+            DB::table('meeting_roles')->insertGetId($meeting_roles);
         });
         
-        return back();
+        return back()->with('output',$meeting['qualifications']);
     }
 
     /**
@@ -140,5 +153,13 @@ class MeetingsController extends Controller
     public function destroy(Meetings $meetings)
     {
         //
+    }
+
+    public function fetch()
+    {
+        $schools = DB::table('schools')->get();
+        $departments = DB::table('departments')->get();
+
+        echo json_encode(["schools" => $schools, "departments" => $departments]);
     }
 }

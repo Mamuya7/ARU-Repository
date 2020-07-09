@@ -28,6 +28,12 @@ class Meetings extends Model
         return $this->belongsToMany('App\Qualification','meeting_qualifications','meeting_id','qualification_id');
     }
 
+    public function roles()
+    {
+        return $this->belongsToMany('App\Roles','meeting_roles','meeting_id','role_id')
+                    ->withPivot('id');
+    }
+
     public function documents()
     {
         return $this->belongsToMany('App\Documents','meeting_documents','meeting_id','document_id');
