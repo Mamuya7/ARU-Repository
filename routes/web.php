@@ -19,4 +19,23 @@ Route::get('/', function () {
 
 Auth::routes();
 
+
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+
+Route::get('AddDepartment', 'DepartmentsController@create')->name('AddDepartment');
+Route::post('storeDepartment','DepartmentsController@store');
+Route::get('showDepartment', 'DepartmentsController@show')->name('ShowDepartment');
+Route::delete('deletedepartment/{departments}','DepartmentsController@destroy');
+Route::post('editDepartment/{departments}','DepartmentsController@edit');
+
+
+Route::get('showschools','SchoolsController@index')->name('showschools');
+Route::get('AddSchool', 'SchoolsController@create')->name('AddSchool');
+Route::post('storeschools', 'SchoolsController@store');
+Route::delete('deleteschool/{schools}','SchoolsController@destroy');
+Route::post('editSchool/{schools}','SchoolsController@edit');
+
+
+// Route::get('showUser','User')
