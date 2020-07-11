@@ -14,40 +14,33 @@
                         <label for="description">Description</label>
                         <textarea id="description" cols="30" rows="8" name="description" class="form-control"></textarea>
                     </div>
+                    @if(Auth::User()->hasBothRoles('head','dean'))
                     <div class="pt-0 pr-3 pl-3 pb-3">
-                        <label for="category">Category</label>
-                        <select name="category" id="category" class="form-control">
+                        <label for="chairman">Chairman As</label>
+                        <select name="chairman" id="chairman" class="form-control">
                             <option value="null" selected disabled></option>
-                            <option value="1">Senate Meeting</option>
-                            <option value="2">School Meeting</option>
-                            <option value="3">Department Meeting</option>
-                            <option value="4">Inter-Department Meeting</option>
-                            <option value="5">Special Meeting</option>
-                            <!-- @foreach(Auth::User()->roles as $role)
-                            <option value="{{$role->pivot->id}}">{{$role->role_name}}</option>
-                            @endforeach -->
+                            @foreach(Auth::User()->roles as $role)
+                            <option value="{{$role->pivot->id}}">{{$role->role_name .'('. $role->role_code .')'}}</option>
+                            @endforeach
                         </select>
                     </div>
-                    <div class="pt-0 pr-3 pl-3 pb-3">
-                        <label for="entity">Entity</label>
-                        <select name="entity" id="entity" class="form-control">
-                            <option value="null" selected disabled></option>
-                            <!-- @foreach(Auth::User()->roles as $role)
-                            <option value="{{$role->pivot->id}}">{{$role->role_name}}</option>
-                            @endforeach -->
-                        </select>
-                    </div>
+                    @endif
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="pt-0 pr-3 pl-3 pb-3">
+                            <div class="form-group mb-0">
                                 <label for="description">Date</label>
-                                <input type="text" class="form-control">
+                                <div class="input-group ">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                    </div>
+                                    <input id="date" name="date" class="form-control datepicker" placeholder="Select date" type="text" value="{{ date('Y/m/d')}}">
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <div class="pt-0 pr-3 pl-3 pb-3">
-                                <label for="description">Time</label>
-                                <input type="text" class="form-control">
+                                <label for="time">Time</label>
+                                <input type="time" id="time" name="time" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -122,6 +115,14 @@
 
             }
         });
+
+        
+		$('.datepicker').datepicker({
+		 showOtherMonths: true,
+		 selectOtherMonths: true,
+        autoclose: true,
+        format: "yyyy/mm/dd"
+	   });
     });
 </script>
 @endsection

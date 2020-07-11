@@ -46,7 +46,10 @@ class MeetingsController extends Controller
     {
         $roles = DB::table('roles')->get();
 
-        return view('meeting.create',['roles' => $roles]);
+        if(Auth::User()->hasAnyRole(['head','dean'])){
+            return view('meeting.create',['roles' => $roles]);
+        }
+        return redirect('/home');
     }
 
     /**
@@ -62,8 +65,11 @@ class MeetingsController extends Controller
             $meeting_id = DB::table('meetings')
                         ->insertGetId(
                             array(
-                                "meeting_title" => $meeting['agenda'],
+                                "meeting_title" => $meeting['title'],
                                 "meeting_description" => $meeting['description'],
+                                "meeting_date" => $meeting['date'],
+                                "meeting_time" => $meeting['time'],
+                                "meeting_type" => $meeting['category'],
                                 "user_id" => Auth::User()->id
                             )
                     );
@@ -71,7 +77,7 @@ class MeetingsController extends Controller
             DB::table('meeting_boards')->insertGetId(
                 array(
                     "meeting_id" => $meeting_id,
-                    "member_id" => $meeting['role'],
+                    "member_id" => Auth::User()->id,
                     "position" => "chairman"
                 )
             );

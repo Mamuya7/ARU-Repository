@@ -40,7 +40,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany('App\Roles','user_roles','user_id','role_id')
+        return $this->belongsToMany('App\Roles','role_user','user_id','role_id')
                     ->withPivot('id')
                     ->withTimestamps();
     }
@@ -61,6 +61,33 @@ class User extends Authenticatable
         foreach (Auth::User()->roles as $value) {
             if($value->role_name === $role){
                 return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasBothRoles($role1,$role2)
+    {
+        $r1 = false; $r2 = false;
+        foreach (Auth::User()->roles as $value) {
+            if($value->role_name === $role1){
+                $r1 = true;
+            }
+            if($value->role_name === $role2){
+                $r2 = true;
+            }
+        }
+
+        return ($r1 && $r2);
+    }
+
+    public function hasAnyRole($roles)
+    {
+        foreach (Auth::User()->roles as $value) {
+            foreach ($roles as $role) {
+                if($value->role_name === $role){
+                    return true;
+                }
             }
         }
         return false;

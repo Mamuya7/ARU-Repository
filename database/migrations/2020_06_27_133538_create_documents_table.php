@@ -15,7 +15,8 @@ class CreateDocumentsTable extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->enum('document_type',['minutes']);
+            $table->string('document_name');
+            $table->enum('document_type',['minutes','attachments']);
             $table->string('document_url');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

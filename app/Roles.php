@@ -13,12 +13,12 @@ class Roles extends Model
      * @var array
      */
     protected $fillable = [
-        'role_name',
+        'role_name', 'role_code',
     ];
 
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany('App\User','user_roles','role_id','user_id')
+        return $this->belongsToMany('App\User','role_user','role_id','user_id')
                     ->withPivot('id')
                     ->withTimestamps();
     }

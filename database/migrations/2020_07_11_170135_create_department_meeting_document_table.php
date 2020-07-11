@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMeetingBoardsTable extends Migration
+class CreateDepartmentMeetingDocumentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateMeetingBoardsTable extends Migration
      */
     public function up()
     {
-        Schema::create('meeting_boards', function (Blueprint $table) {
+        Schema::create('department_meeting_document', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('meeting_id')->unsigned();
-            $table->bigInteger('member_id')->unsigned();
-            $table->enum('position',['chairman','secretary','member'])->default('member');
+            $table->bigInteger('department_meeting_id')->unsigned();
+            $table->bigInteger('document_id')->unsigned();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-            $table->foreign('meeting_id')->references('id')->on('meetings');
-            $table->foreign('member_id')->references('id')->on('users');
+            $table->foreign('department_meeting_id')->references('id')->on('department_meeting');
+            $table->foreign('document_id')->references('id')->on('documents');
         });
     }
 
@@ -32,6 +31,6 @@ class CreateMeetingBoardsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('meeting_boards');
+        Schema::dropIfExists('department_meeting_document');
     }
 }

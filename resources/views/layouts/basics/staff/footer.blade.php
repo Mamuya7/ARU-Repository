@@ -36,3 +36,6 @@
 
 <!-- file uploads js -->
 <script src="{{ asset('ansta/plugins/fileuploads/js/dropify.min.js')}}"></script>
+
+<!-- Date Picker-->
+<script src="{{ asset('ansta/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>

@@ -17,10 +17,8 @@ class CreateDepartmentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('department_name');
             $table->string('department_code');
-            $table->bigInteger('school_id')->unsigned();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-            $table->foreign('school_id')->references('id')->on('schools');
         });
     }
 
