@@ -2,6 +2,11 @@
 
 @section('content')
     <div>
+        <div class="bg-success p-3">
+            @if(Session::has('output'))
+                <span class="text-white">{{Session::get('output')}}</span>
+            @endif
+        </div>
         <form action="store_meeting" method="post">
             @csrf
             <div class="row">
@@ -19,15 +24,14 @@
                         <label for="chairman">Chairman As</label>
                         <select name="chairman" id="chairman" class="form-control">
                             <option value="null" selected disabled></option>
-                            @foreach(Auth::User()->roles as $role)
-                            <option value="{{$role->pivot->id}}">{{$role->role_name .'('. $role->role_code .')'}}</option>
-                            @endforeach
+                            <option value="1">Head</option>
+                            <option value="2">Dean</option>
                         </select>
                     </div>
                     @endif
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group mb-0">
+                            <div class="form-group mb-0 pt-0 pr-3 pl-3 pb-3">
                                 <label for="description">Date</label>
                                 <div class="input-group ">
                                     <div class="input-group-prepend">
@@ -46,16 +50,29 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <div class="form-label mb-3">Qualifications</div>
+                    <div class="form-label mb-3">Select Secretary</div>
                     <div class="card pt-3 mt-0">
-                        <div class="custom-switches-stacked">
-                        @foreach($roles as $role)
-                            <label class="custom-switch">
-                                <input type="checkbox" name="qualifications[]" value="{{$role->id}}" class="custom-switch-input">
-                                <span class="custom-switch-indicator custom-switch-indicator-square"></span>
-                                <span class="custom-switch-description">{{$role->role_name}}</span>
-                            </label>
-                        @endforeach
+                        <div id="staffs" class="custom-switches-stacked">
+                            @if(Auth::User()->hasRole('head'))
+                                @foreach($staffs as $staff)
+                                <label class="custom-switch">
+                                    <input type="radio" name="secretary" value="{{$staff->user_id}}" class="custom-switch-input">
+                                    <span class="custom-switch-indicator mr-3"></span>
+                                    <span class="custom-switch-description">{{$staff->first_name.' '.$staff->last_name}}</span>
+                                </label>
+                                @endforeach
+                            @endif
+                        </div>
+                        <div id="heads" class="custom-switches-stacked {{$display}}">
+                            @if(Auth::User()->hasRole('dean'))
+                                @foreach($heads as $head)
+                                <label class="custom-switch">
+                                    <input type="radio" name="secretary" value="{{$head->user_id}}" class="custom-switch-input">
+                                    <span class="custom-switch-indicator mr-3"></span>
+                                    <span class="custom-switch-description">{{$head->first_name.' '.$head->last_name}}</span>
+                                </label>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -65,56 +82,52 @@
             </div>
         </form>
     </div>
-    @if(Session::has('output'))
-        @foreach(Session::get('output') as $rslt)
-            
-        @endforeach
-    @endif
 @endsection
 
 @section('scripts')
 <script>
-    var departments = null;
-    var schools = null;
+    // var department_members = null;
+    // var school_members = null;
 
     $(document).ready(function(){
-        $('#category').change(function(event){
-            let cat = event.target.value;
+        $('#chairman').change(function(event){
+            let chair = event.target.value;
 
-            $('#entity').empty();
-            let options = "<option></option>";
-
-            if(cat == 3){
-                for (const dep of departments) {
-                    options += "<option id='"+dep.id+"'>";
-                    options += dep.department_name + "("+ dep.department_code +")";
-                    options += "</option>";
-                }
-            }else if(cat == 2){
-                for (const sch of schools) {
-                    options += "<option id='"+sch.id+"'>";
-                    options += sch.school_name + "("+ sch.school_code +")";
-                    options += "</option>";
-                }
+            // $('#members').empty();
+            // members = "";
+            if(chair == 1){
+                $('#staffs').show();
+                $('#heads').hide();
+                // for (const dep of department_members) {
+                //     members += member(dep.user_id,dep.first_name +" "+ dep.last_name);
+                // }
+            }else if(chair == 2){
+                $('#staffs').hide();
+                $('#heads').removeClass('d-none');
+                $('#heads').show();
+                // for (const sch of school_members) {
+                //     members += member(sch.user_id,sch.department_name +" "+ sch.department_code);
+                // }
             }
-            $('#entity').append(options);
+            // $('#members').append(members);
         });
-        $.ajax({
-            url: 'fetch_entities',
-            type:'post',
-            headers: {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-            },
-            dataType:'json',
-            success: function(response){
-                console.log(response);
-                schools = response.schools;
-                departments = response.departments;
-            },
-            error: function(xhr,status,error){
 
-            }
-        });
+        // $.ajax({
+        //     url: 'fetch_meeting_members',
+        //     type:'post',
+        //     headers: {
+        //             'X-CSRF-TOKEN': '{{csrf_token()}}'
+        //     },
+        //     dataType:'json',
+        //     success: function(response){
+        //         console.log(response);
+        //         school_members = response.school_members;
+        //         department_members = response.department_members;
+        //     },
+        //     error: function(xhr,status,error){
+
+        //     }
+        // });
 
         
 		$('.datepicker').datepicker({
@@ -124,5 +137,14 @@
         format: "yyyy/mm/dd"
 	   });
     });
+
+    // const member = (id,name) => {
+    //     let memb =   '<label class="custom-switch">';
+    //             memb +=  '<input type="radio" name="secretary" value="'+id+'" class="custom-switch-input">';
+    //             memb +=  '<span class="custom-switch-indicator mr-3"></span>';
+    //             memb +=  '<span class="custom-switch-description">'+name+'</span>';
+    //         memb +=  '</label>';
+    //     return memb;
+    // }
 </script>
 @endsection

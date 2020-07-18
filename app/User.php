@@ -45,11 +45,6 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
-    public function department()
-    {
-        return $this->belongsTo('App\Departments');
-    }
-
     public function meetings()
     {
         return $this->belongsToMany('App\Meetings','meeting_boards','member_id','meeting_id')
@@ -91,5 +86,15 @@ class User extends Authenticatable
             }
         }
         return false;
+    }
+
+    public function school()
+    {
+        return new School(Auth::User()->department_id);
+    }
+
+    public function department()
+    {
+        return new Department(Auth::User()->department_id);
     }
 }

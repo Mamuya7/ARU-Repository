@@ -1,38 +1,59 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="p-3">
+<div class="p-1">
     <div class="d-flex justify-content-center">
-        <span class="text-md font-italic text-blue">created by {{$creator->last_name.' '.$creator->first_name}}</span>
+        <span class="text-md font-italic text-blue">created by </span>
     </div>
     <div class="row">
         <div class="col-xl-7 col-lg-7 col-md-8">
             <div class="d-flex flex-column">
                 <div class="d-flex justify-content-between">
-                    <div class="text-uppercase text-lg font-weight-600">{{$meeting->meeting_title}}</div>
+                    <div class="text-uppercase text-lg font-weight-600"></div>
                     <span class="fas fa-edit text-xl round-p5-ardhi color-ardhi hover-ardhi"></span>
                 </div>
                 <div class="pb-2">
                     <textarea name="" id="" cols="30" rows="10" class="form-control" disabled>
-                        {{$meeting->meeting_description}}
+                        
                     </textarea>
                 </div>
                 <div class="pt-2">
                     <span>Upload minutes here</span>
-                    <div class="card">
-                        <div class="card-body">
-                            <input type="file" class="dropify" data-height="100" />
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <span>Minutes</span>
+                                <div class="card-body">
+                                    <input type="file" class="dropify" data-height="150" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <span>Matter Arising</span>
+                                <div class="card-body">
+                                    <input type="file" class="dropify" data-height="150" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <span>Attendence</span>
+                                <div class="card-body">
+                                    <input type="file" class="dropify" data-height="150" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="pt-2">
                     <div>
                         <label for="chairman">Chairman</label>
-                        <input type="text" id="chairman" value="{{$chairman}}" class="input-style" disabled>
+                        <input type="text" id="chairman" value="" class="input-style" disabled>
                     </div>
                     <div class="pt-2">
                         <label for="secretary">Secretary</label>
-                        <input type="text" id="secretary" value="{{$secretary}}" class="input-style" disabled>
+                        <input type="text" id="secretary" value="" class="input-style" disabled>
                     </div>
                 </div>
             </div>
@@ -58,15 +79,15 @@
                                         <span class="fas fa-plus-square text-xl text-black pl-1 pt-1"></span>
                                         <span class="p-2 font-weight-800">Add Members</span>
                                     </div>
-                                    @foreach($members as $member)
+                                    
                                     <div class="border-bottom hover-normal p-2">
-                                        <p class="font-weight-700">{{$member->first_name.' '.$member->last_name}}</p>
+                                        <p class="font-weight-700"></p>
                                         <div class="d-flex justify-content-between">
-                                            <span class="text-capitalize">{{$member->role_name}}</span>
-                                            <span class="text-capitalize">{{$member->position}}</span>
+                                            <span class="text-capitalize"></span>
+                                            <span class="text-capitalize"></span>
                                         </div>
                                     </div>
-                                    @endforeach
+                                   
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">

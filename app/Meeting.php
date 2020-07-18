@@ -23,11 +23,6 @@ class Meetings extends Model
                     ->withPivot('id','position');
     }
 
-    public function qualifications()
-    {
-        return $this->belongsToMany('App\Qualification','meeting_qualifications','meeting_id','qualification_id');
-    }
-
     public function roles()
     {
         return $this->belongsToMany('App\Roles','meeting_roles','meeting_id','role_id')
