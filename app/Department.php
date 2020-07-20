@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Departments extends Model
+class Department extends Model
 {
       /**
      * The attributes that are mass assignable.
@@ -15,7 +15,7 @@ class Departments extends Model
 
    
     protected $fillable = [
-        'department_name', 'department_code', 'school_id'
+        'department_name', 'department_code'
     ];
 
     public function user()

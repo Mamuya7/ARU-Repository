@@ -9,7 +9,7 @@
             </div>
             <div class="navbar-top-title">
                 <div class="text-center text-xxl text-black-70 pb-0 mb-0">ARDHI UNIVERSITY</div>
-                <div class="text-center text-md text-pale-orange pt-0 mt-0">ACADEMIC MANAGEMENT INFORMATION SYSTEM</div>
+                <div class="text-center text-md text-pale-orange pt-0 mt-0">INSTITUTIONAL MEETING REPOSITORY SYSTEM</div>
             </div>
         </div>
         <div>

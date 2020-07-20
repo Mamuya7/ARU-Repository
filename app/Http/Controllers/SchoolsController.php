@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Departments;
-use App\Schools;
+use App\School;
 use Illuminate\Http\Request;
 
 class SchoolsController extends Controller
@@ -24,8 +24,6 @@ class SchoolsController extends Controller
      */
     public function index()
     {
-        // $schools = Schools::All()->simplePaginate(1);
-        // $schools = DB::table('schools')->simplePaginate(1);
         $schools = DB::table('schools')->paginate(2);
         return view('school/index',['schools' => $schools]);
     }
@@ -48,7 +46,7 @@ class SchoolsController extends Controller
      */
     public function store(Request $request)
     {
-        Schools::create($request->all());
+        School::create($request->all());
 
         return back()->with('response','New Student Added Successfully');
     }
@@ -59,7 +57,7 @@ class SchoolsController extends Controller
      * @param  \App\Schools  $schools
      * @return \Illuminate\Http\Response
      */
-    public function show(Schools $schools)
+    public function show(School $school)
     {
         //
     }
@@ -70,7 +68,7 @@ class SchoolsController extends Controller
      * @param  \App\Schools  $schools
      * @return \Illuminate\Http\Response
      */
-    public function edit(Schools $schools)
+    public function edit(School $schools)
     {
         echo $schools;
     }
@@ -82,7 +80,7 @@ class SchoolsController extends Controller
      * @param  \App\Schools  $schools
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Schools $schools)
+    public function update(Request $request, School $schools)
     {
         //
     }
@@ -93,7 +91,7 @@ class SchoolsController extends Controller
      * @param  \App\Schools  $schools
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Schools $schools)
+    public function destroy(School $schools)
     {   
         DB::transaction(function() use($schools){
             DB::table('users')

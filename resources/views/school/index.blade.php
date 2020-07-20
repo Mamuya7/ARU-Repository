@@ -5,58 +5,50 @@
 
     
 
-            <!-- Page content -->
     
-      
-        <div class="row tab-pane">
-            <div class="col-md-12">
-                <div class="content content-full-width" id="content">
-                    <!-- begin profile-content -->
-                    <div class="profile-content">
-                        <!-- begin tab-content -->
-                        <div class="tab-content p-0">
-                            <!-- begin #profile-friends tab -->
-                            <div class="tab-pane fade in active show" id="profile-friends">
-                                <!-- begin row -->
-                                <div class="row">
-                                @foreach($schools as $school)
-                                    <!-- end col-6 -->
-                                    <div class="col-md-12">
-                                        <div class="card border shadow">
-                                            <div class="media card-body media-xs overflow-visible">
-                                                <!-- <div class="media-body valign-middle col-md-1">{{$school->id}}</div> -->
-                                                <div class="media-body valign-middle col-md-7">
-                                                    <h4 class="text-inverse"><b>{{$school->school_name}}</b></h4>
-                                                </div>
-                                                <div class="media-body valign-middle col-md-2"><b>{{$school->school_code}}</b></div>
-                                                <div class="media-body valign-middle text-right overflow-visible">
-                                                    <div class="btn-group">
-                                                        <!-- <button class="btn btn-md btn-primary" type="button">update</button> -->
-                                                    <form action="/deleteschool/{{$school->id}}" method="post" class="dis-inline">
-                                                    {{csrf_field()}}
-                                                    {{method_field('DELETE')}}
-                                                    <button type="submit" class="btn btn-sm btn-danger mt-1 mb-1">Delete</button>
-                                                    </form>
-                                                        <div class="col-md-2"></div> 
-                                                
-                                                            <!-- Button trigger modal -->
-                                                    <button type="button" onclick="editSchool({{$school->id}})" class="btn btn-sm btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateSchool">update</button>
-                                                      
+
+                              
+                                   
+                                    <div class="col-xl-12">
+                                        <div class="card  shadow">
+                                            <div class="card-header bg-transparent">
+                                                <div class="row align-items-center">
+                                                    <div class="col">
+                                                        <h2 class="mb-0">Schools</h2>
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <div class="table-responsive">
+                                                    <table class="table card-table text-nowrap">
+                                                        <tr class="border-bottom">
+                                                            <th>Number</th>
+                                                            <th>School Name</th>
+                                                            <th>School Code</th>
+                                                            <th>Action</th>
+                                                            <th>Action</th>
+                                                        </tr>
+
+                                                        @foreach($schools as $school)
+                                                            <tr class="border-bottom">
+                                                                <td>{{$school->id}}</td>
+                                                                <td>{{$school->school_name}}</td>
+                                                                <td>{{$school->school_code}}</td>
+<td><button type="button" class="btn btn-sm btn-primary mt-1 mb-1" onclick="editSchool" data-toggle="modal" data-target="#updateSchool">update</button> </td>
+                                                                <td>
+                                                                <button type="button" class="btn btn-sm btn-primary mt-1 mb-1">Delete</button>                                 
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+
+                                                    </table>
+                                                    {{ $schools->links() }}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                @endforeach
-                                </div><!-- end row -->
-                                {{ $schools->links() }}
-                            </div><!-- end #profile-friends tab -->
-                        </div><!-- end tab-content -->
-                    </div>
-                </div>
-            </div>
-        </div>
+                         
 
     <div class="modal fade" id="updateSchool" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class = "modal-dialog modal-md">

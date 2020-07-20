@@ -5,9 +5,9 @@
     <div class="row">
         <div class="col-lg-8 col-md-7 col-sm-0 col-xs-0">
             <div class="login-r">
-                <h1 class="text-primary">AMIS</h1>
-                <h1 class="amis-lcase">Academic Management Information System</h1>
-                <p>Ardhi University Academic Management System is a system created to enable management of various academic management information.</p>
+                <h1 class="text-primary">MMIS</h1>
+                <h1 class="amis-lcase">Meeting Management Information System</h1>
+                <p>Ardhi University Meeting Management System is a system created to enable management of various academic management information.</p>
                 <ul>
                     <li>Students Registration Process Automation.</li>
                     <li>Students Accommodation Records Management.</li>

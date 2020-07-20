@@ -6,23 +6,23 @@
         <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-header">
-                    <h2 class="mb-0">REGISTER NEW DEPARTMENT</h2>
+                    <h2 class="mb-0">REGISTER ROLES</h2>
                 </div>
             <div class="card-body">
-            <form action="storeDepartment" method="post">
+            <form action="storeRole" method="post">
                 {{csrf_field()}}
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="form-label">Department Name</label>
-                            <input type="text" class="form-control" name="department_name" placeholder="Department Name">
+                            <label class="form-label">Role Name</label>
+                            <input type="text" class="form-control" name="role_name" placeholder="Role Name">
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="form-label">Department Code</label>
-                            <input type="text" class="form-control" name="department_code" placeholder="Department Name">
+                            <label class="form-label">Role Code</label>
+                            <input type="text" class="form-control" name="role_code" placeholder="Role Name">
                         </div>
                     </div>
 
@@ -41,18 +41,4 @@
 </div>
 @endsection
 
-<!-- 
-@section('scripts')
-    <script>
-    
-    $(document).ready(function(){
-      $('#btn_sbmt').click(function(){
-        var selectedCountry = $("#school_id").children("option:selected").val();
-        alert("You have selected the country - " + selectedCountry); 
-      })
-    });
-      
-    </script>
-@endsection -->
- 
    
