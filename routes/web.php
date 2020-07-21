@@ -26,7 +26,7 @@ Route::get('create_meeting','MeetingsController@create');
 Route::get('view_meeting','MeetingsController@index');
 Route::post('store_meeting','MeetingsController@store');
 Route::post('fetch_meeting_members','MeetingsController@fetch');
-Route::post('show_meeting/{meetings}','MeetingsController@show');
+Route::post('show_meeting/{meeting}','MeetingsController@show');
 
 Route::post('show_users','UsersController@show');
 

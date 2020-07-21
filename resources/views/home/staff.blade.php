@@ -1,12 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-@foreach(Auth::User()->roles as $role)
-    {{$role->pivot->id}}
-@endforeach
-@if(Auth::User()->hasRole('dean'))
-    
-@endif
 <div class="row">
     <div class="col-md-6 col-lg-6 col-xl-3">
         <div class="card p-3 px-4 shadow">

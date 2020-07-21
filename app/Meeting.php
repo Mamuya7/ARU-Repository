@@ -4,34 +4,24 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Meetings extends Model
+class Meeting extends Model
 {
+    
      /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'meeting_title', 'meeting_description', 'document_id',
+        'meeting_title', 'meeting_description', 'meeting_date',
     ];
 
     protected $members = null;
-
-    public function users()
-    {
-        return $this->belongsToMany('App\User','meeting_boards','meeting_id','member_id')
-                    ->withPivot('id','position');
-    }
 
     public function roles()
     {
         return $this->belongsToMany('App\Roles','meeting_roles','meeting_id','role_id')
                     ->withPivot('id');
-    }
-
-    public function documents()
-    {
-        return $this->belongsToMany('App\Documents','meeting_documents','meeting_id','document_id');
     }
 
     public function setMembers($value)

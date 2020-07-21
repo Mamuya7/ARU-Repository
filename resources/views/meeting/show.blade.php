@@ -1,25 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
+<span class="fas fa-edit text-xl round-p5-ardhi color-ardhi hover-ardhi shadow fab"></span>
 <div class="p-1">
     <div class="d-flex justify-content-center">
-        <span class="text-md font-italic text-blue">created by </span>
+        <input type="text" id="title" class="form-control text-center text-uppercase text-xl" value="{{$meeting->meeting_title}}" disabled>
     </div>
     <div class="row">
         <div class="col-xl-7 col-lg-7 col-md-8">
             <div class="d-flex flex-column">
-                <div class="d-flex justify-content-between">
-                    <div class="text-uppercase text-lg font-weight-600"></div>
-                    <span class="fas fa-edit text-xl round-p5-ardhi color-ardhi hover-ardhi"></span>
-                </div>
                 <div class="pb-2">
                     <textarea name="" id="" cols="30" rows="10" class="form-control" disabled>
                         
                     </textarea>
                 </div>
                 <div class="pt-2">
-                    <span>Upload minutes here</span>
-                    <div class="row">
+                    <span>Attachments</span>
+                    <div class="attachments">
+                        <div class="create-attachement">
+                            <span class="fas fa-plus"></span>
+                        </div>
+                    </div>
+                    <!-- <div class="row">
                         <div class="col-lg-4">
                             <div class="card">
                                 <span>Minutes</span>
@@ -44,16 +46,16 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="pt-2">
                     <div>
                         <label for="chairman">Chairman</label>
-                        <input type="text" id="chairman" value="" class="input-style" disabled>
+                        <input type="text" id="chairman" value="" class="form-control" disabled>
                     </div>
                     <div class="pt-2">
                         <label for="secretary">Secretary</label>
-                        <input type="text" id="secretary" value="" class="input-style" disabled>
+                        <input type="text" id="secretary" value="" class="form-control" disabled>
                     </div>
                 </div>
             </div>

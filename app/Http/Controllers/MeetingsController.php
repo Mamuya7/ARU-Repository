@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Auth;
-use App\Meetings;
+use App\Meeting;
 use App\DepartmentSchool;
 use Illuminate\Http\Request;
 
@@ -98,23 +98,20 @@ class MeetingsController extends Controller
                                 "meeting_title" => $meeting['title'],
                                 "meeting_description" => $meeting['description'],
                                 "meeting_date" => $meeting['date'],
-                                "meeting_time" => $meeting['time'],
                                 "user_id" => Auth::User()->id
                             )
                     );
 
             if(Auth::User()->hasBothRoles('head','dean')){
                 if($meeting['chairman'] == 1){
-                    $this->set_department_meeting($meeting_id,$meeting['secretary'],Auth::User()->department_id);
+                    $this->create_department_meeting($meeting_id,$meeting);
                 }elseif ($meeting['chairman'] == 2) {
-                    $this->set_school_meeting($meeting_id,$meeting['secretary'],
-                    DepartmentSchool::getDepartmentSchoolId(Auth::User()->department_id));
+                    $this->create_school_meeting($meeting_id,$meeting);
                 }
             }elseif(Auth::User()->hasRole('dean')){
-                $this->set_school_meeting($meeting_id,$meeting['secretary'],
-                DepartmentSchool::getDepartmentSchoolId(Auth::User()->department_id));
+                $this->create_school_meeting($meeting_id,$meeting);
             }elseif (Auth::User()->hasRole('head')) {
-                $this->set_department_meeting($meeting_id,$meeting['secretary'],Auth::User()->department_id);
+                $this->create_department_meeting($meeting_id,$meeting);
             }
         });
         
@@ -124,10 +121,10 @@ class MeetingsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Meetings  $meetings
+     * @param  \App\Meeting  $meeting
      * @return \Illuminate\Http\Response
      */
-    public function show(Meetings $meetings)
+    public function show(Meeting $meeting)
     {
         // $members = DB::table('users')
         //                 ->join('role_user','users.id','=','role_user.user_id')
@@ -147,17 +144,17 @@ class MeetingsController extends Controller
         // $chairman = ($chair === null)? 'Not Selected': $chair->last_name.' '.$chair->first_name;
         // $secretary = ($secr === null)? 'Not Selected': $secr->last_name.' '.$secr->first_name;
 
-        return view('meeting.show'/**,["meeting" => $meetings, "members" => $members, "creator" => $creator[0],
-         'chairman' => $chairman, 'secretary' => $secretary] */);
+        return view('meeting.show',["meeting" => $meeting/**, "members" => $members, "creator" => $creator[0],
+         'chairman' => $chairman, 'secretary' => $secretary*/] );
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Meetings  $meetings
+     * @param  \App\Meeting  $meeting
      * @return \Illuminate\Http\Response
      */
-    public function edit(Meetings $meetings)
+    public function edit(Meeting $meeting)
     {
         //
     }
@@ -166,10 +163,10 @@ class MeetingsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Meetings  $meetings
+     * @param  \App\Meeting $meeting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Meetings $meetings)
+    public function update(Request $request, Meeting $meeting)
     {
         //
     }
@@ -177,10 +174,10 @@ class MeetingsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Meetings  $meetings
+     * @param  \App\Meeting  $meeting
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Meetings $meetings)
+    public function destroy(Meeting $meeting)
     {
         //
     }
@@ -204,24 +201,26 @@ class MeetingsController extends Controller
         echo json_encode(["school_members" => $schools, "department_members" => $departments]);
     }
 
-    protected function set_department_meeting($meeting,$secretary,$department)
+    protected function create_department_meeting($meeting_id,$meeting)
     {
         return DB::table('department_meeting')->insertGetId(
             array(
-                "meeting_id" => $meeting,
-                "department_id" => $department,
-                "secretary_id" => $secretary
+                "meeting_id" => $meeting_id,
+                "department_id" => Auth::User()->department_id,
+                "secretary_id" => $meeting['secretary'],
+                "meeting_time" => $meeting['time'],
             )
         );
     }
 
-    protected function set_school_meeting($meeting,$secretary,$school)
+    protected function create_school_meeting($meeting_id,$meeting)
     {
         return DB::table('school_meeting')->insertGetId(
             array(
-                "meeting_id" => $meeting,
-                "school_id" => $school,
-                "secretary_id" => $secretary
+                "meeting_id" => $meeting_id,
+                "school_id" => DepartmentSchool::getDepartmentSchoolId(Auth::User()->department_id),
+                "secretary_id" => $meeting['secretary'],
+                "meeting_time" => $meeting['time'],
             )
         );
     }
