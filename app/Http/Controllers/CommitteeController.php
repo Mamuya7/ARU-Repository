@@ -2,21 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Roles;
-use DB;
+use App\Committee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class RolesController extends Controller
+class CommitteeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -24,8 +15,8 @@ class RolesController extends Controller
      */
     public function index()
     {
-        $roles = DB::table('roles')->paginate();
-        return view('roles.index',['roles' => $roles]);
+        $committee = DB::table('committees')->paginate(10);
+        return view('committee/index',['committees' => $committee]);
     }
 
     /**
@@ -35,8 +26,7 @@ class RolesController extends Controller
      */
     public function create()
     {
-        //
-        return view('roles.create');
+        return view('committee/create');
     }
 
     /**
@@ -47,29 +37,29 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
-        Roles::create($request->all());
+        Committee::create($request->all());
 
-        return back()->with('response','New Role Added Successfully');
+        return back()->with('response','New Committee Added Successfully');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Roles  $roles
+     * @param  \App\Committee  $committee
      * @return \Illuminate\Http\Response
      */
-    public function show(Roles $roles)
+    public function show(Committee $committee)
     {
-        //return view('roles.index');
+        return view('committee/index');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Roles  $roles
+     * @param  \App\Committee  $committee
      * @return \Illuminate\Http\Response
      */
-    public function edit(Roles $roles)
+    public function edit(Committee $committee)
     {
         //
     }
@@ -78,10 +68,10 @@ class RolesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Roles  $roles
+     * @param  \App\Committee  $committee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Roles $roles)
+    public function update(Request $request, Committee $committee)
     {
         //
     }
@@ -89,10 +79,10 @@ class RolesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Roles  $roles
+     * @param  \App\Committee  $committee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Roles $roles)
+    public function destroy(Committee $committee)
     {
         //
     }

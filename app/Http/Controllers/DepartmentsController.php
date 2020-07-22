@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Departments;
+use App\Department;
 // use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +25,9 @@ class DepartmentsController extends Controller
      */
     public function index()
     {
-        //
+        $departments = DB::table('departments')->paginate(10);
+        return view('department/index',['departments' => $departments]);
+       
     }
 
     /**
@@ -35,8 +37,7 @@ class DepartmentsController extends Controller
      */
     public function create()
     {
-        $school_name = DB::table('Schools')->get();
-        return view('department/create',['schools_name'=>$school_name]);
+        return view('department.create'); 
     }
 
     /**
@@ -46,28 +47,9 @@ class DepartmentsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $data = new Departments([
-            'department_name' =>$request->get('department_name'),
-            'department_code' =>$request->get('department_code'),
-            'school_id' =>$request->get('school_id')
-        ]);    
-        $data->save();        
-        return view('department/create')->with('response','New Student Added Successfully');   
-        
-        // $departments = $request->all();
-        // DB::transaction(function() use($departments){
-        //     $department_id = DB::table('departments')
-        //                     ->insertGetId(
-        //                         array(
-        //                             "department_name" => $departments['department_name'],
-        //                             "department_code" => $departments['department_code'],
-        //                             "school_id" =>$departments["school_id"]
-        //                         ));
-        // });
-
-        
-
+    {  
+        Department::create($request->all());
+        return back()->with('response','New Student Added Successfully');
     }
 
     /**
@@ -76,13 +58,14 @@ class DepartmentsController extends Controller
      * @param  \App\Departments  $departments
      * @return \Illuminate\Http\Response
      */
-    public function show(Departments $departments)
+    public function show(Department $departments)
     {   
-        $departments = DB::table('departments')
-        ->join('schools','departments.school_id','=','schools.id')
-        ->select('departments.*','schools.school_name as school_name','schools.school_code as school_code')
-        ->paginate(2);
-        return view('department/index',['departments' => $departments]);
+        // $departments = DB::table('departments')
+        // ->join('schools','departments.school_id','=','schools.id')
+        // ->select('departments.*','schools.school_name as school_name','schools.school_code as school_code')
+        // ->paginate(2);
+        // return view('department/index',['departments' => $departments]);
+      
     }
 
     /**
@@ -91,10 +74,10 @@ class DepartmentsController extends Controller
      * @param  \App\Departments  $departments
      * @return \Illuminate\Http\Response
      */
-    public function edit(Departments $departments)
+    public function edit(Department $departments)
     {
-        $school = DB::table('schools')->get();
-        echo json_encode(["department" => $departments,'schools' => $school]);
+        // $school = DB::table('schools')->get();
+        // echo json_encode(["department" => $departments,'schools' => $school]);
     }
 
     /**
@@ -104,7 +87,7 @@ class DepartmentsController extends Controller
      * @param  \App\Departments  $departments
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Departments $departments)
+    public function update(Request $request, Department $departments)
     {
         //
     }
@@ -115,13 +98,13 @@ class DepartmentsController extends Controller
      * @param  \App\Departments  $departments
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Departments $departments)
+    public function destroy(Department $departments)
     {
-         DB::transaction(function() use($departments){
-            DB::table('users')->where('department_id',$departments->id)->delete(); 
-            DB::table('departments')->where('id',$departments->id)->delete(); 
-        });
+        //  DB::transaction(function() use($departments){
+        //     DB::table('users')->where('department_id',$departments->id)->delete(); 
+        //     DB::table('departments')->where('id',$departments->id)->delete(); 
+        // });
 
-        return redirect('showDepartment');
+        // return redirect('showDepartment');
     }
 }

@@ -34,20 +34,37 @@
                     <a href="{{ route('AddDepartment') }}" class="slide-item">Add Department</a>
                 </li>
                 <li>
-                    <a href="{{ route('ShowDepartment') }}" class="slide-item">View Departments</a>
+                    <a href="{{ route('showDepartment') }}" class="slide-item">View Departments</a>
                 </li>
                
 
             </ul>
         </li>
+
+        <li class="slide">
+            <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fe fe-grid"></i><span class="side-menu__label">Roles</span><i class="angle fa fa-angle-right"></i></a>
+            <ul class="slide-menu">
+                <li>
+                    <a href="{{'registerRolesForm'}}" class="slide-item">Register Roles</a>
+                </li>
+                <li>
+                    <a href="{{'displayRoles'}}" class="slide-item">View Roles</a>
+                </li>
+                <!-- <li>
+                    <a href="" class="slide-item">View Roles</a>
+                </li> -->
+        
+            </ul>
+        </li>
+
         <li class="slide">
             <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fe fe-map"></i><span class="side-menu__label">Commitee</span><i class="angle fa fa-angle-right"></i></a>
             <ul class="slide-menu">
                 <li>
-                    <a href="maps.html" class="slide-item">Create Commitee</a>
+                    <a href="{{ route('showsCommittee') }}" class="slide-item">Create Commitee</a>
                 </li>
                 <li>
-                    <a href="vector-map.html" class="slide-item">Create Commitee</a>
+                    <a href="{{'displayCommittee'}}" class="slide-item">View Commitee</a>
                 </li>
             </ul>
         </li>

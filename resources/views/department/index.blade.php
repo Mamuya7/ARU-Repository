@@ -1,52 +1,54 @@
 @extends('layouts.admin')
 
 @section('content')
-            <!-- Page content -->   
-      
-<div class="row tab-pane">
-    <div class="col-md-12">
-        <div class="content content-full-width" id="content">
-            <!-- begin profile-content -->
-            <div class="profile-content">
-                <!-- begin tab-content -->
-                <div class="tab-content p-0">
-                    <!-- begin #profile-friends tab -->
-                    <div class="tab-pane fade in active show" id="profile-friends">
-                        <!-- begin row -->
-                        <div class="row">
-                        @foreach($departments as $department)
-                            <!-- end col-6 -->
-                            <div class="col-md-12">
-                                <div class="card border shadow">
-                                    <div class="media card-body media-xs overflow-visible">
-                                        <div class="media-body valign-middle col-md-1">{{$department->id}}</div>
-                                        <div class="media-body valign-middle col-md-5">
-                                            <h4 class="text-inverse">{{$department->department_name}}</h4>
-                                        </div>
-                                        <div class="media-body valign-middle col-md-1">{{$department->department_code}}</div>
-                                        <div class="media-body valign-middle col-md-4"><h5>{{$department->school_name}} <span>(<b>{{$department->school_code}} </b>)</span></h5></div>
-                                        <div class="media-body valign-middle text-right overflow-visible">
-                                            <div class="btn-group">
-                                            
-                                                <form action="/deletedepartment/{{$department->id}}" method="post" class="dis-inline">
-                                                {{csrf_field()}}
-                                                {{method_field('DELETE')}}
-                                                <button type="submit" class="btn btn-sm btn-danger mt-1 mb-1">Delete</button>
-                                                </form>
-                                                    <div class="col-md-1"></div> 
-                                                        <!-- Button trigger modal -->
-                                                    <button type="button" onclick="editDepartment({{$department->id}},{{$department->school_id}})" class="btn btn-sm btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                        </div><!-- end row -->
-                        {{ $departments->links() }}
     
-                    </div><!-- end #profile-friends tab -->
-                
+    
+    <div class="col-xl-12">
+        <div class="card  shadow">
+            <div class="card-header bg-transparent">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="mb-0">Schools</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="table-responsive">
+                    <table class="table card-table text-nowrap">
+                        <tr class="border-bottom">
+                            <th>Number</th>
+                            <th>School Name</th>
+                            <th>School Code</th>
+                            <th>Action</th>
+                            <th>Action</th>
+                        </tr>
 
+                        @foreach($departments as $department)
+                            <tr class="border-bottom">
+                                <td>{{$department->id}}</td>
+                                <td>{{$department->department_name}}</td>
+                                <td>{{$department->department_code}}</td>
+                                <td>   <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button> </td>
+                                <td>
+                                    <form action="" method="post" class="dis-inline">
+                                    <!-- /deletedepartment/{{$department->id}} -->
+                                        {{csrf_field()}}
+                                        {{method_field('DELETE')}}
+                                        <button type="submit" class="btn btn-sm btn-danger mt-1 mb-1">Delete</button>
+                                    </form>                                
+                                </td>
+                            </tr>
+                        @endforeach
+
+                    </table>
+                    {{ $departments->links() }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+                                            
 
 <div class="modal fade" id="updateDepartment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
@@ -75,14 +77,6 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label">School Name</label>
-                                <select class="form-control select2 w-100" id="school">
-                                    <option value="null" selected disabled></option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                 </form>
             </div>
