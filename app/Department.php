@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Department extends Model
 {
@@ -26,8 +27,9 @@ class Department extends Model
      * @return void
      */
     
-    public function __construct()
+    public function __construct($id)
     {
+        $this->id = $id;
     }
 
     public function users()
@@ -39,7 +41,10 @@ class Department extends Model
     {
         return new DepartmentSchool($this->getId());
     }
-
+     public function departmentUsers()
+     {
+        return User::where('department_id',$this->id);
+     }
     public function setId($id)
     {
         $this->id = $id;

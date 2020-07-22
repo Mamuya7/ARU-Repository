@@ -6,6 +6,7 @@ use DB;
 use Auth;
 use App\Meeting;
 use App\DepartmentSchool;
+use App\Department;
 use Illuminate\Http\Request;
 
 class MeetingsController extends Controller
@@ -37,8 +38,9 @@ class MeetingsController extends Controller
         }
         if(Auth::User()->hasAnyRole(['head','staff'])){
             $result['department'] = DB::table('meetings')
-                                    ->join('department_meeting','meeting_id','=','department_meeting.meeting_id')
+                                    ->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
                                     ->where('department_meeting.department_id',Auth::User()->department_id)
+                                    ->orderBy('meetings.meeting_date','desc')
                                     ->get();
         }
 
@@ -126,6 +128,7 @@ class MeetingsController extends Controller
      */
     public function show(Meeting $meeting)
     {
+        $department = new Department(Auth::User()->department_id); 
         // $members = DB::table('users')
         //                 ->join('role_user','users.id','=','role_user.user_id')
         //                 ->join('roles','role_user.role_id','=','roles.id')
@@ -144,7 +147,7 @@ class MeetingsController extends Controller
         // $chairman = ($chair === null)? 'Not Selected': $chair->last_name.' '.$chair->first_name;
         // $secretary = ($secr === null)? 'Not Selected': $secr->last_name.' '.$secr->first_name;
 
-        return view('meeting.show',["meeting" => $meeting/**, "members" => $members, "creator" => $creator[0],
+        return view('meeting.show',["meeting" => $meeting, "members" => $department->departmentUsers()/**, "creator" => $creator[0],
          'chairman' => $chairman, 'secretary' => $secretary*/] );
     }
 
