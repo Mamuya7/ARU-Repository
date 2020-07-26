@@ -20,10 +20,11 @@ class DepartmentSchool extends Model
      *
      * @return void
      */
-    public function __construct($department_id)
+    public function __construct()
     {
-        $this->setDepartmentId($department_id);
-        $this->setSchoolId(DepartmentSchool::find($department_id));
+        // $this->setDepartmentId($department_id);
+        // $departmentSchool = DepartmentSchool::where('department_id',1)->get();
+        // $this->setSchoolId($departmentSchool->school_id);
     }
 
     public static function getDepartmentSchoolId($dep_id)

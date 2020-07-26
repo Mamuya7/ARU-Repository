@@ -23,11 +23,11 @@ class DepartmentMeeting extends Model
     protected $meeting;
     protected $secretary;
 
-    public function __construct($meeting)
+    public function __construct()
     {
-        $this->meeting = $meeting;
-        $this->secretary = DepartmentMeeting::where('meeting_id',$this->meeting)
-                            ->where('department_id',Auth::User()->department_id)->first();
+        // $this->meeting = $meeting;
+        // $this->secretary = DepartmentMeeting::where('meeting_id',$this->meeting)
+        //                     ->where('department_id',Auth::User()->department_id)->first();
     }
 
     public function getDepartmentSecretary()

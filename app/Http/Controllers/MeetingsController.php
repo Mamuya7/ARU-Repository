@@ -32,7 +32,7 @@ class MeetingsController extends Controller
         if(Auth::User()->hasAnyRole(['dean','head'])){
             $result['school'] = DB::table('meetings')
                                 ->join('school_meeting','meetings.id','=','school_meeting.meeting_id')
-                                ->where('school_meeting.school_id',Auth::User()->department()->departmentSchool()->getSchoolId())
+                                ->where('school_meeting.school_id',Auth::User()->department->school[0]->id)
                                 ->orderBy('meetings.meeting_date','desc')
                                 ->get();
         }
@@ -94,11 +94,19 @@ class MeetingsController extends Controller
     {
         $meeting = $request->all();
         DB::transaction(function() use($meeting){
+            $type = "";
+            if(Auth::User()->hasRole("head")){
+                $type = "department";
+            }elseif (Auth::User()->hasRole("dean")) {
+                $type = "school";
+            }
+
             $meeting_id = DB::table('meetings')
                         ->insertGetId(
                             array(
                                 "meeting_title" => $meeting['title'],
                                 "meeting_description" => $meeting['description'],
+                                "meeting_type" => $type,
                                 "meeting_date" => $meeting['date'],
                                 "user_id" => Auth::User()->id
                             )
@@ -128,7 +136,7 @@ class MeetingsController extends Controller
      */
     public function show(Meeting $meeting)
     {
-        $department = new Department(Auth::User()->department_id); 
+         $members = array();
         // $members = DB::table('users')
         //                 ->join('role_user','users.id','=','role_user.user_id')
         //                 ->join('roles','role_user.role_id','=','roles.id')
@@ -141,14 +149,19 @@ class MeetingsController extends Controller
         //                 ->where('users.id',$meetings->user_id)
         //                 ->get();
 
-        // $meetings->setMembers($members);
-        // $chair = $meetings->getChairman();
-        // $secr = $meetings->getSecretary();
-        // $chairman = ($chair === null)? 'Not Selected': $chair->last_name.' '.$chair->first_name;
-        // $secretary = ($secr === null)? 'Not Selected': $secr->last_name.' '.$secr->first_name;
+       
+        if($meeting->ofDepartment()){
+            $members = Auth::User()->department->users;
+        }elseif ($meeting->ofSchool()) {
+            $school = Auth::User()->department->school;
+            $members = $school->schoolHeads();
+        }
+        $meeting->setMembers($members);
+        $chair = $meeting->getChairman();
+        $secr = $meeting->getSecretary();
 
-        return view('meeting.show',["meeting" => $meeting, "members" => $department->departmentUsers()/**, "creator" => $creator[0],
-         'chairman' => $chairman, 'secretary' => $secretary*/] );
+        return view('meeting.show',["meeting" => $meeting, "members" => $members,
+         'chair' => $chair, 'secr' => $secr ] );
     }
 
     /**
@@ -221,7 +234,7 @@ class MeetingsController extends Controller
         return DB::table('school_meeting')->insertGetId(
             array(
                 "meeting_id" => $meeting_id,
-                "school_id" => DepartmentSchool::getDepartmentSchoolId(Auth::User()->department_id),
+                "school_id" => Auth::User()->department->school[0]->id,
                 "secretary_id" => $meeting['secretary'],
                 "meeting_time" => $meeting['time'],
             )

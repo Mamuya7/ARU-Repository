@@ -18,18 +18,15 @@ class Department extends Model
     protected $fillable = [
         'department_name', 'department_code',
     ];
-
-    protected $id;
-
     /**
      * Create a new model instance.
      *
      * @return void
      */
     
-    public function __construct($id)
+    public function __construct()
     {
-        $this->id = $id;
+        
     }
 
     public function users()
@@ -37,20 +34,14 @@ class Department extends Model
         return $this->hasMany('App\User');
     }
 
-    public function departmentSchool()
+    public function school()
     {
-        return new DepartmentSchool($this->getId());
+        return $this->belongsToMany('App\School','department_school','department_id','school_id')
+                    ->withPivot('school_id','department_id');
     }
-     public function departmentUsers()
-     {
-        return User::where('department_id',$this->id);
-     }
-    public function setId($id)
+    public function meetings()
     {
-        $this->id = $id;
-    }
-    public function getId()
-    {
-        return $this->id;
+        return $this->belongsToMany('App\Meeting','department_meeting','department_id','meeting_id')
+                    ->withPivot('department_id','meeting_id','secretary_id');
     }
 }

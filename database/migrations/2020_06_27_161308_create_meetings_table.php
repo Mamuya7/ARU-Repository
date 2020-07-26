@@ -17,6 +17,7 @@ class CreateMeetingsTable extends Migration
             $table->bigIncrements('id');
             $table->string('meeting_title');
             $table->longText('meeting_description')->nullable();
+            $table->enum('meeting_type',['board','council','committee','department','directorate','school']);
             $table->date('meeting_date')->nullable();
             $table->bigInteger('user_id')->unsigned();
             $table->timestamp('created_at')->useCurrent();

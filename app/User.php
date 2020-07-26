@@ -55,6 +55,16 @@ class User extends Authenticatable
         return false;
     }
 
+    public function userHasRole( $role)
+    {
+        foreach ($this->roles as $value) {
+            if($value->role_name === $role){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function hasBothRoles($role1,$role2)
     {
         $r1 = false; $r2 = false;
@@ -84,11 +94,17 @@ class User extends Authenticatable
 
     public function school()
     {
-        return new School(Auth::User()->department_id);
+        return Auth::User()->department->school;
     }
 
     public function department()
     {
-        return new Department(Auth::User()->department_id);
+        return $this->belongsTo('App\Department');
     }
+    // public function department()
+    // {
+    //     $department = new Department();
+    //     $department->setId(Auth::User()->department_id);
+    //     return $department;
+    // }
 }

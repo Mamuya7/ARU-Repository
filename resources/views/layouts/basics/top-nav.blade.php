@@ -3,7 +3,7 @@
         <div class="nav-head-bar">
             <!-- Brand -->
             <div class="navbar-top-logo">
-                <a class="navbar-brand pt-0" href="home">
+                <a class="navbar-brand pt-0" href="{{ url('home')}}">
                     <img src="{{asset('img/logo/aruLogo.png')}}" class="navbar-brand-img" alt="...">
                 </a>
             </div>

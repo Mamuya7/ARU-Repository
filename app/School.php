@@ -15,35 +15,18 @@ class School extends Model
         'school_name', 'school_code',
     ];
 
-    // protected $id;
-    // protected $department_id;
-    /**
-     * Create a new model instance.
-     *
-     * @return void
-     */
-    // public function __construct($department)
-    // {
-    //     setDepartmentId($department);
-    // }
 
-    // public function setDepartmentId($department)
-    // {
-    //     $this->department_id = $department;
-    // }
+    public function departments()
+    {
+        return $this->belongsToMany('App\Department','department_school','school_id','department_id')
+                    ->withPivot('school_id','department_id');
+    }
+    public function meeting()
+    {
+        return $this->belongsToMany('App\Meeting','school_meeting','school_id','meeting_id');
+    }
+    public function schoolHeads()
+    {
 
-    // public function getDepartmentId()
-    // {
-    //     return $this->department_id;
-    // }
-
-    // public function getId()
-    // {
-    //     return $this->id;
-    // }
-
-    // public function departments()
-    // {
-    //     return $this->belongsToMany('App\Department','department_school','school_id','department_id');
-    // }
+    }
 }
