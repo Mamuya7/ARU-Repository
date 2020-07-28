@@ -57,6 +57,8 @@ Route::post('storeRole', 'RolesController@store');
 Route::post('editRole/{roles}','RolesController@edit');
 
 
+//users
+Route::get('assignRole','UserController@create')->name('assignRoles');
 
 
 // Route::get('showUser','User')

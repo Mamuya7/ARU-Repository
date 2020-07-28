@@ -12,6 +12,9 @@
                 <li>
                     <a class="slide-item" >View User</a>
                 </li>
+                <li>
+                    <a href="{{ route('assignRole') }}" class="slide-item" >Assign Role</a>
+                </li>
             </ul>
         </li>
         <li class="slide">
