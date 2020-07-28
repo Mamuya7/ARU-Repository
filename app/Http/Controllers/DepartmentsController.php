@@ -77,7 +77,8 @@ class DepartmentsController extends Controller
     public function edit(Department $departments)
     {
         // $school = DB::table('schools')->get();
-        // echo json_encode(["department" => $departments,'schools' => $school]);
+        //echo json_encode(["department" => $departments]);
+        echo $departments;
     }
 
     /**

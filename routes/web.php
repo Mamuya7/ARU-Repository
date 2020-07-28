@@ -35,7 +35,7 @@ Route::get('AddDepartment', 'DepartmentsController@create')->name('AddDepartment
 Route::post('storeDepartment','DepartmentsController@store');
 Route::get('showDepartment', 'DepartmentsController@index')->name('showDepartment');
 // Route::delete('deletedepartment/{departments}','DepartmentsController@destroy');
-// Route::post('editDepartment/{departments}','DepartmentsController@edit');
+Route::post('editDepartment/{departments}','DepartmentsController@edit');
 
 //schools
 Route::get('showschools','SchoolsController@index')->name('showschools');
@@ -48,11 +48,14 @@ Route::post('editSchool/{schools}','SchoolsController@edit');
 Route::get('showsCommittee','CommitteeController@create')->name('showsCommittee');
 Route::get('displayCommittee','CommitteeController@index')->name('displayCommittee');
 Route::post('storesCommittee', 'CommitteeController@store');
+Route::post('editCommittee/{committee}','CommitteeController@edit');
 
 //Roles
 Route::get('registerRolesForm','RolesController@create')->name('registerRolesForm');
 Route::get('displayRoles','RolesController@index')->name('displayRoles');
 Route::post('storeRole', 'RolesController@store');
+Route::post('editRole/{roles}','RolesController@edit');
+
 
 
 

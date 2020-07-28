@@ -8,45 +8,54 @@
     
 
                               
-                                   
-                                    <div class="col-xl-12">
-                                        <div class="card  shadow">
-                                            <div class="card-header bg-transparent">
-                                                <div class="row align-items-center">
-                                                    <div class="col">
-                                                        <h2 class="mb-0">Schools</h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="">
-                                                <div class="table-responsive">
-                                                    <table class="table card-table text-nowrap">
-                                                        <tr class="border-bottom">
-                                                            <th>Number</th>
-                                                            <th>School Name</th>
-                                                            <th>School Code</th>
-                                                            <th>Action</th>
-                                                            <th>Action</th>
-                                                        </tr>
+    
+    <div class="col-xl-12">
+        <div class="card  shadow">
+            <div class="card-header bg-transparent">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="mb-0">Schools</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="table-responsive">
+                    <table class="table card-table text-nowrap">
+                        <tr class="border-bottom">
+                            <th>Number</th>
+                            <th>School Name</th>
+                            <th>School Code</th>
+                            <th>Action</th>
+                            <th>Action</th>
+                        </tr>
 
-                                                        @foreach($schools as $school)
-                                                            <tr class="border-bottom">
-                                                                <td>{{$school->id}}</td>
-                                                                <td>{{$school->school_name}}</td>
-                                                                <td>{{$school->school_code}}</td>
-<td><button type="button" class="btn btn-sm btn-primary mt-1 mb-1" onclick="editSchool" data-toggle="modal" data-target="#updateSchool">update</button> </td>
-                                                                <td>
-                                                                <button type="button" class="btn btn-sm btn-primary mt-1 mb-1">Delete</button>                                 
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
+                        @foreach($schools as $school)
+                            <tr class="border-bottom">
+                                <td>{{$school->id}}</td>
+                                <td>{{$school->school_name}}</td>
+                                <td>{{$school->school_code}}</td>
+                <td>
+                <button type="button" class="btn btn-sm btn-primary mt-1 mb-1" onclick="editSchool({{ $school->id}})" data-toggle="modal" data-target="#updateSchool">update</button> 
+                </td>
+                
+                <td>
+                    <!-- <button type="button" class="btn btn-sm btn-primary mt-1 mb-1">Delete</button>  --> 
+                    <form action="deleteSchool/{{$school->id}}" method="post" class="dis-inline">
+                
+                    {{csrf_field()}}
+                        {{method_field('DELETE')}}
+                        <button type="submit" class="btn btn-sm btn-primary mt-1 mb-1">Delete</button>
+                    </form>                                 
+                </td>
+                            </tr>
+                        @endforeach
 
-                                                    </table>
-                                                    {{ $schools->links() }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                    </table>
+                    {{ $schools->links() }}
+                </div>
+            </div>
+        </div>
+    </div>
 
                          
 

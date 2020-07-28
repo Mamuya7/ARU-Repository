@@ -93,15 +93,18 @@ class SchoolsController extends Controller
      */
     public function destroy(School $schools)
     {   
+        // DB::transaction(function() use($schools){
+        //     DB::table('users')
+        //     ->join('departments','users.department_id','=','departments.id')
+        //     ->join('schools','departments.school_id','=','schools.id')
+        //     ->where('departments.school_id',$schools->id)->delete(); 
+        //     DB::table('departments')->where('school_id',$schools->id)->delete();
+        //     DB::table('schools')->where('id',$schools->id)->delete();
+        // });
+            
         DB::transaction(function() use($schools){
-            DB::table('users')
-            ->join('departments','users.department_id','=','departments.id')
-            ->join('schools','departments.school_id','=','schools.id')
-            ->where('departments.school_id',$schools->id)->delete(); 
-            DB::table('departments')->where('school_id',$schools->id)->delete();
             DB::table('schools')->where('id',$schools->id)->delete();
         });
-
         
         return redirect('showschools');
     }

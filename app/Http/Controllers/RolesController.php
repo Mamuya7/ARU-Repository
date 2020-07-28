@@ -71,7 +71,7 @@ class RolesController extends Controller
      */
     public function edit(Roles $roles)
     {
-        //
+        echo $roles;
     }
 
     /**
@@ -94,6 +94,11 @@ class RolesController extends Controller
      */
     public function destroy(Roles $roles)
     {
-        //
+        DB::transaction(function() use($roles){
+            DB::table('roles')->where('id',$roles->id)->delete();
+        });
+        
+        return redirect('showschools');
+    }
     }
 }

@@ -61,7 +61,7 @@ class CommitteeController extends Controller
      */
     public function edit(Committee $committee)
     {
-        //
+        echo $committee;
     }
 
     /**

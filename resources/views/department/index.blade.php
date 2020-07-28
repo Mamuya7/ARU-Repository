@@ -90,40 +90,60 @@
 
 <script>
 
-    function editDepartment(did,sid){
+    // function editDepartment(did,sid){
     
-        $.ajax({
-                url: '/editDepartment/'+did,
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                },
-                dataType: 'json',
-                success:function(response){
-                    console.log(response);
-                    displayForm(response,sid);
-                },
-                error:function(xhr,status,err){
-                    console.log(err);
-                }
-            });
-    }
+    //     $.ajax({
+    //             url: '/editDepartment/'+did,
+    //             type: 'POST',
+    //             headers: {
+    //                 'X-CSRF-TOKEN': '{{csrf_token()}}'
+    //             },
+    //             dataType: 'json',
+    //             success:function(response){
+    //                 console.log(response);
+    //                 displayForm(response,sid);
+    //             },
+    //             error:function(xhr,status,err){
+    //                 console.log(err);
+    //             }
+    //         });
+    // }
    
 
-
-    function displayForm(data,sid){
-
-        $('#name').val(data.department.department_name);
-        $('#code').val(data.department.department_code);
-        let options = "";
-        for (const school of data.schools) {
-            if(school.id == sid){
-                options += "<option id='"+school.id+"' selected>"+ school.school_name+"</option>"
-            }else{
-                options += "<option id='"+school.id+"'>"+ school.school_name+"</option>"
+    function editDepartment(did){
+        
+    $.ajax({
+            url: '/editDepartment/'+did,
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{csrf_token()}}'
+            },
+            dataType: 'json',
+            success:function(response){
+                // console.log(response);
+                displayForm(response);
+            },
+            error:function(xhr,status,err){
+                console.log(err);
             }
-        }
-        $('#school').append(options);
+        });
+}
+
+
+
+    function displayForm(data){
+
+        $('#name').val(data.department_name);
+        $('#code').val(data.department_code);
+        // let options = "";
+        // for (const school of data.schools) {
+        //     if(school.id == sid){
+        //         options += "<option id='"+school.id+"' selected>"+ school.school_name+"</option>"
+        //     }else{
+        //         options += "<option id='"+school.id+"'>"+ school.school_name+"</option>"
+        //     }
+        // }
+        // $('#school').append(options);
 
            
     }
