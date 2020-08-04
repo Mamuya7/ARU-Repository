@@ -1,6 +1,8 @@
 	<!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800" rel="stylesheet">
 
+	<script src="{{ asset('ansta/plugins/jquery/dist/jquery.min.js') }}"></script>
+
 	<!-- Icons -->
 	<link href="{{ asset('ansta/css/icons.css') }}" rel="stylesheet">
 

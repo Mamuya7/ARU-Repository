@@ -100,5 +100,6 @@ class RolesController extends Controller
         
         return redirect('showschools');
     }
-    }
+
 }
+

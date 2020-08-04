@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Directorate;
 use Illuminate\Http\Request;
-use App\Department;
-use App\User;
-use Illuminate\Support\Facades\DB;
 
-class UserController extends Controller
+class DirectorateController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-       
+        //
     }
 
     /**
@@ -26,14 +24,7 @@ class UserController extends Controller
      */
     public function create()
     {
-    
-        $users = DB::table('departments')
-        ->join('users','users.department_id','=','departments.id')
-        ->select(DB::raw('CONCAT(users.first_name," ",users.last_name) as full_name'),'users.email as email','departments.department_name as department')
-        ->get();
-
-
-        return view('user.roleUser',['user' => $users,'role'=>$roles]);
+        //
     }
 
     /**
@@ -50,10 +41,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Directorate  $directorate
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Directorate $directorate)
     {
         //
     }
@@ -61,10 +52,10 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Directorate  $directorate
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Directorate $directorate)
     {
         //
     }
@@ -73,10 +64,10 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Directorate  $directorate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Directorate $directorate)
     {
         //
     }
@@ -84,10 +75,10 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Directorate  $directorate
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Directorate $directorate)
     {
         //
     }

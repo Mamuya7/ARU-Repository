@@ -36,6 +36,7 @@ Route::post('storeDepartment','DepartmentsController@store');
 Route::get('showDepartment', 'DepartmentsController@index')->name('showDepartment');
 // Route::delete('deletedepartment/{departments}','DepartmentsController@destroy');
 Route::post('editDepartment/{departments}','DepartmentsController@edit');
+Route::post('showdirectoryschools','DepartmentsController@displaySChool')->name('showdirectoryschools');
 
 //schools
 Route::get('showschools','SchoolsController@index')->name('showschools');
@@ -58,7 +59,7 @@ Route::post('editRole/{roles}','RolesController@edit');
 
 
 //users
-Route::get('assignRole','UserController@create')->name('assignRoles');
+Route::get('assignRole','UserController@create')->name('assignRole');
 
 
 // Route::get('showUser','User')

@@ -153,12 +153,21 @@
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
-
-                            
+                            @enderror          
                         </div>
 
-                        <div class="form-group" style="padding-top:100px;">
+                        <div class="form-group">
+                            <label class="form-label">Role</label>
+                            <select id="role" name=role class="form-control select2 w-100" >
+                                <option value="none" selected="selected" disabled>Select Role</option>
+                                {{ $role }}
+                            @foreach($role as $roles)
+                                <option value="{{$roles->id}}" class="text-md">{{$roles->role_name}}</option>
+                            @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
                             <label class="form-label">Department</label>
                             <select id="department" name="department" class="form-control select2 w-100" >
                                 <option value="none" selected="selected" disabled>Select Department</option>
@@ -187,5 +196,28 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+
+        function displayDepartment(){
+            $.ajax({
+            url: '/show department',
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{csrf_token()}}'
+            },
+            dataType: 'json',
+            success:function(response){
+                SchoolDirectorate.setSchools(response.schools);
+                SchoolDirectorate.setDirectorates(response.directorates);
+            },
+            error:function(xhr,status,err){
+                console.log(err);
+            }
+        });
+        }
+    })
+</script>
 
 @endsection
