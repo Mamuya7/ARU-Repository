@@ -17,6 +17,9 @@ class CreateCommitteeMeetingTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('meeting_id')->unsigned();
             $table->bigInteger('committee_id')->unsigned();
+            $table->bigInteger('chairman_id')->unsigned();
+            $table->bigInteger('secretary_id')->unsigned();
+            $table->time('meeting_time')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('meeting_id')->references('id')->on('meetings');

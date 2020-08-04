@@ -9,9 +9,10 @@ $factory->define(User::class, function (Faker $faker) {
     return [
         'first_name' => $faker->name,
         'last_name' => $faker->name,
-        'username' => $faker->unique()->number,
+        'username' => Str::random(6)."/1000"."/S.2020",
         'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+        'gender' => $faker->randomElement(['male','female']),
+        'password' => Hash::make('password'),
         'department_id' => factory(App\Department::class),
     ];
 });

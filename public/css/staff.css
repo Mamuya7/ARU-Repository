@@ -47,3 +47,19 @@
     border-bottom: 2px solid #4c5050;
     width: 100%;
 }
+
+.fab{
+    position: absolute;
+    z-index: 10000;
+    top: 8rem;
+    right: 5%;
+}
+
+.box-md{
+    padding: 3px;
+    width: 100px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

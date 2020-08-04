@@ -14,4 +14,19 @@ class School extends Model
     protected $fillable = [
         'school_name', 'school_code',
     ];
+
+
+    public function departments()
+    {
+        return $this->belongsToMany('App\Department','department_school','school_id','department_id')
+                    ->withPivot('school_id','department_id');
+    }
+    public function meeting()
+    {
+        return $this->belongsToMany('App\Meeting','school_meeting','school_id','meeting_id');
+    }
+    public function schoolHeads()
+    {
+
+    }
 }

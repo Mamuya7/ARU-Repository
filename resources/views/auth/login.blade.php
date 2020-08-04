@@ -5,14 +5,14 @@
     <div class="row">
         <div class="col-lg-8 col-md-7 col-sm-0 col-xs-0">
             <div class="login-r">
-                <h1 class="text-primary">MMIS</h1>
-                <h1 class="amis-lcase">Meeting Management Information System</h1>
-                <p>Ardhi University Meeting Management System is a system created to enable management of various academic management information.</p>
+                <h1 class="text-primary">IMRS</h1>
+                <h1 class="amis-lcase">Institutional Meeting Repository System</h1>
+                <p>Ardhi University Meeting Repository System is a system created to enable storing and retrieving meeting document delivarables.</p>
                 <ul>
-                    <li>Students Registration Process Automation.</li>
-                    <li>Students Accommodation Records Management.</li>
-                    <li>Students Academic Records Management.</li>
-                    <li>Students Financial Records Management</li>
+                    <li>Meeting Creation Process Automation.</li>
+                    <li>Minutes, Matter Arising, Attendence and Attachments storage.</li>
+                    <li>Search and Retrieval of past Meetings with associated Attachments.</li>
+                    <li>History and Backtracking of Meeting with associated Attachments</li>
                 </ul>
             </div>
         </div>

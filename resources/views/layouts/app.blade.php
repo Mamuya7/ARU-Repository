@@ -11,10 +11,10 @@
     
     <!-- Favicon -->
     <link href="{{ asset('img/logo/aruLogo.png') }}" rel="icon" type="image/png">
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
     
     @guest
-    <!-- Scripts -->
-    <!-- <script src="{{ asset('js/app.js') }}" defer></script> -->
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

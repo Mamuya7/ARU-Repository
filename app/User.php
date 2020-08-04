@@ -45,20 +45,19 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
-    public function department()
-    {
-        return $this->belongsTo('App\Departments');
-    }
-
-    public function meetings()
-    {
-        return $this->belongsToMany('App\Meetings','meeting_boards','member_id','meeting_id')
-                    ->withPivot('id','position');
-    }
-
     public function hasRole($role)
     {
         foreach (Auth::User()->roles as $value) {
+            if($value->role_name === $role){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function userHasRole( $role)
+    {
+        foreach ($this->roles as $value) {
             if($value->role_name === $role){
                 return true;
             }
@@ -92,4 +91,20 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    public function school()
+    {
+        return Auth::User()->department->school;
+    }
+
+    public function department()
+    {
+        return $this->belongsTo('App\Department');
+    }
+    // public function department()
+    // {
+    //     $department = new Department();
+    //     $department->setId(Auth::User()->department_id);
+    //     return $department;
+    // }
 }

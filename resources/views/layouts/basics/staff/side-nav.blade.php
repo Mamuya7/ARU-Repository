@@ -17,11 +17,11 @@
             <ul class="slide-menu">
                 @if(Auth::User()->hasAnyRole(['head','dean']))
                 <li>
-                    <a href="create_meeting" class="slide-item">Create Meeting</a>
+                    <a href="{{ url('create_meeting')}}" class="slide-item">Create Meeting</a>
                 </li>
                 @endif
                 <li>
-                    <a href="view_meeting" class="slide-item">View Meeting</a>
+                    <a href="{{ url('view_meeting')}}" class="slide-item">View Meeting</a>
                 </li>
             </ul>
         </li>
