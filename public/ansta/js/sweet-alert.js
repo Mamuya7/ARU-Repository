@@ -38,19 +38,30 @@ $(function() {
 	});
 	// Timer
 	$("#but4").on("click", function(e){
-		var message = $("#message").val();
-		var title = $("#title").val();
+		var message = $("#alert-message").val();
+		var title = $("#alert-title").val();
+		var alerttype = $("#alert-type").val();
+		var duration = $("#alert-timer").val();
+
 		if (message == "") {
 			message = "Your message";
 		}
 		if (title == "") {
 			title = "Your message";
 		}
-		message += "(close after 2 seconds)";
+		if(alerttype == ""){
+			alerttype = "success";
+		}
+		if(duration == ""){
+			duration = 2000;
+		}
+		
+		message += "(close after "+ duration/1000 + " seconds)";
 		swal({
 			title: title,
 			text: message,
-			timer: 2000,
+			type: alerttype,
+			timer: duration,
 			showConfirmButton: false
 		});
 	});

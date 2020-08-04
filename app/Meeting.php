@@ -17,13 +17,11 @@ class Meeting extends Model
         'meeting_title', 'meeting_description', 'meeting_type', 'meeting_date',
     ];
 
-    protected $members = null;
-
     public function __construct()
     {
        
     }
-
+    // meetings eloquent relationship methods
     public function departments()
     {
         return $this->belongsToMany('App\Department','department_meeting','meeting_id','department_id')
@@ -37,11 +35,18 @@ class Meeting extends Model
     {
         return $this->belongsToMany('App\Committee','committee_meeting','meeting_id','committee_id');
     }
-    public function setMembers($value)
+    public function departmentMeetingDocuments()
     {
-        $this->members = $value;
+        return $this->hasManyThrough('App\DepartmentMeetingDocument','App\DepartmentMeeting','meeting_id','department_meeting_id');
     }
 
+    // getting meetings pivots objects
+    public function departmentMeetings()
+    {
+        return $this->hasMany('App\DepartmentMeeting');
+    }
+
+    // checking meetings type methods
     public function ofDepartment()
     {
         if($this->meeting_type === 'department'){
@@ -93,12 +98,12 @@ class Meeting extends Model
     }
     public function getChairman()
     {
-        if($this->ofDepartment() && ($this->members !== null))
+        if($this->ofDepartment())
         {
-            foreach ($this->members as $member) {
-                $user = User::find($member->id);
-                if($user->userHasRole('head')){
-                    return $member;
+            foreach (Auth::User()->department->users as $user) {
+                $member = User::find($user->id);
+                if($member->userHasRole('head')){
+                    return $user;
                 }
             }
         }
@@ -107,11 +112,11 @@ class Meeting extends Model
 
     public function getSecretary()
     {
-        if($this->ofDepartment() && ($this->members !== null))
+        if($this->ofDepartment())
         {
-            foreach ($this->members as $member) {
-                if($member->id === $this->departments()->where('department_id',Auth::User()->department_id)->first()->pivot->secretary_id){
-                    return $member;
+            foreach (Auth::User()->department->users as $user) {
+                if($user->id === $this->departments()->where('department_id',Auth::User()->department_id)->first()->pivot->secretary_id){
+                    return $user;
                 }
             }
         }

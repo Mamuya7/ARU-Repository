@@ -23,10 +23,12 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('create_meeting','MeetingsController@create');
-Route::get('view_meeting','MeetingsController@index');
+Route::get('view_meeting','MeetingsController@index')->name('view_meetings');
 Route::post('store_meeting','MeetingsController@store');
 Route::post('fetch_meeting_members','MeetingsController@fetch');
 Route::post('show_meeting/{meeting}','MeetingsController@show');
+Route::post('uploadfile/{meeting}','MeetingsController@uploadFile');
+Route::post('downloadfile','MeetingsController@downloadFile');
 
 Route::post('show_users','UsersController@show');
 

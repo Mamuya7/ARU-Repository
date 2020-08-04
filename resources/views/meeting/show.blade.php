@@ -24,33 +24,24 @@
                 <div class="pt-2">
                     <span>Attachments</span>
                     <div class="row">
+                        @foreach($documents as $document)
                         <div class="col-lg-4">
-                            <span>Agenda</span>
-                            <div class="card">
+                            <div class="document card shadow">
                                 <div class="card-body">
-                                    <input type="file" class="dropify" data-height="180" />
+                                    <img src="{{ $document->icon($document->document_extension)}}" alt="document" />
+                                    <span onclick="downloadfile({{json_encode($document)}},{{json_encode(url('downloadfile'))}})">
+                                        <i class="fe fe-download"></i>
+                                    </span>
                                 </div>
-                            </div> 
-                        </div>
-                        <div class="col-lg-4">
-                            <span>Minutes</span>
-                            <div class="card">
-                                <div class="card-body">
-                                    <input type="file" class="dropify" data-height="180" />
+                                <div class="card-footer p-1">
+                                    <h3 class="text-capitalize">{{$document->document_type}}</h3>
                                 </div>
-                            </div> 
+                            </div>
                         </div>
-                        <div class="col-lg-4">
-                            <span>Matter Arising</span>
-                            <div class="card">
-                                <div class="card-body">
-                                    <input type="file" class="dropify" data-height="180" />
-                                </div>
-                            </div> 
-                        </div>
+                        @endforeach
                     </div>
                     <span>Other Attachments</span>
-                    <div id="attachments" class="row">
+                    <div id="attachments" class="row"  data-toggle="modal" data-target="#attachment-modal">
                         <div id="create-attachment" class="col-lg-3 hover-ardhi box-md">
                             <span class="fas fa-plus"></span>
                         </div>
@@ -187,29 +178,132 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="attachment-modal" tabindex="-1" role="dialog" aria-labelledby="attachmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="attachment-modal-label">Upload File</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{url('uploadfile').'/'.$meeting->id}}" method="post" id="upload-form" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <input type="file" id="file-upload" name="file-upload" class="dropify" data-height="300" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card h-75">
+                                <div class="card-header">
+                                    <h2>Select File Type</h2>
+                                    <input type="text" name="meeting_id" value="{{$meeting->id}}" hidden>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex flex-column justify-content-center h-100">
+                                        <input type="radio" name="file-type" value="none" class="d-none" checked>
+                                        <label class="custom-switch">
+                                            <input type="radio" name="file-type" value="agenda" class="custom-switch-input">
+                                            <span class="custom-switch-indicator mr-3"></span>
+                                            <span class="custom-switch-description text-capitalize">Agenda</span>
+                                        </label>
+                                        <label class="custom-switch">
+                                            <input type="radio" name="file-type" value="minutes" class="custom-switch-input">
+                                            <span class="custom-switch-indicator mr-3"></span>
+                                            <span class="custom-switch-description text-capitalize">Minutes</span>
+                                        </label>
+                                        <label class="custom-switch">
+                                            <input type="radio" name="file-type" value="matter_arising" class="custom-switch-input">
+                                            <span class="custom-switch-indicator mr-3"></span>
+                                            <span class="custom-switch-description text-capitalize">Matter Arising</span>
+                                        </label>
+                                        <label class="custom-switch">
+                                            <input type="radio" name="file-type" value="other" class="custom-switch-input">
+                                            <span class="custom-switch-indicator mr-3"></span>
+                                            <span class="custom-switch-description text-capitalize">Other</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="close-upload" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" id="upload" class="btn btn-primary">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="button" value="" id="alert-type" hidden>
+<input type="button" value="" id="alert-title" hidden>
+<input type="button" value="" id="alert-timer" hidden>
 @endsection
 
 @section('scripts')
     <script>
+		$('.dropify').dropify({
+			messages: {
+				'default': 'Drag and drop a file here or click',
+				'replace': 'Drag and drop or click to replace',
+				'remove': 'Remove',
+				'error': 'Ooops, something wrong appended.'
+			},
+			error: {
+				'fileSize': 'The file size is too big (2M max).'
+			}
+		});
 
         $(document).ready(function(){
-            $('#create-attachment').click(function(){
-                $('#attachments').prepend(createAttachment());
-            });
-
-            $('.dropify').dropify({
-                messages: {
-                    'default': 'Drag and drop a file here or click',
-                    'replace': 'Drag and drop or click to replace',
-                    'remove': 'Remove',
-                    'error': 'Ooops, something wrong appended.'
-                },
-                error: {
-                    'fileSize': 'The file size is too big (2M max).'
+            $('#upload').click(function(){
+                let file = filetype();
+                if(file.isSet){
+                    $("#upload-form").trigger("submit");
+                    $("#file-upload").val("");
+                    $("#close-upload").trigger('click');
+                    clearAlert();
                 }
             });
         });
 
+        const downloadfile = (document,path) => {
+            $.ajax({
+                url: path,
+                type:'post',
+                headers: {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                data: {'document':document},
+                dataType:'json',
+                success: function(response){
+                    console.log(response);
+                },
+                error: function(xhr,status,error){
+
+                }
+            })
+        }
+
+        const filetype = () => {
+            let file = $("input[name=file-type]:checked").val();
+            if(file === 'none'){
+                $('#but4').trigger('click');
+                setAlert({title:"File Type Not Selected",
+                            type: "warning",
+                            timer: 2000});
+
+                return {isSet:false};
+            }else{
+                return {isSet:true};
+            }
+
+        }
         const createAttachment = () =>{
             let att = '<div class="col-lg-3">';
                     att += '<div class="card">';
