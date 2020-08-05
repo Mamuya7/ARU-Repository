@@ -15,8 +15,15 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-       
+    {  
+        $users = DB::table('departments')
+        ->join('users','users.department_id','=','departments.id')
+        ->select(DB::raw('CONCAT(users.first_name," ",users.last_name) as full_name'),'users.id as id','users.gender as gender','users.email as email','departments.department_name as department')
+        ->get();
+
+
+        return view('user.index',['user' => $users]);
+    //    return view('user.index');
     }
 
     /**

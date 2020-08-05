@@ -31,7 +31,12 @@
                              <button type="button" onclick="editCommittee({{$committee->id}})" class="btn btn-sm btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateRole">update</button> 
                         </td>
                         <td>       
-                            <button type="button" class="btn btn-sm btn-primary mt-1 mb-1">Delete</button>                                 
+                            <form action="/deleteCommitee/{{$committee->id}}" method="post" class="dis-inline">
+                                
+                                {{csrf_field()}}
+                                {{method_field('DELETE')}}
+                                <button type="submit" class="btn btn-sm btn-primary mt-1 mb-1">Delete</button>
+                            </form>                                 
                         </td>
                     </tr>
                     @endforeach

@@ -103,7 +103,15 @@ class SchoolsController extends Controller
         // });
             
         DB::transaction(function() use($schools){
-            DB::table('schools')->where('id',$schools->id)->delete();
+            // DB::table('schools')->where('id',$schools->id)->delete();
+
+            // DB::table('schools')
+            // ->join('department_school','department_school.department_id','=','schools.id')
+            // ->where('department_school.id','=','schools.id','=',$school_id)
+            // ->delete();
+
+            DB::table('schools')->where('schools.id',$school_id)->delete();
+            DB::table('department_school')->where('department_school.school_id',$school_id)->delete();
         });
         
         return redirect('showschools');

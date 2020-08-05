@@ -1,13 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-
-
-    
-
-    
-
-                              
+                        
     
     <div class="col-xl-12">
         <div class="card  shadow">
@@ -39,7 +33,7 @@
                 </td>
                 
                 <td>
-                    <!-- <button type="button" class="btn btn-sm btn-primary mt-1 mb-1">Delete</button>  --> 
+                 
                     <form action="deleteSchool/{{$school->id}}" method="post" class="dis-inline">
                 
                     {{csrf_field()}}
@@ -57,12 +51,14 @@
         </div>
     </div>
 
+    <input type='button' class="btn btn-primary mt-1 mb-1" value='Conform alert 2' id='click4'>
+
                          
 
     <div class="modal fade" id="updateSchool" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class = "modal-dialog modal-md">
             <div class = "modal-content">
-                <div class = "modal-header bg-gradient-cyan">      
+                <div class = "modal-header bg-primary">      
                     <button type = "button" class="close" data-dismiss = "modal">×</button>
                     <!-- <h4 class = "modal-title">Warning</h4> -->
                 </div>
@@ -122,6 +118,31 @@
             $('#code').val(data.school_code);
            
     }
+
+        $(document).ready(function(){
+                $("#click4").on("click", function(e){
+                swal({
+                    title: "Are you sure?",
+                    text: "You want to delete these item",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }, function(isConfirm) {
+                    if (isConfirm) {
+                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                    } else {
+                        swal("Cancelled", "Your imaginary file is safe :)", "error");
+                    }
+                });
+             });
+        });
+    
+
+   
 </script>
 
 @endsection

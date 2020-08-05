@@ -21,7 +21,7 @@ class CreateCommitteeRoleTable extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('role_id')->references('id')->on('roles');
-            $table->foreign('committee_id')->references('id')->on('committee');
+            $table->foreign('committee_id')->references('id')->on('committees');
         });
     }
 

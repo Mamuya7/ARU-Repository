@@ -33,3 +33,5 @@
 
 <!-- Ansta JS -->
 <script src="{{ asset('ansta/js/custom.js') }}"></script>
+
+<script src="{{ asset('ansta/plugins/sweet-alert/sweetalert.min.js') }}"></script>

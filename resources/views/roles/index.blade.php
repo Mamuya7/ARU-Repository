@@ -28,7 +28,7 @@
                             <td>{{$role->role_name}}</td>
                             <td>{{$role->role_code}}</td>
                             <td>  
-                             <button type="button" onclick="editRole({{$role->id}})" class="btn btn-sm btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateRole">update</button> 
+                             <button type="button" onclick="editRole({{$role->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateRole">update</button> 
                             </td>
                                 
                             <td>
@@ -37,7 +37,7 @@
                             
                                     {{csrf_field()}}
                                     {{method_field('DELETE')}}
-                                    <button type="submit" class="btn btn-sm btn-primary mt-1 mb-1">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-square btn-primary mt-1 mb-1">Delete</button>
                                 </form>                                 
                             </td>
                         </tr>
@@ -50,39 +50,40 @@
 </div>
 
 <div class="modal fade" id="updateRole" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class = "modal-dialog modal-md">
-            <div class = "modal-content">
-                <div class = "modal-header bg-gradient-cyan">      
-                    <button type = "button" class="close" data-dismiss = "modal">×</button>
-                    <!-- <h4 class = "modal-title">Warning</h4> -->
-                </div>
-                <div class = "modal-body">
-                    <form action="" method="post">
-                        {{csrf_field()}}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="form-label">Role Name</label>
-                                    <input type="text" id="name" class="form-control" name="school_name">
-                                </div>
+    <div class = "modal-dialog modal-md">
+        <div class = "modal-content">
+            <div class = "modal-header bg-primary">      
+                <button type = "button" class="close" data-dismiss = "modal">×</button>
+                <!-- <h4 class = "modal-title">Warning</h4> -->
+            </div>
+            <div class = "modal-body">
+                <form action="" method="post">
+                    {{csrf_field()}}
+                    <input type="text" id="r_id" class="form-control" name="role_id" hidden>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label">Role Name</label>
+                                <input type="text" id="name" class="form-control" name="school_name">
                             </div>
-                        
+                        </div>
+                    
 
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="form-label">Role Code</label>
-                                    <input type="text" id="code" class="form-control" name="school_code">
-                                </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label">Role Code</label>
+                                <input type="text" id="code" class="form-control" name="school_code">
                             </div>
-                    </form>    
-                </div>
-                <div class = "modal-footer">
-                    <button type="button" class="btn btn-md btn-primary mt-1 mb-1">update</button>
-                    <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
-                </div>
+                        </div>
+                </form>    
+            </div>
+            <div class = "modal-footer">
+                <button type="button" id="update-role" class="btn btn-md btn-primary mt-1 mb-1">update</button>
+                <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
             </div>
         </div>
     </div>
+</div>
 
 
 <script>
@@ -106,11 +107,36 @@
     }
 
     function displayForm(data){
-
+        $('#r_id').val(data.id);
         $('#name').val(data.role_name);
         $('#code').val(data.role_code);
-   
     }
+
+    function updateRoles(){
+       var name = $('#name').val();
+       var code = $('#code').val();
+        $.ajax({
+            url: '/updateRole',
+            type: 'POST',
+            // data:{
+            //     role_name:name,role_code:code
+            // },
+            // headers: {
+            //     'X-CSRF-TOKEN': '{{csrf_token()}}'
+            // },
+            success:function(response){
+               
+            },
+            error:function(xhr,status,err){
+                console.log(err);
+            }
+        });
+        
+    }
+
+    $('#update-role').click(function(){
+        updateRoles();
+    })
 
            
 </script>

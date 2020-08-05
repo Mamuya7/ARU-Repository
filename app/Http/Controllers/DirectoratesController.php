@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Directorate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class DirectorateController extends Controller
+class DirectoratesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,8 @@ class DirectorateController extends Controller
      */
     public function index()
     {
-        //
+        $directorate = DB::table('directorates')->paginate();
+        return view('directorate.index',['directorates' => $directorate]);
     }
 
     /**
@@ -24,7 +26,7 @@ class DirectorateController extends Controller
      */
     public function create()
     {
-        //
+        return view('directorate.create'); 
     }
 
     /**
@@ -35,13 +37,14 @@ class DirectorateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Directorate::create($request->all());
+        return back()->with('response','New Role Added Successfully');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Directorate  $directorate
+     * @param  \App\Directorates  $directorate
      * @return \Illuminate\Http\Response
      */
     public function show(Directorate $directorate)
@@ -52,10 +55,10 @@ class DirectorateController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Directorate  $directorate
+     * @param  \App\Directorates  $directorate
      * @return \Illuminate\Http\Response
      */
-    public function edit(Directorate $directorate)
+    public function edit(Directorates $directorate)
     {
         //
     }
@@ -64,10 +67,10 @@ class DirectorateController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Directorate  $directorate
+     * @param  \App\Directorates  $directorate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Directorate $directorate)
+    public function update(Request $request, Directorates $directorate)
     {
         //
     }
@@ -75,10 +78,10 @@ class DirectorateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Directorate  $directorate
+     * @param  \App\Directorates  $directorate
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Directorate $directorate)
+    public function destroy(Directorates $directorate)
     {
         //
     }

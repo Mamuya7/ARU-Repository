@@ -86,6 +86,16 @@ class RolesController extends Controller
         //
     }
 
+    public function updateRole(){
+        $name = $request->input('role_name');
+        $code = $request->input('role__code');
+       
+        $id = DB::table('departments')->insert(
+            ['department_name' => $name, 'department_code' => $code]
+        );
+
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -98,7 +108,7 @@ class RolesController extends Controller
             DB::table('roles')->where('id',$roles->id)->delete();
         });
         
-        return redirect('showschools');
+        return redirect('displayRoles');
     }
 
 }

@@ -84,6 +84,10 @@ class CommitteeController extends Controller
      */
     public function destroy(Committee $committee)
     {
-        //
+        DB::transaction(function() use($committee){
+            DB::table('committees')->where('id', $committee->id)->delete();
+        });
+
+        return redirect('displayCommittee');
     }
 }

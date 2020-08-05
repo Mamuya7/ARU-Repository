@@ -10,7 +10,7 @@
                     <a class="slide-item" href="{{ route('register') }}">Add User</a>
                 </li>
                 <li>
-                    <a class="slide-item" >View User</a>
+                    <a href="{{ route('viewUsers') }}" class="slide-item" >View Users</a>
                 </li>
                 <li>
                     <a href="{{ route('assignRole') }}" class="slide-item">Assign Role</a>
@@ -68,6 +68,30 @@
                 </li>
                 <li>
                     <a href="{{'displayCommittee'}}" class="slide-item">View Commitee</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fe fe-map"></i><span class="side-menu__label">Directorate</span><i class="angle fa fa-angle-right"></i></a>
+            <ul class="slide-menu">
+                <li>
+                    <a href="{{ route('registerDirectorateForm') }}" class="slide-item">Create Directorate</a>
+                </li>
+                <li>
+                    <a href="{{ route('displayDirectorates') }}" class="slide-item">View Directorates</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fe fe-map"></i><span class="side-menu__label">Meeting</span><i class="angle fa fa-angle-right"></i></a>
+            <ul class="slide-menu">
+                <li>
+                    <a href="" class="slide-item">Create Meeting</a>
+                </li>
+                <li>
+                    <a href="" class="slide-item">View Meetings</a>
                 </li>
             </ul>
         </li>
