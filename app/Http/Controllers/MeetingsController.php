@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use DB;
 use Auth;
 use App\Meeting;
+use App\Document;
+use App\DepartmentMeeting;
 use App\DepartmentSchool;
 use App\Department;
+use Response;
 use Illuminate\Http\Request;
 
 class MeetingsController extends Controller
@@ -136,31 +139,20 @@ class MeetingsController extends Controller
      */
     public function show(Meeting $meeting)
     {
-         $members = array();
-        // $members = DB::table('users')
-        //                 ->join('role_user','users.id','=','role_user.user_id')
-        //                 ->join('roles','role_user.role_id','=','roles.id')
-        //                 ->join('meeting_members','role_user.id','=','meeting_members.member_role_id')
-        //                 ->select('users.first_name','users.last_name','roles.role_name','role_user.user_id', 'meeting_members.position')
-        //                 ->where('meeting_members.meeting_id',$meetings->id)
-        //                 ->get();
-        // $creator = DB::table('users')
-        //                 ->select('users.first_name','users.last_name')
-        //                 ->where('users.id',$meetings->user_id)
-        //                 ->get();
+        $members = array();
+        $documents = array();
 
-       
         if($meeting->ofDepartment()){
             $members = Auth::User()->department->users;
+            $documents = $meeting->departmentMeetings()->where('meeting_id',$meeting->id)->first()->documents;
         }elseif ($meeting->ofSchool()) {
             $school = Auth::User()->department->school;
             $members = $school->schoolHeads();
         }
-        $meeting->setMembers($members);
         $chair = $meeting->getChairman();
         $secr = $meeting->getSecretary();
 
-        return view('meeting.show',["meeting" => $meeting, "members" => $members,
+        return view('meeting.show',["meeting" => $meeting, "members" => $members, "documents" => $documents,
          'chair' => $chair, 'secr' => $secr ] );
     }
 
@@ -196,6 +188,47 @@ class MeetingsController extends Controller
     public function destroy(Meeting $meeting)
     {
         //
+    }
+
+    public function uploadFile(Request $request, Meeting $meeting)
+    {
+        if($request->hasFile('file-upload')){
+            $dir = 'public/documents/';
+            $filetype = $request->input('file-type');
+            $ext = $request->file('file-upload')->extension();
+
+            $path = $request->file('file-upload')->store($dir.$filetype);
+
+            if($path !== null){
+                $document = $this->create_document([
+                    "type" => $filetype,
+                    "path" => $path,
+                    "extension" => $ext]);
+                
+                if($meeting->ofDepartment()){
+                    $departmentMeeting = DepartmentMeeting::where('meeting_id',$meeting->id)
+                                        ->where(function($query){
+                                                $query->where('department_id',Auth::User()->department_id);
+                                        })->get();
+                    $departmentMeeting->first()->documents()->save($document);
+                }elseif ($meeting->ofDirectorate()) {
+                    # code...
+                }elseif ($meeting->ofSchool()) {
+                    # code...
+                }elseif ($meeting->ofCommittee()) {
+                    # code...
+                }
+            }
+        }
+
+        return redirect()->route('view_meetings');
+    }
+
+    public function downloadFile(Request $request)
+    {
+        $document = $request->input('document');
+        response()->download(storage_path($document["document_url"]),$document["document_type"]);
+        echo json_encode($document);
     }
 
     public function fetch()
@@ -240,4 +273,15 @@ class MeetingsController extends Controller
             )
         );
     }
+
+    protected function create_document($docInfo){
+        $document = new Document([
+            'document_name' => "",
+            'document_type' => $docInfo["type"],
+            'document_url' => $docInfo["path"],
+            'document_extension' => $docInfo["extension"]
+        ]);
+        return $document;
+    }
+
 }

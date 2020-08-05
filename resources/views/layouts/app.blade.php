@@ -90,6 +90,7 @@
     		@endauth
 		</div>
 	</div>
+	<input type="button" id="but4" value="">
     @include('layouts.basics.staff.footer')
 
 	@if(View::hasSection('scripts'))

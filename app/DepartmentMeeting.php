@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DepartmentMeeting extends Model
 {
+    public $table = 'department_meeting';
     public static $TABLE_NAME = 'department_meeting';
     
     protected $fillable = [
@@ -20,18 +21,15 @@ class DepartmentMeeting extends Model
     public static $SECRETARY_ID = 'secretary_id';
     public static $MEETING_TIME = 'meeting_time';
 
-    protected $meeting;
-    protected $secretary;
-
-    public function __construct()
+    
+    public function meeting()
     {
-        // $this->meeting = $meeting;
-        // $this->secretary = DepartmentMeeting::where('meeting_id',$this->meeting)
-        //                     ->where('department_id',Auth::User()->department_id)->first();
+        return $this->belongsTo('App\Meeting');
     }
 
-    public function getDepartmentSecretary()
+    public function documents()
     {
-        return $this->secretary;
+        return $this->morphMany('App\Document','documentable');
     }
+
 }
