@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Auth;
+use DateTime;
 
 class Meeting extends Model
 {
@@ -93,7 +94,9 @@ class Meeting extends Model
     }
     public function wasHeld()
     {
-        if($this->meeting_date > date('Y-m-d')){
+        $meetingdate = new DateTime($this->meeting_date);
+        $todaydate = new DateTime(date('Y-m-d'));
+        if($meetingdate < $todaydate){
             return true;
         }
         return false;

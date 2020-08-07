@@ -34,20 +34,19 @@
 
 <!-- file uploads js -->
 <script src="{{ asset('ansta/plugins/fileuploads/js/dropify.min.js')}}"></script>
+<!-- Date Picker-->
+<script src="{{ asset('ansta/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 
 <!-- Custom scroll bar Js-->
 <script src="{{ asset('ansta/plugins/customscroll/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+
 <!-- Ansta JS -->
 <script src="{{ asset('ansta/js/custom.js') }}"></script>
-
-
-<!-- Date Picker-->
-<script src="{{ asset('ansta/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 
 <!-- Staff JS -->
 <script src="{{ asset('js/staff.js') }}"></script>
 
 <!-- Kialapi pdf JS
     ============================================ -->
-<script src="{{ asset('kiaalap/js/pdf/jquery.media.js')}}"></script>
-<script src="{{ asset('kiaalap/js/pdf/pdf-active.js')}}"></script>
+<!-- <script src="{{ asset('kiaalap/js/pdf/jquery.media.js')}}"></script>
+<script src="{{ asset('kiaalap/js/pdf/pdf-active.js')}}"></script> -->

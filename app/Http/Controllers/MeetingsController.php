@@ -147,8 +147,8 @@ class MeetingsController extends Controller
             $members = Auth::User()->department->users;
             $documents = $meeting->departmentMeetings()->where('meeting_id',$meeting->id)->first()->documents;
         }elseif ($meeting->ofSchool()) {
-            $school = Auth::User()->department->school;
-            $members = $school->schoolHeads();
+            $schoolmeeting = $meeting->schoolMeetings()->where('school_id',Auth::User()->department()->school->id)->get();
+            return redirect()->route('show_school_meeting'.'/'.$schoolmeeting->id);
         }
         $chair = $meeting->getChairman();
         $secr = $meeting->getSecretary();
@@ -238,7 +238,7 @@ class MeetingsController extends Controller
                             ->where(function($query){
                                     $query->where('department_id',Auth::User()->department_id);
                             })->get();
-            $attendence = Array();
+            
             foreach ($data as $status => $users) {
                 foreach ($users as $user) {
                     $depMeeting->first()->attendences()->updateOrCreate(

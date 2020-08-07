@@ -31,7 +31,7 @@
                     <span>Attachments</span>
                     <div class="row">
                         @foreach($documents as $document)
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <div class="document card shadow">
                                 <div class="card-body">
                                     <img src="{{ $document->icon($document->document_extension)}}" alt="document" />
@@ -46,7 +46,7 @@
                         </div>
                         @endforeach
                     </div>
-                    <span>Other Attachments</span>
+                    <span>Add Attachments</span>
                     <div id="attachments" class="row"  data-toggle="modal" data-target="#attachment-modal">
                         <div id="create-attachment" class="col-lg-3 hover-ardhi box-md">
                             <span class="fas fa-plus"></span>
@@ -59,9 +59,6 @@
                             <label for="chairman">Chairman</label>
                             <input type="text" id="chairman" value="{{($chair === null)? 'Not Selected': $chair->last_name.' '.$chair->first_name}}" class="form-control" disabled>
                         </div>
-                        <!-- <div class="col-lg-3">
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Change</button>
-                        </div> -->
                     </div>
                     <div class="row">
                         <div class="col-lg-9">
@@ -69,7 +66,7 @@
                             <input type="text" id="secretary" value="{{($secr === null)? 'Not Selected': $secr->last_name.' '.$secr->first_name}}" class="form-control" disabled>
                         </div>
                         <div class="col-lg-3">
-                            @if(($meeting->wasHeld()) && (Auth::User()->id == $chair->id))
+                            @if((!$meeting->wasHeld()) && (Auth::User()->id == $chair->id))
                             <button class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Change</button>
                             @endif
                         </div>
@@ -94,7 +91,7 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                                 <div class="d-flex flex-column h-100vh">
-                                    @if($meeting->wasHeld())
+                                    @if(!$meeting->wasHeld())
                                     <div class="border-ardhi box-fit hover-ardhi cursor-default mb-3" data-toggle="modal" data-target="#largeModal">
                                         <span class="fas fa-plus-square text-xl text-black pl-1 pt-1"></span>
                                         <span class="p-2 font-weight-800">Invite Member</span>
@@ -104,7 +101,11 @@
                                     <div class="border-bottom hover-normal p-2 cursor-default">
                                         <p class="font-weight-700"></p>
                                         <div class="d-flex justify-content-between">
-                                            <span class="text-capitalize">{{$member->first_name}}</span>
+                                            <span class="text-capitalize">{{$member->first_name}}
+                                                @if($member->id == Auth::User()->id)
+                                                <span class="text-uppercase bg-green text-white ml-2 p-1">you</span>
+                                                @endif
+                                            </span>
                                             @if(($chair !== null) && ($chair->id == $member->id))
                                             <span class="text-capitalize text-red">Chairman</span>
                                             @elseif(($secr !== null) && ($secr->id == $member->id))
