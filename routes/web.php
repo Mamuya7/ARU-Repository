@@ -29,6 +29,8 @@ Route::post('fetch_meeting_members','MeetingsController@fetch');
 Route::post('show_meeting/{meeting}','MeetingsController@show');
 Route::post('uploadfile/{meeting}','MeetingsController@uploadFile');
 Route::post('downloadfile','MeetingsController@downloadFile');
+Route::post('changesecretary/{meeting}','MeetingsController@changeSecretary');
+Route::post('create_attendence/{meeting}','MeetingsController@createAttendence');
 
 Route::post('show_users','UsersController@show');
 

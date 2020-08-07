@@ -1,16 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-<span class="fas fa-edit text-xl round-p5-ardhi color-ardhi hover-ardhi shadow fab"></span>
 <div class="p-1">
     <div class="row">
-        <div class="col-lg-9">
+        <div class="col-lg-8">
             <div class="d-flex justify-content-center">
                 <input type="text" id="title" class="form-control text-center text-uppercase text-xl" value="{{$meeting->meeting_title}}" disabled>
             </div>
         </div>
-        <div class="col-lg-3">
-            <span class="text-xxl">{{$meeting->meeting_date}}</span>
+        <div class="col-lg-2">
+            <span class="text-xl">{{$meeting->meeting_date}}</span>
+        </div>
+        <div class="col-lg-2 text-right">
+            <span class="fab">
+                <span class="fas fa-edit text-xl round-p5-ardhi color-ardhi hover-ardhi shadow"></span>
+                <span class="ion-person-stalker text-xl round-p5-ardhi color-ardhi hover-ardhi"
+                 data-toggle="modal" data-target="#attendence"></span>
+            </span>
         </div>
     </div>
     <div class="row">
@@ -123,7 +129,7 @@
     </div>
 </div>
 <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
-    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="modal-title-default">Select Secretary</h2>
@@ -152,8 +158,8 @@
                 @endforeach
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="changesecretary({{json_encode(url('changesecretary/'.$meeting->id))}})">Save changes</button>
+                <button type="button" id="close-change-secretary" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -174,6 +180,71 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary">Add Members</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="attendence" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="attendenceLabel">Select Attendence</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-4"><span>Members</span></div>
+                    <div class="col-lg-2"><span>Status</span></div>
+                    <div class="col-lg-2"><span>Attended</span></div>
+                    <div class="col-lg-2"><span>Missed With Report</span></div>
+                    <div class="col-lg-2"><span>Missed Without Report</span></div>
+                </div>
+                @foreach($members as $member)
+                <div class="row">
+                    <div class="col-lg-4">
+                        <span class="text-capitalize">{{$member->last_name .' '. $member->first_name}}</span>
+                    </div>
+                    <div class="col-lg-2">
+                        @if(($chair !== null) && ($chair->id == $member->id))
+                        <span class="text-capitalize text-red">Chairman</span>
+                        @elseif(($secr !== null) && ($secr->id == $member->id))
+                        <span class="text-capitalize text-green">Secretary</span>
+                        @else
+                        <span class="text-capitalize">Member</span>
+                        @endif
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="custom-switches-stacked">
+                            <label class="custom-switch">
+                                <input type="radio" name="{{$member->id}}" value="attended" class="custom-switch-input" checked="">
+                                <span class="custom-switch-indicator custom-switch-indicator-square"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="custom-switches-stacked">
+                            <label class="custom-switch">
+                                <input type="radio" name="{{$member->id}}" value="missed" class="custom-switch-input">
+                                <span class="custom-switch-indicator custom-switch-indicator-square"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="custom-switches-stacked">
+                            <label class="custom-switch">
+                                <input type="radio" name="{{$member->id}}" value="noreport" class="custom-switch-input">
+                                <span class="custom-switch-indicator custom-switch-indicator-square"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="close-attendence" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="getattendence({{json_encode($members)}},{{json_encode(url('create_attendence/'.$meeting->id))}})">Submit</button>
             </div>
         </div>
     </div>
@@ -272,6 +343,66 @@
             });
         });
 
+        const getattendence = (members,path) => {
+            let data = {
+                "attended": Array(), "missed":Array(), "noreport":Array()
+            }
+            for (const member of members) {
+                let attendence = $('input[name=' + member.id + ']:checked').val();
+
+                if(attendence == 'attended'){
+                    data.attended.push(member.id); 
+                }else if(attendence == 'missed'){
+                    data.missed.push(member.id);
+                }else if(attendence == 'noreport'){
+                    data.noreport.push(member.id);
+                }
+            }
+
+            postdata(data,path);
+        }
+        const postdata = (data,path) => {
+            $.ajax({
+                url: path,
+                type:'post',
+                headers: {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                data: {'data':data},
+                dataType:'json',
+                success: function(response){
+                    showSuccess('Recorded Successfully!!');
+                    $('#but4').trigger('click');
+                    $('#close-attendence').trigger('click');
+                },
+                error: function(xhr,status,error){
+
+                }
+            });
+        }
+
+        const changesecretary = (path) => {
+            let secretary = $('input[name=secretary]:checked').val();
+            $.ajax({
+                url: path,
+                type:'post',
+                headers: {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                data: {'secretary_id':secretary},
+                dataType:'json',
+                success: function(response){
+                    showSuccess('Secretary Updated Successfully!!');
+                    $('#but4').trigger('click');
+                    $('#close-change-secretary').trigger('click');
+                },
+                error: function(xhr,status,error){
+                    showFailure('Selection of Secretary is Failed!!');
+                    $('#but4').trigger('click');
+                }
+            });
+        }
+
         const downloadfile = (document,path) => {
             $.ajax({
                 url: path,
@@ -287,16 +418,16 @@
                 error: function(xhr,status,error){
 
                 }
-            })
+            });
         }
 
         const filetype = () => {
             let file = $("input[name=file-type]:checked").val();
             if(file === 'none'){
-                $('#but4').trigger('click');
                 setAlert({title:"File Type Not Selected",
                             type: "warning",
                             timer: 2000});
+                $('#but4').trigger('click');
 
                 return {isSet:false};
             }else{

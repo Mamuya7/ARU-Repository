@@ -24,6 +24,22 @@ const setAlertType = (type) => {
 const setAlertTimer = (timer) => {
     $("#alert-timer").val(timer);
 }
+const showSuccess = (message) => {
+    setAlert({
+        title: message,
+        message: "",
+        type: 'success',
+        timer: 2500
+    });
+}
+const showFailure = (message) => {
+    setAlert({
+        title: message,
+        message: "",
+        type: 'danger',
+        timer: 3500
+    });
+}
 const clearAlert = () => {
     $("#alert-title").val("");
     $("#alert-message").val("");

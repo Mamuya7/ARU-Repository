@@ -35,15 +35,17 @@ class Meeting extends Model
     {
         return $this->belongsToMany('App\Committee','committee_meeting','meeting_id','committee_id');
     }
-    public function departmentMeetingDocuments()
-    {
-        return $this->hasManyThrough('App\DepartmentMeetingDocument','App\DepartmentMeeting','meeting_id','department_meeting_id');
-    }
-
-    // getting meetings pivots objects
     public function departmentMeetings()
     {
         return $this->hasMany('App\DepartmentMeeting');
+    }
+    public function schoolMeetings()
+    {
+        return $this->hasMany('App\SchoolMeeting');
+    }
+    public function directorateMeetings()
+    {
+        return $this->hasMany('App\DirectorateMeeting');
     }
 
     // checking meetings type methods
@@ -91,7 +93,7 @@ class Meeting extends Model
     }
     public function wasHeld()
     {
-        if($this->meeting_date < date('Y-m-d')){
+        if($this->meeting_date > date('Y-m-d')){
             return true;
         }
         return false;

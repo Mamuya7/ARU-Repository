@@ -46,3 +46,8 @@
 
 <!-- Staff JS -->
 <script src="{{ asset('js/staff.js') }}"></script>
+
+<!-- Kialapi pdf JS
+    ============================================ -->
+<script src="{{ asset('kiaalap/js/pdf/jquery.media.js')}}"></script>
+<script src="{{ asset('kiaalap/js/pdf/pdf-active.js')}}"></script>

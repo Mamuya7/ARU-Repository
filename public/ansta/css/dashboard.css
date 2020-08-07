@@ -4655,6 +4655,9 @@ button.close {
 	}
 }
 
+.modal-xl{
+	max-width: 80%;
+}
 /*--Tooltip---*/
 
 .tooltip {

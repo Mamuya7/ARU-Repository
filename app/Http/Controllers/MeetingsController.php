@@ -9,6 +9,7 @@ use App\Document;
 use App\DepartmentMeeting;
 use App\DepartmentSchool;
 use App\Department;
+use App\Attendence;
 use Response;
 use Illuminate\Http\Request;
 
@@ -230,24 +231,34 @@ class MeetingsController extends Controller
         response()->download(storage_path($document["document_url"]),$document["document_type"]);
         echo json_encode($document);
     }
+    public function createAttendence(Request $request, Meeting $meeting){
+        $data = $request->input('data');
+        DB::transaction(function() use($data,$meeting){
+            $depMeeting = DepartmentMeeting::where('meeting_id',$meeting->id)
+                            ->where(function($query){
+                                    $query->where('department_id',Auth::User()->department_id);
+                            })->get();
+            $attendence = Array();
+            foreach ($data as $status => $users) {
+                foreach ($users as $user) {
+                    $depMeeting->first()->attendences()->updateOrCreate(
+                        ["user_id" => $user],
+                        ["user_id" => $user,"status" => $status]
+                    );
+                }
+            }
+        });
 
-    public function fetch()
+        echo json_encode("success");
+    }
+
+    public function changeSecretary(Request $request, Meeting $meeting)
     {
-        $dep_id = Auth::User()->department_id;
-        $sch_id = DB::table('department_school')->select('school_id')->where('department_id',$dep_id)->get();
+        $secretary_id = $request->input('secretary_id');
+        $depMeeting = $meeting->departmentMeetings()->where('department_id',Auth::User()->department_id);
+        $depMeeting->update(['secretary_id' => $secretary_id]);
 
-        $schools = DB::table('users')->join('role_user','users.id','=','role_user.user_id')
-                                ->join('roles','role_user.role_id','=','roles.id')
-                                ->join('departments','users.department_id','=','departments.id')
-                                ->join('department_school','departments.id','=','department_school.department_id')
-                                ->select('role_user.user_id','users.first_name','users.last_name')
-                                ->where('roles.role_name','head')
-                                ->where(function($query) use($sch_id){
-                                    $query->where('department_school.school_id',$sch_id[0]->school_id);
-                                })->get();
-        $departments = DB::table('users')->where('users.department_id',$dep_id)->get();
-
-        echo json_encode(["school_members" => $schools, "department_members" => $departments]);
+        echo json_encode($meeting);
     }
 
     protected function create_department_meeting($meeting_id,$meeting)
