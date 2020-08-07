@@ -1,59 +1,64 @@
 @extends('layouts.admin')
 
 @section('content')
-
-
+                        
     
+    <div class="col-xl-12">
+        <div class="card  shadow">
+            <div class="card-header bg-transparent">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="mb-0">Schools</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="table-responsive">
+                    <table class="table card-table text-nowrap">
+                        <tr class="border-bottom">
+                            <!-- <th>Number</th> -->
+                            <th>School Name</th>
+                            <th>School Code</th>
+                            <th>Action</th>
+                            <th>Action</th>
+                        </tr>
 
-    
+                        @foreach($schools as $school)
+                            <tr class="border-bottom">
+                                <!-- <td></td> -->
+                                <td>{{$school->school_name}}</td>
+                                <td>{{$school->school_code}}</td>
+                <td>
+                <button type="button" class="btn btn-sm btn-square btn-primary mt-1 mb-1" onclick="editSchool({{ $school->id}})" data-toggle="modal" data-target="#updateSchool">update</button> 
+                </td>
+                
+                <td>
+                 
+                    <form action="deleteschool/{{$school->id}}" method="post" class="dis-inline">
+                
+                    {{csrf_field()}}
+                        {{method_field('DELETE')}}
+                        <button type="submit" class="btn btn-sm btn-square btn-primary mt-1 mb-1">Delete</button>
+                    </form>                                 
+                </td>
+                            </tr>
+                        @endforeach
 
-                              
-                                   
-                                    <div class="col-xl-12">
-                                        <div class="card  shadow">
-                                            <div class="card-header bg-transparent">
-                                                <div class="row align-items-center">
-                                                    <div class="col">
-                                                        <h2 class="mb-0">Schools</h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="">
-                                                <div class="table-responsive">
-                                                    <table class="table card-table text-nowrap">
-                                                        <tr class="border-bottom">
-                                                            <th>Number</th>
-                                                            <th>School Name</th>
-                                                            <th>School Code</th>
-                                                            <th>Action</th>
-                                                            <th>Action</th>
-                                                        </tr>
+                    </table>
+                    {{ $schools->links() }}
+                </div>
+            </div>
+        </div>
+    </div>
 
-                                                        @foreach($schools as $school)
-                                                            <tr class="border-bottom">
-                                                                <td>{{$school->id}}</td>
-                                                                <td>{{$school->school_name}}</td>
-                                                                <td>{{$school->school_code}}</td>
-<td><button type="button" class="btn btn-sm btn-primary mt-1 mb-1" onclick="editSchool" data-toggle="modal" data-target="#updateSchool">update</button> </td>
-                                                                <td>
-                                                                <button type="button" class="btn btn-sm btn-primary mt-1 mb-1">Delete</button>                                 
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-
-                                                    </table>
-                                                    {{ $schools->links() }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+    <!-- <input type='button' class="btn btn-primary mt-1 mb-1" value='Conform alert 2' id='click4'> -->
 
                          
 
     <div class="modal fade" id="updateSchool" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class = "modal-dialog modal-md">
             <div class = "modal-content">
-                <div class = "modal-header bg-gradient-cyan">      
+                <div class = "modal-header bg-primary">      
                     <button type = "button" class="close" data-dismiss = "modal">×</button>
                     <!-- <h4 class = "modal-title">Warning</h4> -->
                 </div>
@@ -102,7 +107,7 @@
                 error:function(xhr,status,err){
                     console.log(err);
                 }
-            });
+        });
     }
    
 
@@ -113,6 +118,31 @@
             $('#code').val(data.school_code);
            
     }
+
+        $(document).ready(function(){
+                $("#click4").on("click", function(e){
+                swal({
+                    title: "Are you sure?",
+                    text: "You want to delete these item",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }, function(isConfirm) {
+                    if (isConfirm) {
+                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                    } else {
+                        swal("Cancelled", "Your imaginary file is safe :)", "error");
+                    }
+                });
+             });
+        });
+    
+
+   
 </script>
 
 @endsection

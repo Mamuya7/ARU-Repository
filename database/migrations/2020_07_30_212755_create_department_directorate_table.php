@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCommitteeRoleTable extends Migration
+class CreateDepartmentDirectorateTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateCommitteeRoleTable extends Migration
      */
     public function up()
     {
-        Schema::create('committee_role', function (Blueprint $table) {
+        Schema::create('department_directorate', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('role_id')->unsigned();
-            $table->bigInteger('committee_id')->unsigned();
-            $table->enum('position',['chairman','secretary','member']);
+            $table->bigInteger('directorate_id')->unsigned();
+            $table->bigInteger('department_id')->unsigned();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-            $table->foreign('role_id')->references('id')->on('roles');
-            $table->foreign('committee_id')->references('id')->on('committees');
+            $table->foreign('directorate_id')->references('id')->on('directorates');
+            $table->foreign('department_id')->references('id')->on('departments');
+
         });
     }
 
@@ -32,6 +32,6 @@ class CreateCommitteeRoleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('committee_role');
+        Schema::dropIfExists('department_directorate');
     }
 }

@@ -1,6 +1,8 @@
 	<!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800" rel="stylesheet">
 
+	<script src="{{ asset('ansta/plugins/jquery/dist/jquery.min.js') }}"></script>
+
 	<!-- Icons -->
 	<link href="{{ asset('ansta/css/icons.css') }}" rel="stylesheet">
 
@@ -22,6 +24,10 @@
 		============================================ -->
 	<link rel="stylesheet" href="{{ asset('css/preloader/preloader-style.css')}}">
 	<link rel="stylesheet" href="{{ asset('css/top-nav.css')}}">
+
+	<!-- sweetalert css-->
+	<link href="{{ asset('ansta/plugins/sweet-alert/sweetalert.css') }}" rel="stylesheet" />
+
 	@guest
 	<link href="{{ asset('fonts/montserrat/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap')}}" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('css/login.css')}}">

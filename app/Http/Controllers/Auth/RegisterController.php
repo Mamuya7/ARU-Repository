@@ -66,9 +66,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        // insertGetId
         $user = DB::table('users')->select('id')->latest()->first();
         $username = $data['last_name'].'/'.($user->id + 1).'/S.'.date('Y');
-        return User::create([
+        $newUser = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'username' => $username,
@@ -77,5 +78,13 @@ class RegisterController extends Controller
             'department_id' => $data['department'],
             'password' => Hash::make($data['password']),
         ]);
+        
+        DB::table('role_user')->insertGetId(
+            array(
+                "user_id" => $newUser->id,
+                "role_id" => $data['role']
+            )
+        );
+        return $newUser;
     }
 }

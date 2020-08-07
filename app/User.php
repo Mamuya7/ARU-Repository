@@ -45,6 +45,11 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
+    public function committees()
+    {
+        return $this->belongsToMany('App\Committee','committee_user','user_id','committee_id');
+    }
+
     public function hasRole($role)
     {
         foreach (Auth::User()->roles as $value) {

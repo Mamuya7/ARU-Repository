@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Committee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -53,6 +52,8 @@ class CommitteeController extends Controller
         return view('committee/index');
     }
 
+
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -61,7 +62,7 @@ class CommitteeController extends Controller
      */
     public function edit(Committee $committee)
     {
-        //
+        echo $committee;
     }
 
     /**
@@ -72,8 +73,17 @@ class CommitteeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Committee $committee)
-    {
-        //
+    {  
+        $name = $request->input('committee_name');
+        $code = $request->input('committee_code');
+
+        $committee->update([
+            "committee_name" => $name,
+            "committee_code" => $code
+        ]);
+
+        
+
     }
 
     /**
@@ -84,6 +94,10 @@ class CommitteeController extends Controller
      */
     public function destroy(Committee $committee)
     {
-        //
+        DB::transaction(function() use($committee){
+            DB::table('committees')->where('id', $committee->id)->delete();
+        });
+
+        return back();
     }
 }

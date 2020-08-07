@@ -18,4 +18,9 @@ class Committee extends Model
     {
         return $this->belongsToMany('App\Meeting','committee_meeting','committee_id','meeting_id');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User','committee_user','committee_id','user_id');
+    }
 }

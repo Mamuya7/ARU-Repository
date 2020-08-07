@@ -2,21 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Roles;
-use DB;
+use App\Directorate;
+// use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
-class RolesController extends Controller
+class DirectoratesController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -24,8 +16,8 @@ class RolesController extends Controller
      */
     public function index()
     {
-        $roles = DB::table('roles')->paginate();
-        return view('roles.index',['roles' => $roles]);
+        $directorate = DB::table('directorates')->paginate();
+        return view('directorate.index',['directorates' => $directorate]);
     }
 
     /**
@@ -35,8 +27,7 @@ class RolesController extends Controller
      */
     public function create()
     {
-        //
-        return view('roles.create');
+        return view('directorate.create');
     }
 
     /**
@@ -47,69 +38,64 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
-        Roles::create($request->all());
-
+        Directorate::create($request->all());
         return back()->with('response','New Role Added Successfully');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Roles  $roles
+     * @param  \App\Directorates  $directorates
      * @return \Illuminate\Http\Response
      */
-    public function show(Roles $roles)
+    public function show(Directorates $directorates)
     {
-        //return view('roles.index');
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Roles  $roles
+     * @param  \App\Directorates  $directorates
      * @return \Illuminate\Http\Response
      */
-    public function edit(Roles $roles)
+    public function edit(Directorates $directorates)
     {
-        echo $roles;
+            echo $directorates;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Roles  $roles
+     * @param  \App\Directorates  $directorates
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Roles $roles)
+    public function update(Request $request, Directorates $directorates)
     {
         //
-    }
-
-    public function updateRole(){
-        $name = $request->input('role_name');
-        $code = $request->input('role__code');
-       
-        $id = DB::table('departments')->insert(
-            ['department_name' => $name, 'department_code' => $code]
-        );
-
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Roles  $roles
+     * @param  \App\Directorates  $directorates
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Roles $roles)
+    public function destroy(Directorates $directorates)
     {
-        DB::transaction(function() use($roles){
-            DB::table('roles')->where('id',$roles->id)->delete();
+        DB::transaction(function() use($directorates){
+            DB::table('directorates')->where('id',$directorates->id)->delete();
         });
         
-        return redirect('displayRoles');
+        return redirect('displayDirectorates');
+       
     }
-
 }
+
+
+
+
+
+
 

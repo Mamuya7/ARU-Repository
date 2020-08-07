@@ -1,59 +1,11 @@
 @extends('layouts.admin')
 
 @section('content')
-    
-    
-    <div class="col-xl-12">
-        <div class="card  shadow">
-            <div class="card-header bg-transparent">
-                <div class="row align-items-center">
-                    <div class="col">
-                        <h2 class="mb-0">Schools</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="">
-                <div class="table-responsive">
-                    <table class="table card-table text-nowrap">
-                        <tr class="border-bottom">
-                            <th>Number</th>
-                            <th>School Name</th>
-                            <th>School Code</th>
-                            <th>Action</th>
-                            <th>Action</th>
-                        </tr>
-
-                        @foreach($departments as $department)
-                            <tr class="border-bottom">
-                                <td>{{$department->id}}</td>
-                                <td>{{$department->department_name}}</td>
-                                <td>{{$department->department_code}}</td>
-                                <td>   <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button> </td>
-                                <td>
-                                    <form action="" method="post" class="dis-inline">
-                                    <!-- /deletedepartment/{{$department->id}} -->
-                                        {{csrf_field()}}
-                                        {{method_field('DELETE')}}
-                                        <button type="submit" class="btn btn-sm btn-danger mt-1 mb-1">Delete</button>
-                                    </form>                                
-                                </td>
-                            </tr>
-                        @endforeach
-
-                    </table>
-                    {{ $departments->links() }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-                                            
 
 <div class="modal fade" id="updateDepartment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-primary">
                 <h2 class="modal-title" id="largeModalLabel">Modal title</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -87,46 +39,139 @@
         </div>
     </div>
 </div>
+<div class="nav-wrapper">
+    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link mb-sm-3 mb-md-0 active border" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="fe fe-home mr-2"></i>Academic departments</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link mb-sm-3 mb-md-0 border" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="fe fe-message-circle mr-2"></i>Administration departments</a>
+        </li>
+    </ul>
+</div>
+
+									
+									
+				
+
+
+<div class="col-md-12" id="tabs-icons-text-2">
+    <div class="card  shadow">
+            <div class="card-body ">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                        <div class="card-header bg-transparent border-bottom-0">
+                            <h2>ACADEMIC DEPARTMENTS</h2>
+                        </div>
+                        <div class="emp-tab">
+                            <div class="table-responsive">
+                                <table class="table  table-hover table-striped text-nowrap">
+                                    <thead class="text-default">
+                                        <tr>                                            
+                                            <th>Department Name</th>
+                                            <th>Department Code</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($departments as $department)
+                                    <tr>
+                                        
+                                        <td>{{$department->department_name}}</td>
+                                        <td>{{$department->department_code}}</td>
+                                        <td>   <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button>
+                                        </td>
+                                        <td>
+                                            <form action="/deletedepartment/{{$department->id}}" >
+                                                {{csrf_field()}}
+                                                {{method_field('DELETE')}} 
+                                                <button type="submit" class="btn btn-sm btn-square btn-danger mt-1 mb-1">Delete</button>
+                                            </form>                                
+                                        </td>
+                                    </tr>
+                                        @endforeach
+                
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>          
+                     
+                    </div>
+                    <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+                        <div class="card-header bg-transparent border-bottom-0">
+                            <h2>ADMINISTRATION DEPARTMENTS</h2>
+                        </div>
+                        <div class="emp-tab">
+                            <div class="table-responsive">
+                                <table class="table  table-hover table-striped text-nowrap">
+                                    <thead class="text-default">
+                                        <tr>
+                                            
+                                            <th>Department Name</th>
+                                            <th>Department Code</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($directorates as $department)
+                                    <tr>
+                                        
+                                        <td>{{$department->department_name}}</td>
+                                        <td>{{$department->department_code}}</td>
+                                        <td>   <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button> 
+                                        
+                                            <!-- /deletedepartment/{{$department->id}} -->
+                                                {{csrf_field()}}
+                                                {{method_field('DELETE')}}
+                                                <button type="submit" class="btn btn-sm btn-square btn-danger mt-1 mb-1">Delete</button>
+                                            </form>                                
+                                        </td>
+                                    </tr>
+                                        @endforeach
+                
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
 
 <script>
 
-    function editDepartment(did,sid){
-    
-        $.ajax({
-                url: '/editDepartment/'+did,
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                },
-                dataType: 'json',
-                success:function(response){
-                    console.log(response);
-                    displayForm(response,sid);
-                },
-                error:function(xhr,status,err){
-                    console.log(err);
-                }
-            });
-    }
    
-
-
-    function displayForm(data,sid){
-
-        $('#name').val(data.department.department_name);
-        $('#code').val(data.department.department_code);
-        let options = "";
-        for (const school of data.schools) {
-            if(school.id == sid){
-                options += "<option id='"+school.id+"' selected>"+ school.school_name+"</option>"
-            }else{
-                options += "<option id='"+school.id+"'>"+ school.school_name+"</option>"
-            }
+function editDepartment(did){
+    
+    $.ajax({
+        url: '/editDepartment/'+did,
+        type: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{csrf_token()}}'
+        },
+        dataType: 'json',
+        success:function(response){
+            // console.log(response);
+            displayForm(response);
+        },
+        error:function(xhr,status,err){
+            console.log(err);
         }
-        $('#school').append(options);
+    });
+}
 
-           
-    }
+
+
+function displayForm(data){
+
+    $('#name').val(data.department_name);
+    $('#code').val(data.department_code);
+            
+}
 </script>
 
 @endsection

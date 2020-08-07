@@ -13,7 +13,7 @@ class CreateCommitteeTable extends Migration
      */
     public function up()
     {
-        Schema::create('committee', function (Blueprint $table) {
+        Schema::create('committees', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('committee_name');
             $table->string('committee_code');
