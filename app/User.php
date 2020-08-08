@@ -106,10 +106,4 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Department');
     }
-    // public function department()
-    // {
-    //     $department = new Department();
-    //     $department->setId(Auth::User()->department_id);
-    //     return $department;
-    // }
 }

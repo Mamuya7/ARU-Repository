@@ -49,12 +49,17 @@
 }
 
 .fab{
-    position: absolute;
+    /* position: absolute; */
     z-index: 10000;
-    top: 8rem;
-    right: 5%;
+    /* top: 7rem; */
+    /* right: 5%; */
 }
-
+.box-sm{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: fit-content;
+}
 .box-md{
     padding: 3px;
     width: 100px;
@@ -62,9 +67,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-.icon-md{
-    
 }
 
 .attachments{
@@ -75,7 +77,8 @@
 
 .document {
 	position: relative;
-	width: 100%;
+    width: 100%;
+    height: 75%;
 	background: #ffffff;
 	text-align: center;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);

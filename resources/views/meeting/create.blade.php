@@ -2,11 +2,11 @@
 
 @section('content')
     <div>
+        @if(Session::has('output'))
         <div class="bg-success p-3">
-            @if(Session::has('output'))
                 <span class="text-white">{{Session::get('output')}}</span>
-            @endif
         </div>
+        @endif
         <form action="store_meeting" method="post">
             @csrf
             <div class="row">
@@ -112,30 +112,13 @@
             // $('#members').append(members);
         });
 
-        // $.ajax({
-        //     url: 'fetch_meeting_members',
-        //     type:'post',
-        //     headers: {
-        //             'X-CSRF-TOKEN': '{{csrf_token()}}'
-        //     },
-        //     dataType:'json',
-        //     success: function(response){
-        //         console.log(response);
-        //         school_members = response.school_members;
-        //         department_members = response.department_members;
-        //     },
-        //     error: function(xhr,status,error){
-
-        //     }
-        // });
-
         
-		$('.datepicker').datepicker({
-		 showOtherMonths: true,
-		 selectOtherMonths: true,
-        autoclose: true,
-        format: "yyyy/mm/dd"
-	   });
+	// 	$('.datepicker').datepicker({
+	// 	 showOtherMonths: true,
+	// 	 selectOtherMonths: true,
+    //     autoclose: true,
+    //     format: "yyyy/mm/dd"
+	//    });
     });
 
     // const member = (id,name) => {

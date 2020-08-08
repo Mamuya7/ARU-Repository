@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SchoolMeeting extends Model
+class CommitteeMeeting extends Model
 {
-    protected $fillable = ["meeting_id","school_id"];
+    protected $fillable = ["meeting_id","committee_id"];
     
     public function meeting()
     {

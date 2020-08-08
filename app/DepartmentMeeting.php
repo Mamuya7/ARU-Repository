@@ -31,5 +31,9 @@ class DepartmentMeeting extends Model
     {
         return $this->morphMany('App\Document','documentable');
     }
+    public function attendences()
+    {
+        return $this->morphMany('App\Attendence','attendenceable');
+    }
 
 }
