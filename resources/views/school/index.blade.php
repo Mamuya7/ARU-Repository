@@ -16,7 +16,7 @@
                 <div class="table-responsive">
                     <table class="table card-table text-nowrap">
                         <tr class="border-bottom">
-                            <th>Number</th>
+                            <!-- <th>Number</th> -->
                             <th>School Name</th>
                             <th>School Code</th>
                             <th>Action</th>
@@ -25,20 +25,20 @@
 
                         @foreach($schools as $school)
                             <tr class="border-bottom">
-                                <td>{{$school->id}}</td>
+                                <!-- <td></td> -->
                                 <td>{{$school->school_name}}</td>
                                 <td>{{$school->school_code}}</td>
                 <td>
-                <button type="button" class="btn btn-sm btn-primary mt-1 mb-1" onclick="editSchool({{ $school->id}})" data-toggle="modal" data-target="#updateSchool">update</button> 
+                <button type="button" class="btn btn-sm btn-square btn-primary mt-1 mb-1" onclick="editSchool({{ $school->id}})" data-toggle="modal" data-target="#updateSchool">update</button> 
                 </td>
                 
                 <td>
                  
-                    <form action="deleteSchool/{{$school->id}}" method="post" class="dis-inline">
+                    <form action="deleteschool/{{$school->id}}" method="post" class="dis-inline">
                 
                     {{csrf_field()}}
                         {{method_field('DELETE')}}
-                        <button type="submit" class="btn btn-sm btn-primary mt-1 mb-1">Delete</button>
+                        <button type="submit" class="btn btn-sm btn-square btn-primary mt-1 mb-1">Delete</button>
                     </form>                                 
                 </td>
                             </tr>
@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <input type='button' class="btn btn-primary mt-1 mb-1" value='Conform alert 2' id='click4'>
+    <!-- <input type='button' class="btn btn-primary mt-1 mb-1" value='Conform alert 2' id='click4'> -->
 
                          
 
@@ -107,7 +107,7 @@
                 error:function(xhr,status,err){
                     console.log(err);
                 }
-            });
+        });
     }
    
 

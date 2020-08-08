@@ -2,37 +2,32 @@
 
 @section('content')
 
-<div class="col-xl-12">
-    <div class="card  shadow">
-        <div class="card-header bg-transparent">
-            <div class="row align-items-center">
-                <div class="col">
-                    <h2 class="mb-0">Roles</h2>
-                </div>
-            </div>
+<div class="card  shadow">
+    <div class="card-body ">               
+        <div class="card-header bg-transparent border-bottom-0">
+            <h2>ROLES</h2>
         </div>
-        <div class="">
+        <div class="emp-tab">
             <div class="table-responsive">
-                <table class="table card-table text-nowrap">
-                    <tr class="border-bottom">
-                        <th>Number</th>
-                        <th>Name</th>
-                        <th>Code</th>
-                        <th>Action</th>
-                        <th>Action</th>
-                    </tr>
-
+                <table class="table  table-hover table-striped text-nowrap">
+                    <thead class="text-default">
+                        <tr>
+                            
+                            <th>Role Name</th>
+                            <th>Role Code</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     @foreach($roles as $role)
                         <tr class="border-bottom">
-                            <td>{{$role->id}}</td>
+                            <!-- <td>{{$role->id}}</td> -->
                             <td>{{$role->role_name}}</td>
                             <td>{{$role->role_code}}</td>
                             <td>  
                              <button type="button" onclick="editRole({{$role->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateRole">update</button> 
                             </td>
-                                
                             <td>
-                                <!-- <button type="button" class="btn btn-sm btn-primary mt-1 mb-1">Delete</button>  --> 
                                 <form action="/deleteRole/{{$role->id}}" method="post" class="dis-inline">
                             
                                     {{csrf_field()}}
@@ -43,18 +38,21 @@
                         </tr>
                     @endforeach
 
+
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
 
+
+
 <div class="modal fade" id="updateRole" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class = "modal-dialog modal-md">
         <div class = "modal-content">
             <div class = "modal-header bg-primary">      
                 <button type = "button" class="close" data-dismiss = "modal">×</button>
-                <!-- <h4 class = "modal-title">Warning</h4> -->
             </div>
             <div class = "modal-body">
                 <form action="" method="post">

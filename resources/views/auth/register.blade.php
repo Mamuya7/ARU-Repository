@@ -158,7 +158,7 @@
 
                         <div class="form-group">
                             <label class="form-label">Role</label>
-                            <select id="role" name=role class="form-control select2 w-100" >
+                            <select id="role" name="role" class="form-control select2 w-100" >
                                 <option value="none" selected="selected" disabled>Select Role</option>
                                 {{ $role }}
                             @foreach($role as $roles)

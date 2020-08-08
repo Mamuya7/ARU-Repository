@@ -13,7 +13,7 @@
                     <a href="{{ route('viewUsers') }}" class="slide-item" >View Users</a>
                 </li>
                 <li>
-                    <a href="{{ route('assignRole') }}" class="slide-item">Assign Role</a>
+                    <!-- <a href="" class="slide-item">Assign Role</a> -->
                 </li>
             </ul>
         </li>
@@ -68,6 +68,10 @@
                 </li>
                 <li>
                     <a href="{{'displayCommittee'}}" class="slide-item">View Commitee</a>
+                </li>
+
+                <li>
+                    <a href="{{url('createUserCommittee')}}" class="slide-item">Assign Commitee</a>
                 </li>
             </ul>
         </li>

@@ -35,3 +35,6 @@
 <script src="{{ asset('ansta/js/custom.js') }}"></script>
 
 <script src="{{ asset('ansta/plugins/sweet-alert/sweetalert.min.js') }}"></script>
+
+<script src="{{ asset('ansta/plugins/sortable/jquery.sortable.js') }}"></script>
+<script src="{{ asset('ansta/plugins/sortable/jquery.sortable.min.js') }}"></script>

@@ -37,7 +37,7 @@ Route::post('show_users','UsersController@show');
 Route::get('AddDepartment', 'DepartmentsController@create')->name('AddDepartment');
 Route::post('storeDepartment','DepartmentsController@store');
 Route::get('showDepartment', 'DepartmentsController@index')->name('showDepartment');
-// Route::delete('deletedepartment/{departments}','DepartmentsController@destroy');
+Route::delete('deletedepartment/{departments}','DepartmentsController@destroy');
 Route::post('editDepartment/{departments}','DepartmentsController@edit');
 Route::post('showdirectoryschools','DepartmentsController@displaySChool')->name('showdirectoryschools');
 
@@ -49,11 +49,21 @@ Route::delete('deleteschool/{schools}','SchoolsController@destroy');
 Route::post('editSchool/{schools}','SchoolsController@edit');
 
 //Committee Routes
+
 Route::get('showsCommittee','CommitteeController@create')->name('showsCommittee');
 Route::get('displayCommittee','CommitteeController@index')->name('displayCommittee');
 Route::post('storesCommittee', 'CommitteeController@store');
 Route::post('editCommittee/{committee}','CommitteeController@edit');
-Route::delete('deleteCommittee/{committee}','CommitteeController@destroy');
+Route::post('updateCommittee/{committee}', 'CommitteeController@update');
+Route::delete('deleteCommitee/{committee}','CommitteeController@destroy');
+Route::get('assignCommittee','CommitteeController@display');
+// Route::post('AssignMembersCommittee', 'CommitteeController@asignMemberCommittee');
+
+// Route::get('commiteeUnasigned','CommitteeController@showUsers')->name('commiteeUnasigned');
+
+// Committee users
+Route::get('createUserCommittee', 'CommitteeUserController@create')->name('createUserCommittee');
+Route::post('assignUserCommittee', 'CommitteeUserController@store')->name('assignUserCommittee');
 
 
 //Roles
@@ -70,11 +80,14 @@ Route::post('updateRole', 'RolesController@updateRole');
 Route::get('registerDirectorateForm','DirectoratesController@create')->name('registerDirectorateForm');
 Route::post('storesDirectorate', 'DirectoratesController@store');
 Route::get('displayDirectorates','DirectoratesController@index')->name('displayDirectorates');
+Route::delete('deletedirectorate/{directorates}','DirectoratesController@destroy');
+Route::post('editDirectoratee/{directorate}','DirectoratesController@edit');
+
 
 
 
 //users
-Route::get('assignRole','UserController@create')->name('assignRole');
+Route::get('getUserRole/{id}','UserController@show')->name('getUserRole');
 Route::get('viewUsers','UserController@index')->name('viewUsers');
 
 

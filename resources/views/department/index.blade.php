@@ -72,7 +72,6 @@
                                             <th>Department Name</th>
                                             <th>Department Code</th>
                                             <th>Action</th>
-                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -81,12 +80,13 @@
                                         
                                         <td>{{$department->department_name}}</td>
                                         <td>{{$department->department_code}}</td>
-                                        <td>   <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button> </td>
+                                        <td>   <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button>
+                                        </td>
                                         <td>
-                                            <!-- /deletedepartment/{{$department->id}} -->
+                                            <form action="/deletedepartment/{{$department->id}}" >
                                                 {{csrf_field()}}
-                                                {{method_field('DELETE')}}
-                                                <button type="submit" class="btn btn-sm btn-danger mt-1 mb-1">Delete</button>
+                                                {{method_field('DELETE')}} 
+                                                <button type="submit" class="btn btn-sm btn-square btn-danger mt-1 mb-1">Delete</button>
                                             </form>                                
                                         </td>
                                     </tr>
@@ -112,7 +112,6 @@
                                             <th>Department Name</th>
                                             <th>Department Code</th>
                                             <th>Action</th>
-                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -121,12 +120,12 @@
                                         
                                         <td>{{$department->department_name}}</td>
                                         <td>{{$department->department_code}}</td>
-                                        <td>   <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button> </td>
-                                        <td>
+                                        <td>   <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button> 
+                                        
                                             <!-- /deletedepartment/{{$department->id}} -->
                                                 {{csrf_field()}}
                                                 {{method_field('DELETE')}}
-                                                <button type="submit" class="btn btn-sm btn-danger mt-1 mb-1">Delete</button>
+                                                <button type="submit" class="btn btn-sm btn-square btn-danger mt-1 mb-1">Delete</button>
                                             </form>                                
                                         </td>
                                     </tr>

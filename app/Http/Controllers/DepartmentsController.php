@@ -26,8 +26,6 @@ class DepartmentsController extends Controller
      */
     public function index()
     {
-        // $departments = DB::table('departments')->paginate(10);
-        // return view('department/index',['departments' => $departments]);
         
         $departments = DB::table('departments')
         ->join('department_school','departments.id','=','department_school.department_id')
@@ -130,10 +128,10 @@ class DepartmentsController extends Controller
      */
     public function destroy(Department $departments)
     {
-        //  DB::transaction(function() use($departments){
-        //     DB::table('users')->where('department_id',$departments->id)->delete(); 
-        //     DB::table('departments')->where('id',$departments->id)->delete(); 
-        // });
+         DB::transaction(function() use($departments){
+            DB::table('users')->where('department_id',$departments->id)->delete(); 
+            DB::table('departments')->where('id',$departments->id)->delete(); 
+        });
 
         // return redirect('showDepartment');
     }

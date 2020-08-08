@@ -93,27 +93,18 @@ class SchoolsController extends Controller
      */
     public function destroy(School $schools)
     {   
-        // DB::transaction(function() use($schools){
-        //     DB::table('users')
-        //     ->join('departments','users.department_id','=','departments.id')
-        //     ->join('schools','departments.school_id','=','schools.id')
-        //     ->where('departments.school_id',$schools->id)->delete(); 
-        //     DB::table('departments')->where('school_id',$schools->id)->delete();
-        //     DB::table('schools')->where('id',$schools->id)->delete();
-        // });
-            
+       
         DB::transaction(function() use($schools){
-            // DB::table('schools')->where('id',$schools->id)->delete();
 
-            // DB::table('schools')
-            // ->join('department_school','department_school.department_id','=','schools.id')
-            // ->where('department_school.id','=','schools.id','=',$school_id)
-            // ->delete();
-
-            DB::table('schools')->where('schools.id',$school_id)->delete();
-            DB::table('department_school')->where('department_school.school_id',$school_id)->delete();
+            DB::table('users')
+            ->join('department_school','users.department_id','=','department_school.department_id')
+            ->where('department_school.school_id','schools.id',$schools->id)->delete();
+            DB::table('department_school')
+            ->join('departments','department_school.department_id','=','departments.id')
+            ->where('department_school.school_id','=',$schools->id)->delete();
+            DB::table('schools')->where('schools.id',$schools->id)->delete();
         });
-        
-        return redirect('showschools');
+      
+        return back();
     }
 }

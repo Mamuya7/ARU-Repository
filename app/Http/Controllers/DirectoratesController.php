@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Directorate;
-use Illuminate\Http\Request;
+// use DB;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class DirectoratesController extends Controller
 {
@@ -26,7 +27,7 @@ class DirectoratesController extends Controller
      */
     public function create()
     {
-        return view('directorate.create'); 
+        return view('directorate.create');
     }
 
     /**
@@ -44,10 +45,10 @@ class DirectoratesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Directorates  $directorate
+     * @param  \App\Directorates  $directorates
      * @return \Illuminate\Http\Response
      */
-    public function show(Directorate $directorate)
+    public function show(Directorates $directorates)
     {
         //
     }
@@ -55,22 +56,22 @@ class DirectoratesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Directorates  $directorate
+     * @param  \App\Directorates  $directorates
      * @return \Illuminate\Http\Response
      */
-    public function edit(Directorates $directorate)
+    public function edit(Directorates $directorates)
     {
-        //
+            echo $directorates;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Directorates  $directorate
+     * @param  \App\Directorates  $directorates
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Directorates $directorate)
+    public function update(Request $request, Directorates $directorates)
     {
         //
     }
@@ -78,11 +79,23 @@ class DirectoratesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Directorates  $directorate
+     * @param  \App\Directorates  $directorates
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Directorates $directorate)
+    public function destroy(Directorates $directorates)
     {
-        //
+        DB::transaction(function() use($directorates){
+            DB::table('directorates')->where('id',$directorates->id)->delete();
+        });
+        
+        return redirect('displayDirectorates');
+       
     }
 }
+
+
+
+
+
+
+
