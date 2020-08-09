@@ -26,14 +26,9 @@ class DepartmentsController extends Controller
      */
     public function index()
     {
-        
-        $departments = DB::table('departments')
-        ->join('department_school','departments.id','=','department_school.department_id')
-        ->get();
+     $departments = Department::whereHasMorph('departmentable','App\School')->get();
 
-        $directorates = DB::table('departments')
-        ->join('department_directorate','department_directorate.department_id','=','departments.id')
-        ->get();
+        $directorates = Department::whereHasMorph('departmentable','App\Directorate')->get();
         return view('department/index',['departments' => $departments, 'directorates' => $directorates]);
     }
 
@@ -60,18 +55,17 @@ class DepartmentsController extends Controller
         $radio = $request->input('department-type');
         $school_directorate = $request->input('school_directorate_id');
 
-        $id = DB::table('departments')->insertGetId(
-            ['department_name' => $name, 'department_code' => $code]
-        );
 
         if($radio == '1'){
-            DB::table('department_school')->insert(
-                ['school_id' => $school_directorate,'department_id' =>$id ]
-            );
+            $department =  new Department(["department_code" => $code, "department_name" => $name]);
+            $school = School::find($school_directorate);
+            $school->departments()->save($department);
+         
         }else{
-            DB::table('department_directorate')->insert(
-                ['directorate_id' => $school_directorate,'department_id' =>$id ]
-            );
+            $department =  new Department(["department_code" => $code, "department_name" => $name]);
+            $directorate = Directorate::find($school_directorate);
+            $directorate->departments()->save($department);
+           
         }
            
         return back()->with('response','New Student Added Successfully');

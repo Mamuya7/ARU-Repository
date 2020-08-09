@@ -17,6 +17,7 @@
                             
                             <th>Directorate Name</th>
                             <th>Directorate Code</th>
+                            <th>Departments</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -26,6 +27,7 @@
                         
                         <td>{{$directorate->directorate_name}}</td>
                         <td>{{$directorate->directorate_code}}</td>
+                        <td>{{$directorate->departments_count}}</td>
                         <td>   <button type="button" onclick="editDirectorate({{$directorate->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDirectorate">update</button> 
                         </td>
                         <td>

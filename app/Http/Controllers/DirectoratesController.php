@@ -16,7 +16,8 @@ class DirectoratesController extends Controller
      */
     public function index()
     {
-        $directorate = DB::table('directorates')->paginate();
+        // $directorate = DB::table('directorates')->paginate();
+        $directorate = Directorate::select(['id','directorate_name','directorate_code'])->withCount('departments')->paginate(10);
         return view('directorate.index',['directorates' => $directorate]);
     }
 

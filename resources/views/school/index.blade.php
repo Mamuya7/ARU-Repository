@@ -19,6 +19,7 @@
                             <!-- <th>Number</th> -->
                             <th>School Name</th>
                             <th>School Code</th>
+                            <th>Departments</th>
                             <th>Action</th>
                             <th>Action</th>
                         </tr>
@@ -28,6 +29,7 @@
                                 <!-- <td></td> -->
                                 <td>{{$school->school_name}}</td>
                                 <td>{{$school->school_code}}</td>
+                                <td>{{$school->departments_count}}</td>
                 <td>
                 <button type="button" class="btn btn-sm btn-square btn-primary mt-1 mb-1" onclick="editSchool({{ $school->id}})" data-toggle="modal" data-target="#updateSchool">update</button> 
                 </td>

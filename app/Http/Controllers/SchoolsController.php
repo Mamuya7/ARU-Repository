@@ -24,7 +24,8 @@ class SchoolsController extends Controller
      */
     public function index()
     {
-        $schools = DB::table('schools')->paginate(2);
+        // $schools = DB::table('schools')->paginate(6);
+        $schools = School::select(['id','school_name','school_code'])->withCount('departments')->paginate(6);
         return view('school/index',['schools' => $schools]);
     }
 

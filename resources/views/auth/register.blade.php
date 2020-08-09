@@ -160,9 +160,9 @@
                             <label class="form-label">Role</label>
                             <select id="role" name="role" class="form-control select2 w-100" >
                                 <option value="none" selected="selected" disabled>Select Role</option>
-                                {{ $role }}
-                            @foreach($role as $roles)
-                                <option value="{{$roles->id}}" class="text-md">{{$roles->role_name}}</option>
+
+                            @foreach($roles as $role)
+                                <option value="{{$role->id}}" class="text-md">{{$role->role_name}}</option>
                             @endforeach
                             </select>
                         </div>
