@@ -16,24 +16,18 @@ class Department extends Model
 
    
     protected $fillable = [
-        'department_name', 'department_code',
+        'department_name', 'department_code', 'departmentable_id', 'departmentable_type',
     ];
-    /**
-     * Create a new model instance.
-     *
-     * @return void
-     */
-    
-    public function __construct()
-    {
-        
-    }
 
     public function users()
     {
         return $this->hasMany('App\User');
     }
 
+    public function departmentable()
+    {
+        return $this->morphTo();
+    }
     public function school()
     {
         return $this->belongsToMany('App\School','department_school','department_id','school_id')

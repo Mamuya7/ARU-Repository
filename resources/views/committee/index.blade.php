@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-
+{{$committees}}
 <div class="col-xl-12">
     <div class="card  shadow">
         <div class="card-header bg-transparent">
@@ -46,7 +46,7 @@
         </div>
     </div>
 </div>
-
+{{$committees}}
 
 <div class="modal fade" id="updateRole" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class = "modal-dialog modal-md">

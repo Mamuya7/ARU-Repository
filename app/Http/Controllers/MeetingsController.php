@@ -103,6 +103,8 @@ class MeetingsController extends Controller
                 $type = "department";
             }elseif (Auth::User()->hasRole("dean")) {
                 $type = "school";
+            }elseif(Auth::User()->hasRole("director")){
+                $type = "directorate";
             }
 
             $meeting_id = DB::table('meetings')
@@ -126,6 +128,8 @@ class MeetingsController extends Controller
                 $this->create_school_meeting($meeting_id,$meeting);
             }elseif (Auth::User()->hasRole('head')) {
                 $this->create_department_meeting($meeting_id,$meeting);
+            }elseif(Auth::User()->hasRole('director')){
+                $this->create_directorate_meeting($meeting_id,$meeting);
             }
         });
         
@@ -279,6 +283,17 @@ class MeetingsController extends Controller
             array(
                 "meeting_id" => $meeting_id,
                 "school_id" => Auth::User()->department->school[0]->id,
+                "secretary_id" => $meeting['secretary'],
+                "meeting_time" => $meeting['time'],
+            )
+        );
+    }
+    protected function create_directorate_meeting($meeting_id,$meeting)
+    {
+        return DB::table('directorate_meeting')->insertGetId(
+            array(
+                "meeting_id" => $meeting_id,
+                "directorate_id" => Auth::User()->department()->directorate[0]->id,
                 "secretary_id" => $meeting['secretary'],
                 "meeting_time" => $meeting['time'],
             )

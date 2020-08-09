@@ -18,7 +18,7 @@ class CreateDocumentsTable extends Migration
             $table->string('document_name')->nullable();
             $table->enum('document_type',['agenda','minutes','matter_arising','other']);
             $table->string('document_url');
-            $table->integer('documentable_id');
+            $table->integer('documentable_id')->unsigned();
             $table->string('documentable_type');
             $table->string('document_extension')->nullable();
             $table->timestamp('created_at')->useCurrent();
