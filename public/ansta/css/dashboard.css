@@ -5171,6 +5171,7 @@ a.bg-darker:hover, a.bg-darker:focus, button.bg-darker:hover, button.bg-darker:f
 }
 .border {
 	border: 1px solid #dae0ef !important;
+	
 }
 .border-top {
 	border-top: 1px solid #dae0ef !important;

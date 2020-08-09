@@ -22,8 +22,11 @@ class UserController extends Controller
         ->select(DB::raw('CONCAT(users.first_name," ",users.last_name) as full_name'),'users.id as id','users.gender as gender','users.email as email','departments.department_name as department')
         ->get();
 
+        
+        $roles = DB::table('roles')->get();
 
-        return view('user.index',['user' => $users]);
+
+        return view('user.index',['user' => $users,'roles'=>$roles]);
     //    return view('user.index');
     }
 
@@ -39,7 +42,6 @@ class UserController extends Controller
         ->join('users','users.department_id','=','departments.id')
         ->select(DB::raw('CONCAT(users.first_name," ",users.last_name) as full_name'),'users.email as email','departments.department_name as department')
         ->get();
-
 
         return view('user.roleUser',['user' => $users,'role'=>$roles]);
     }
