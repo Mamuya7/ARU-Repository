@@ -49,7 +49,7 @@
 
     
     <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                    
                 <div class="modal-body">
@@ -67,16 +67,53 @@
                                         <a class="nav-link mb-sm-3 mb-md-0 border" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="fe fe-message-circle mr-2"></i>User Role</a>
                                     </li>
                                 </ul>
-                            </div>
+                                
+                              </div>
                         </div>
                         <div class="card-body">
                            
                             
                                 <div class="card-body ">
                                     <div class="tab-content" id="myTabContent">
+                                    <button type="button btn-primary" class="close" data-dismiss="modal" aria-label="Close">                    
+                            
                                         <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
-                                            <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
-                                            <p class="description mb-0">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse.</p>
+                                            
+                                        <div class="table-responsive border ">
+                                            <table class="table row table-borderless w-100 m-0 ">
+                                                <tbody class="col-lg-6 p-0">
+                                                    <tr>
+                                                        <td><strong>Full Name :</strong> Cori Stover</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Location :</strong> USA</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Languages :</strong> English, German, Spanish.</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>DOB :</strong> 18/02/1992</td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody class="col-lg-6 p-0">
+                                                    <tr>
+                                                        <td><strong>Occupation :</strong> Administrator</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Website :</strong> ansta.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Email :</strong> coristover@ansta.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Phone :</strong> +222-6652-6325</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+													 
+                                      
+                                            
                                         </div>
                                        
                                         <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
@@ -86,20 +123,19 @@
                                             <div class="row">
                                                 <div class="col-md-7">
                                                 <ul id="sortable1" class="list-group connectedSortable">
-                                                        <li class="list-group-item active">Lion</li>
-                                                        <li class="list-group-item">Dog</li>
-                                                        <li class="list-group-item">Cat</li>
-                                                        <li class="list-group-item">Tiger</li>
+                                                        
                                                     </ul>
                                                 </div>
 
                                                 <div class="col-md-5">
+                                                @foreach($roles as $role)
                                                     <ul id="sortable2" class="list-group connectedSortable">
-                                                        <li class="list-group-item active">Fish</li>
-                                                        <li class="list-group-item">Bird</li>
+                                                        <li class="list-group-item">{{$role->role_name}}</li>
+                                                        <!-- <li class="list-group-item">Bird</li>
                                                         <li class="list-group-item">Falcon</li>
-                                                        <li class="list-group-item">Mouse</li>
-                                                    </ul>    
+                                                        <li class="list-group-item">Mouse</li> -->
+                                                    </ul>
+                                                @endforeach    
                                                             
                                                 </div>
                     
@@ -109,8 +145,7 @@
                                 </div>
                         
                         </div>
-                    
-									
+    							
                 </div>
                
             </div>
@@ -126,39 +161,49 @@
     <script>
             
         $(document).ready(function(){
-            alert('aaa');
             $("#sortable1, #sortable2").sortable({
                 connectWith: ".connectedSortable"
             });
         });
 
-        // function displayRole(id){
+        function displayRole(id){
 
-        // //     $.ajax({
-        // //         url: '/getUserRole/'+id,
-        // //         type: 'GET',
-        // //         headers: {
-        // //             'X-CSRF-TOKEN': '{{csrf_token()}}'
-        // //         },
-        // //         dataType: 'json',
-        // //         success:function(response){
-        // //             DisplayUserRoles(response);
+            $.ajax({
+                url: '/getUserRole/'+id,
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success:function(response){
+                    displayUserRoles(response);
                     
-        // //         },
-        // //         error:function(xhr,status,err){
-        // //             console.log(err);
-        // //         }
-        // //     });
+                },
+                error:function(xhr,status,err){
+                    console.log(err);
+                }
+            });
 
-        // // }
+        }
 
-        // DisplayUserRoles(response){
-        //     var list = '';
-        //     response.forEach(role => {
-        //         list +="<li class='list-group-item'>"role.role_name"</li>";
-        //     });
-        //     return list;
-        // }
+        function displayUserRoles(data){
+            
+            var list ="";
+            data.forEach(role => {
+                list +="<li class='list-group-item'>";
+                list+=role.role_name;
+                list +="</li>";
+            });
+            $('#sortable1').empty();
+            $('#sortable1').append(list);
+
+            // data.forEach(school => {
+            //         list += '<option data-tokens="'+school.school_name +" "+ school.school_code;
+            //         list += '" value="'+school.id+'">'+school.school_name+ " (" +school.school_code +")"+'</option>'; 
+            //     });
+            // $('#sortable1').append(list);
+           
+        }
         
 
     </script>

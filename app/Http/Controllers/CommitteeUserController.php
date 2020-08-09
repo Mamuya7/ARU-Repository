@@ -62,8 +62,16 @@ class CommitteeUserController extends Controller
      */
     public function show(CommitteeUser $committeeUser)
     {
-        //
+        // 
     }
+
+    public function display($id)
+    {
+        $committeeUsers = Committee::find($id)->users;
+        echo json_encode($committeeUsers);
+    
+    }
+
 
     /**
      * Show the form for editing the specified resource.

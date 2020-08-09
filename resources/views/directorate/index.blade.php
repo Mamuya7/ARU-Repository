@@ -7,6 +7,7 @@
     <div class="card-body ">               
         <div class="card-header bg-transparent border-bottom-0">
             <h2>DIRECTORATES</h2>
+            {{$directorates}}
         </div>
         <div class="emp-tab">
             <div class="table-responsive">
@@ -36,7 +37,7 @@
 
                         </td>
                     </tr>
-                        @endforeach
+                    @endforeach
 
 
                     </tbody>

@@ -69,6 +69,9 @@ Route::get('assignCommittee','CommitteeController@display');
 // Committee users
 Route::get('createUserCommittee', 'CommitteeUserController@create')->name('createUserCommittee');
 Route::post('assignUserCommittee', 'CommitteeUserController@store')->name('assignUserCommittee');
+// Route::post('CommitteeMembers/{committeeUser}', 'CommitteeUserController@show')->name('CommitteeMembers');
+Route::get('CommitteeMembers/{id}','CommitteeUserController@display')->name('CommitteeMembers');
+
 
 
 //Roles
