@@ -54,11 +54,11 @@ class SchoolMeetingController extends Controller
                         }
                     }
                 }
+                if(Auth::User()->hasBothRoles('head','dean')){
+                    $result['display'] = "d-none";
+                }
 
                 return view('meeting.create',$result);
-            }
-            if(Auth::User()->hasBothRoles('head','dean')){
-                $result['display'] = "d-none";
             }
         return redirect('/home');
     }
@@ -72,13 +72,6 @@ class SchoolMeetingController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function()use($request){
-            // $meeting = Meeting::create([
-            //     "meeting_title" => $request->input('title'),
-            //     "meeting_description" => $request->input('description'),
-            //     "meeting_type" => "school",
-            //     "meeting_date" => $request->input('date'),
-            //     "user_id" => Auth::User()->id
-            // ]);
             $meeting = new Meeting;
             $meeting->meeting_title =  $request->input('title');
             $meeting->meeting_description = $request->input('description');
@@ -99,7 +92,7 @@ class SchoolMeetingController extends Controller
             ]);
         });
 
-        return redirect('create_school_meeting')->with("output","success");
+        return redirect('create_school_meeting')->with("output","School meeting created successfully!!");
     }
 
     /**

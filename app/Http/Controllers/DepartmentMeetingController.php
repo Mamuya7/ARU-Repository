@@ -25,7 +25,27 @@ class DepartmentMeetingController extends Controller
      */
     public function create()
     {
-        //
+
+        if(Auth::User()->hasRole('head')){
+            $result = ["heads" => array(), "staffs" => array(), "display" => "", "title" => "Create Department Meeting"];
+
+            // $sch_id = School::whereHas('departments',function(Builder $query){
+            //     $query->where('id','=',Auth::User()->department_id);
+            // })->first()->id;
+
+            // $departments = School::find($sch_id)->departments;
+
+            foreach(Auth::User()->department->users as $user){
+                array_push($result['staffs'],$user);
+            }
+            if(Auth::User()->hasBothRoles('head','dean')){
+                $result['display'] = "d-none";
+            }
+
+            return view('meeting.create',$result);
+        }
+        
+        return redirect('/home');
     }
 
     /**
@@ -36,7 +56,25 @@ class DepartmentMeetingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::transaction(function()use($request){
+            $meeting = new Meeting;
+            $meeting->meeting_title =  $request->input('title');
+            $meeting->meeting_description = $request->input('description');
+            $meeting->meeting_type = "department";
+            $meeting->meeting_date = $request->input('date');
+            $meeting->user_id = Auth::User()->id;
+
+            $meeting->save();
+    
+            DepartmentMeeting::create([
+                "meeting_id" => $meeting->id,
+                "department_id" => Auth::User()->department_id,
+                "secretary_id" => $request->input('secretary'),
+                "meeting_time" => $request->input('time'),
+            ]);
+        });
+
+        return redirect('create_department_meeting')->with("output","Department meeting created successfully!!");
     }
 
     /**

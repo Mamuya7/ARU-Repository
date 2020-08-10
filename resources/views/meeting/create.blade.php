@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="card">
+<div class="card p-0 m-1">
     <div class="card-header">
-        <h1 class="text-center">{{$title}}</h1>
+        <h1 class="text-center p-0 m-0">{{$title}}</h1>
     </div>
 </div>
 <div>
     @if(Session::has('output'))
-    <div class="bg-success p-3">
+    <div class="bg-success p-1">
             <span class="text-white">{{Session::get('output')}}</span>
     </div>
     @endif
@@ -80,7 +80,7 @@
                             </label>
                             @endforeach
                         @endif
-                    </div>
+                    </div>{{json_encode($heads)}}
                     <div id="heads" class="custom-switches-stacked {{$display}}">
                         @if(Auth::User()->hasRole('dean'))
                             @foreach($heads as $head)
@@ -131,12 +131,12 @@
         });
 
         
-	// 	$('.datepicker').datepicker({
-	// 	 showOtherMonths: true,
-	// 	 selectOtherMonths: true,
-    //     autoclose: true,
-    //     format: "yyyy/mm/dd"
-	//    });
+		$('.datepicker').datepicker({
+		 showOtherMonths: true,
+		 selectOtherMonths: true,
+        autoclose: true,
+        format: "yyyy/mm/dd"
+	   });
     });
 
     // const member = (id,name) => {
