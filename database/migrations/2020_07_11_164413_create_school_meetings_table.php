@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSchoolMeetingTable extends Migration
+class CreateSchoolMeetingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateSchoolMeetingTable extends Migration
      */
     public function up()
     {
-        Schema::create('school_meeting', function (Blueprint $table) {
+        Schema::create('school_meetings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('school_id')->unsigned();
             $table->bigInteger('meeting_id')->unsigned();

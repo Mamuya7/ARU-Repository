@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,17 @@ Route::get('/home', 'HomeController@index')->name('home');
 // Meeting routes
 Route::get('create_meeting','MeetingsController@create');
 Route::get('view_meeting','MeetingsController@index')->name('view_meetings');
-Route::post('store_meeting','MeetingsController@store');
+Route::post('store_meeting',function(Request $request){
+    if(Auth::User()->hasRole('dean')){
+        return redirect()->route('storeSchoolMeeting',[$request]);
+    }elseif (Auth::User()->hasRole('director')) {
+        return redirect()->route('storeDirectorateMeeting',[$request]);
+    }elseif (Auth::User()->hasRole('head')) {
+        return redirect()->route('storeDepartmentMeeting',[$request]);
+    }elseif (Auth::User()->hasRole('system administrator')) {
+        return redirect()->route('storeGeneralMeeting');
+    }
+});
 Route::post('fetch_meeting_members','MeetingsController@fetch');
 Route::post('show_meeting/{meeting}','MeetingsController@show');
 Route::post('uploadfile/{meeting}','MeetingsController@uploadFile');
@@ -36,7 +47,22 @@ Route::post('create_attendence/{meeting}','MeetingsController@createAttendence')
 Route::post('show_users','UsersController@show');
 
 // SchoolMeeting routes
+Route::get('view_school_meetings','SchoolMeetingController@index')->name('viewSchoolMeetings');
+Route::get('create_school_meeting','SchoolMeetingController@create')->name('createSchoolMeeting');
 Route::post('show_school_meeting/{schoolmeeting}','SchoolMeetingController@show');
+Route::get('store_school_meeting','SchoolMeetingController@store')->name('storeSchoolMeeting');
+
+// DirectorateMeeting routes
+Route::get('view_directorate_meeting','DirectorateMeetingController@index')->name('viewDirectorateMeetings');
+Route::get('create_directorate_meeting','DirectorateMeetingController@create')->name('createDirectorateMeeting');
+Route::post('show_directorate_meeting/{directoratemeeting}','DirectorateMeetingController@show');
+Route::get('store_directorate_meeting','DirectorateMeetingController@store')->name('storeDirectorateMeeting');
+
+// DepartmentMeeting routes
+Route::get('view_department_meeting','DepartmentMeetingController@index')->name('viewDepartmentMeetings');
+Route::get('create_department_meeting','DepartmentMeetingController@create')->name('createDepartmentMeeting');
+Route::post('show_department_meeting/{departmentmeeting}','DepartmentMeetingController@show');
+Route::get('store_department_meeting','DepartmentMeetingController@store')->name('storeDepartmentMeeting');
 
 // Departments
 Route::get('AddDepartment', 'DepartmentsController@create')->name('AddDepartment');
