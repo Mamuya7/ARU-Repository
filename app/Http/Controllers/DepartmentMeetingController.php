@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+Use App\User;
 use App\DepartmentMeeting;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,7 +17,28 @@ class DepartmentMeetingController extends Controller
      */
     public function index()
     {
-        //
+
+        if(Auth::User()->department->belongsToSchool()){
+            $sch_id = School::whereHas('departments',function(Builder $query){
+                    $query->where('id','=',Auth::User()->department_id);
+                })->first()->id;
+
+            $meetings = DB::table('meetings')->join('school_meetings','meetings.id','=','school_meetings.meeting_id')
+                    ->where('school_meetings.school_id','=',$sch_id)
+                    ->orderBy('meetings.meeting_date','desc')->get();
+        }elseif (Auth::User()->department->belongsToDirectorate()) {
+            $dir_id = Directorate::whereHas('departments',function(Builder $query){
+                    $query->where('id','=',Auth::User()->department_id);
+                })->first()->id;
+
+            $meetings = DB::table('meetings')->join('directorate_meetings','meetings.id','=','directorate_meetings.meeting_id')
+                    ->where('directorate_meetings.school_id','=',$dir_id)
+                    ->orderBy('meetings.meeting_date','desc')->get();
+        }
+        $department_meetings = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
+                        ->where('department_meeting.department_id','=',Auth::User()->department_id)
+                        ->orderBy('meetings.meeting_date','desc')->get();         
+        return view('meeting.staff-view',["school_directorate" => $meetings, "department" => $department_meetings]);
     }
 
     /**
@@ -42,7 +65,7 @@ class DepartmentMeetingController extends Controller
                 $result['display'] = "d-none";
             }
 
-            return view('meeting.create',$result);
+            return view('meeting.staff-create',$result);
         }
         
         return redirect('/home');
@@ -85,7 +108,17 @@ class DepartmentMeetingController extends Controller
      */
     public function show(DepartmentMeeting $departmentMeeting)
     {
-        //
+        $users = Auth::User()->department->users;
+        $chair = new User;
+        foreach ($users as $user) {
+            if($user->hasRole('head')){
+                $chair = $user;
+            }
+        }
+
+        return view('meeting.show',["specificMeeting" => $departmentMeeting, 
+        "documents" => $departmentMeeting->documents,
+        "chair" => $chair, "secr" => null, "members" => $users]);
     }
 
     /**

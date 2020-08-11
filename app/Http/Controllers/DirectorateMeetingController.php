@@ -50,7 +50,7 @@ class DirectorateMeetingController extends Controller
                 }
             }
 
-            return view('meeting.create',$result);
+            return view('meeting.staff-create',$result);
         }
     return redirect('/home');
     }

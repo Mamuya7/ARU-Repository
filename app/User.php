@@ -6,6 +6,7 @@ use Auth;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -99,7 +100,18 @@ class User extends Authenticatable
 
     public function school()
     {
-        return Auth::User()->department->school;
+        $school_id = School::whereHas('departments',function(Builder $query){
+            $query->where('id','=',$this->department_id);
+        })->first()->id;
+        return School::find($school_id);
+    }
+
+    public function directorate()
+    {
+        $directorate_id = Directorate::whereHas('departments',function(Builder $query){
+            $query->where('id','=',$this->department_id);
+        })->first()->id;
+        return Directorate::find($directorate_id);
     }
 
     public function department()

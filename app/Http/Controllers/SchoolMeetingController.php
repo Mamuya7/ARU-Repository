@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\User;
 use DB;
 use App\Meeting;
 use App\School;
@@ -27,7 +28,19 @@ class SchoolMeetingController extends Controller
      */
     public function index()
     {
-        
+        $sch_id = School::whereHas('departments',function(Builder $query){
+                $query->where('id','=',Auth::User()->department_id);
+            })->first()->id;
+
+        $department_meetings = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
+                            ->select('meetings.*','department_meeting.id as child_id','department_meeting.*')
+                            ->where('department_meeting.department_id','=',Auth::User()->department_id)
+                            ->orderBy('meetings.meeting_date','desc')->get();
+        $school_meetings = DB::table('meetings')->join('school_meetings','meetings.id','=','school_meetings.meeting_id')
+                            ->select('meetings.*','school_meetings.id as child_id','school_meetings.*')
+                            ->where('school_meetings.school_id','=',$sch_id)
+                            ->orderBy('meetings.meeting_date','desc')->get();         
+        return view('meeting.staff-view',["school_directorate" => $school_meetings, "department" => $department_meetings]);
     }
 
     /**
@@ -37,9 +50,8 @@ class SchoolMeetingController extends Controller
      */
     public function create()
     {
-            $result = ["heads" => array(), "staffs" => array(), "display" => "", "title" => "Create School Meeting"];
-
             if(Auth::User()->hasRole('dean')){
+                $result = ["heads" => array(), "staffs" => array(), "display" => "", "title" => "Create School Meeting"];
 
                 $sch_id = School::whereHas('departments',function(Builder $query){
                     $query->where('id','=',Auth::User()->department_id);
@@ -58,7 +70,7 @@ class SchoolMeetingController extends Controller
                     $result['display'] = "d-none";
                 }
 
-                return view('meeting.create',$result);
+                return view('meeting.staff-create',$result);
             }
         return redirect('/home');
     }
@@ -103,7 +115,25 @@ class SchoolMeetingController extends Controller
      */
     public function show(SchoolMeeting $schoolMeeting)
     {
-        //
+        $chair = new User;
+        $secr = new User;
+        $members = Array();
+        $school_departments = School::find($schoolMeeting->school_id)->departments;
+        foreach ($school_departments as $department) {
+            foreach ($department->users as $user) {
+                if($user->hasRole('head')){
+                    array_push($members,$user);
+                }elseif($user->hasRole('dean')){
+                    $chair = $user;
+                    array_push($members,$user);
+                }elseif($user->hasRole('administrative officer')){
+                    $secr = $user;
+                }
+            }
+        }
+        return view('meeting.show',["specificMeeting" => $schoolMeeting, 
+        "documents" => $schoolMeeting->documents,
+        "chair" => $chair, "secr" => $secr, "members" => $members]);
     }
 
     /**
