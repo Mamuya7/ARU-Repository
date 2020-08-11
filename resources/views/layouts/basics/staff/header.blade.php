@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="{{ asset('ansta/plugins/bootstrap/css/bootstrap.min.css') }}">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
 
 	<!-- Dashboard CSS -->
 	<link href="{{ asset('ansta/css/dashboard.css') }}" rel="stylesheet" type="text/css">

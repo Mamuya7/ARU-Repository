@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     public function hasRole($role)
     {
-        foreach (Auth::User()->roles as $value) {
+        foreach ($this->roles as $value) {
             if($value->role_name === $role){
                 return true;
             }
@@ -73,7 +73,7 @@ class User extends Authenticatable
     public function hasBothRoles($role1,$role2)
     {
         $r1 = false; $r2 = false;
-        foreach (Auth::User()->roles as $value) {
+        foreach ($this->roles as $value) {
             if($value->role_name === $role1){
                 $r1 = true;
             }
@@ -87,7 +87,7 @@ class User extends Authenticatable
 
     public function hasAnyRole($roles)
     {
-        foreach (Auth::User()->roles as $value) {
+        foreach ($this->roles as $value) {
             foreach ($roles as $role) {
                 if($value->role_name === $role){
                     return true;

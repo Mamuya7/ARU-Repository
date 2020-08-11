@@ -7,11 +7,12 @@ use Auth;
 use App\Meeting;
 use App\Document;
 use App\DepartmentMeeting;
-use App\DepartmentSchool;
+use App\School;
 use App\Department;
 use App\Attendence;
 use Response;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class MeetingsController extends Controller
 {
@@ -32,23 +33,27 @@ class MeetingsController extends Controller
      */
     public function index()
     {
-        $result = ['school' => array(), 'department' => array()];
-        if(Auth::User()->hasAnyRole(['dean','head'])){
-            $result['school'] = DB::table('meetings')
-                                ->join('school_meeting','meetings.id','=','school_meeting.meeting_id')
-                                ->where('school_meeting.school_id',Auth::User()->department->school[0]->id)
-                                ->orderBy('meetings.meeting_date','desc')
-                                ->get();
+        if(Auth::User()->hasRole('dean')){
+            return redirect()->route('viewSchoolMeetings');
+        }elseif (Auth::User()->hasRole('director')) {
+            return redirect()->route('viewDirectorateMeetings');
+        }elseif (Auth::User()->hasRole('head')) {
+            if(Auth::User()->department->belongsToSchool()){
+                return redirect()->route('viewSchoolMeetings');
+            }elseif (Auth::User()->department->belongsToDirectorate()) {
+                return redirect()->route('viewDirectorateMeetings');
+            }
+        }elseif (Auth::User()->hasRole('system administrator')) {
+            $result = [
+                'school' => Meeting::all()->where('meeting_type','school')->get(), 
+                'department' => Meeting::all()->where('meeting_type','department')->get(), 
+                'directorate' => Meeting::all()->where('meeting_type','directorate')->get()
+            ];
+    
+            return view('meeting.view',$result);
+        }else{
+            return redirect()->route('viewDepartmentMeetings');
         }
-        if(Auth::User()->hasAnyRole(['head','staff'])){
-            $result['department'] = DB::table('meetings')
-                                    ->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
-                                    ->where('department_meeting.department_id',Auth::User()->department_id)
-                                    ->orderBy('meetings.meeting_date','desc')
-                                    ->get();
-        }
-
-        return view('meeting.view',$result);
     }
 
     /**
@@ -58,34 +63,44 @@ class MeetingsController extends Controller
      */
     public function create()
     { 
-        $dep_id = Auth::User()->department_id;
-        
-        if(Auth::User()->hasAnyRole(['head','dean'])){
-            $result = ["heads" => array(), "staffs" => array(), "display" => ""];
-            if(Auth::User()->hasRole('dean')){
-                $sch_id = DB::table('department_school')->select('school_id')->where('department_id',$dep_id)->get();
-
-                $result['heads'] = DB::table('users')->join('role_user','users.id','=','role_user.user_id')
-                                        ->join('roles','role_user.role_id','=','roles.id')
-                                        ->join('departments','users.department_id','=','departments.id')
-                                        ->join('department_school','departments.id','=','department_school.department_id')
-                                        ->select('role_user.user_id','users.first_name','users.last_name')
-                                        ->where('roles.role_name','head')
-                                        ->where(function($query) use($sch_id){
-                                            $query->where('department_school.school_id',$sch_id[0]->school_id);
-                                        })->get();
-            }
-            if (Auth::User()->hasRole('head')) {
-                $result['staffs'] = DB::table('users')
-                                ->select('users.first_name','users.last_name','users.id as user_id')
-                                ->where('users.department_id',$dep_id)->get();
-            }
-            if(Auth::User()->hasBothRoles('head','dean')){
-                $result['display'] = "d-none";
-            }
-            return view('meeting.create',$result);
+        if(Auth::User()->hasRole('dean')){
+            return redirect()->route('createSchoolMeeting');
+        }elseif (Auth::User()->hasRole('director')) {
+            return redirect()->route('createDirectorateMeeting');
+        }elseif (Auth::User()->hasRole('head')) {
+            return redirect()->route('createDepartmentMeeting');
+        }elseif (Auth::User()->hasRole('system administrator')) {
+            // if(Auth::User()->hasAnyRole(['head','dean'])){
+    
+            //     $result = ["heads" => array(), "staffs" => array(), "display" => ""];
+    
+            //     if(Auth::User()->hasRole('dean')){
+    
+            //         $sch_id = School::whereHas('departments',function(Builder $query){
+            //             $query->where('id','=',Auth::User()->department_id);
+            //         })->first()->id;
+    
+            //         $departments = School::find($sch_id)->departments;
+    
+            //         foreach($departments as $department){
+            //             foreach($department->users as $user){
+            //                 if($user->hasRole('head')){
+            //                     array_push($result['heads'],$user);
+            //                 }
+            //             }
+            //         }
+            //     }
+            //     if (Auth::User()->hasRole('head')) {
+            //         $result['staffs'] = Auth::User()->department->users;
+            //     }
+            //     if(Auth::User()->hasBothRoles('head','dean')){
+            //         $result['display'] = "d-none";
+            //     }
+                return view('meeting.create');
+            // }
+        }else{
+            return redirect('/home');
         }
-        return redirect('/home');
     }
 
     /**

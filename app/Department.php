@@ -28,14 +28,26 @@ class Department extends Model
     {
         return $this->morphTo();
     }
-    public function school()
-    {
-        return $this->belongsToMany('App\School','department_school','department_id','school_id')
-                    ->withPivot('school_id','department_id');
-    }
     public function meetings()
     {
         return $this->belongsToMany('App\Meeting','department_meeting','department_id','meeting_id')
                     ->withPivot('department_id','meeting_id','secretary_id');
+    }
+
+    //logical functions
+    public function belongsToSchool()
+    {
+        if($this->departmentable->getMorphClass() == School::class){
+            return true;
+        }
+        return false;
+    }
+
+    public function belongsToDirectorate()
+    {
+        if($this->departmentable->getMorphClass() == Directorate::class){
+            return true;
+        }
+        return false;
     }
 }
