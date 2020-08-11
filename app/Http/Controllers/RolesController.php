@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use App\Roles;
-use DB;
 use Illuminate\Http\Request;
 
 class RolesController extends Controller
@@ -24,7 +23,7 @@ class RolesController extends Controller
      */
     public function index()
     {
-        $roles = DB::table('roles')->paginate();
+        $roles = DB::table('roles')->paginate(7);
         return view('roles.index',['roles' => $roles]);
     }
 

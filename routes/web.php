@@ -52,6 +52,7 @@ Route::get('AddSchool', 'SchoolsController@create')->name('AddSchool');
 Route::post('storeschools', 'SchoolsController@store');
 Route::delete('deleteschool/{schools}','SchoolsController@destroy');
 Route::post('editSchool/{schools}','SchoolsController@edit');
+Route::post('updateSchool/{schools}', 'SchoolsController@update');
 
 //Committee Routes
 
@@ -89,7 +90,8 @@ Route::get('registerDirectorateForm','DirectoratesController@create')->name('reg
 Route::post('storesDirectorate', 'DirectoratesController@store');
 Route::get('displayDirectorates','DirectoratesController@index')->name('displayDirectorates');
 Route::delete('deletedirectorate/{directorates}','DirectoratesController@destroy');
-Route::post('editDirectoratee/{directorate}','DirectoratesController@edit');
+Route::post('editDirectorate/{directorates}','DirectoratesController@edit');
+Route::post('updateDirectorate/{directorates}', 'DirectoratesController@update');
 
 
 
@@ -97,6 +99,8 @@ Route::post('editDirectoratee/{directorate}','DirectoratesController@edit');
 //users
 Route::get('getUserRole/{id}','UserController@show')->name('getUserRole');
 Route::get('viewUsers','UserController@index')->name('viewUsers');
+Route::post('assignRole', 'UserController@store');
+
 
 
 

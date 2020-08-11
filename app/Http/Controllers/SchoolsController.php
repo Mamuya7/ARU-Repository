@@ -83,7 +83,16 @@ class SchoolsController extends Controller
      */
     public function update(Request $request, School $schools)
     {
-        //
+        $name = $request->input('school_name');
+        $code = $request->input('school_code');
+
+        $schools->update([
+            "school_name" => $name,
+            "school_code" => $code
+        ]);
+
+        return redirect()->route('showschools');
+
     }
 
     /**

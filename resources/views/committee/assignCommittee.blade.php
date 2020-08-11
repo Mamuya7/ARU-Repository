@@ -6,22 +6,6 @@
 <div class="row" style="margin-top:40px"> 
     <div class="col-md-7 col-lg-7">
         <div class="card  shadow">
-            <!-- <div class="card-header bg-transparent">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="col-md-4">
-                             <h2 class="mb-0">Staffs</h2>   
-                        </div>
-                        <div class="col-md-7">
-                            <div class="input-group input-group-alternative">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                </div><input class="form-control" placeholder="Search" type="text">
-                            </div>  
-                        </div>
-                    </div>
-                </div>
-            </div> -->
             <div class="table-responsive table-primary">
                 <table class="table card-table text-nowrap">
                     <tr class="border-bottom">

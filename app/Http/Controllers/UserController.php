@@ -54,7 +54,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $userId = $request->input('user_id');
+        $roleId = $request->input('role_id');
+
+        $post = DB::table('role_user')->insert([
+            'user_id' => $userId, 
+            'role_id' => $roleId
+          ]);
+        return back();
+    
     }
 
     /**
@@ -64,10 +72,11 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
+    {   
+        $user = $id;
         $roles = User::find($id)->roles;
         $role = DB::table('roles')->get();
-        echo json_encode($roles);
+        echo json_encode(['roles'=>$roles,'users'=>$user]);
     
         // return view('department/index',['departments' => $departments])
     }
@@ -82,6 +91,8 @@ class UserController extends Controller
     {
         
     }
+
+    
 
     /**
      * Update the specified resource in storage.

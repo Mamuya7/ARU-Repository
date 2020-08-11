@@ -82,7 +82,7 @@ class CommitteeController extends Controller
             "committee_code" => $code
         ]);
 
-        
+        return redirect()->route('displayCommittee');
 
     }
 

@@ -97,35 +97,35 @@
 <div class="modal fade" id="updateRole" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class = "modal-dialog modal-md">
         <div class = "modal-content">
-            <div class = "modal-header bg-gradient-cyan">      
-                <button type = "button" class="close" data-dismiss = "modal">×</button>
-            </div>
-            <div class="modal-body">
-                <form action="" method="post">
-                    {{csrf_field()}}
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label">Committee Name</label>
-                                <input type="text" id="name" class="form-control" name="committee_name">
+            <form id="update-committee" method="post">
+                <div class = "modal-header bg-gradient-cyan">      
+                    <button type = "button" class="close" data-dismiss = "modal">×</button>
+                </div>
+                <div class="modal-body">
+                        {{csrf_field()}}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label">Committee Name</label>
+                                    <input type="text" id="name" class="form-control" name="committee_name">
+                                </div>
                             </div>
-                        </div>
-                    
+                        
 
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label">Committee Code</label>
-                                <input type="text" id="code" class="form-control" name="committee_code">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label">Committee Code</label>
+                                    <input type="text" id="code" class="form-control" name="committee_code">
+                                </div>
                             </div>
-                        </div>
 
-                        <input type="text" id="com_id" class="form-control" name="id" hidden>
-                </form>    
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btn-submit" class="btn btn-md btn-primary mt-1 mb-1" data-dismiss="modal" >update</button>
-                <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
-            </div>
+                            <input type="text" id="com_id" class="form-control" name="id" hidden>   
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-md btn-primary mt-1 mb-1" >update</button>
+                    <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
+                </div>
+            </form> 
         </div>
     </div>
 </div>
@@ -159,39 +159,39 @@
         $('#com_id').val(data.id);
         $('#name').val(data.committee_name);
         $('#code').val(data.committee_code);
-
+        $('#update-committee').attr('action',"updateCommittee/"+data.id);
     }
 
-    $('#btn-submit').click(function(){
-        var name = $("#name").val();
-        var code = $("#code").val();
-        var id = $("#com_id").val();
+    // $('#btn-submit').click(function(){
+    //     var name = $("#name").val();
+    //     var code = $("#code").val();
+    //     var id = $("#com_id").val();
 
-        $.ajax({
-            url: '/updateCommittee/'+id,
-            type: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{csrf_token()}}'
-            },
-            data:{
-                committee_name:name,
-                committee_code:code
-             },
-            dataType: 'json',
-            success:function(response){
+    //     $.ajax({
+    //         url: '/updateCommittee/'+id,
+    //         type: 'POST',
+    //         headers: {
+    //             'X-CSRF-TOKEN': '{{csrf_token()}}'
+    //         },
+    //         data:{
+    //             committee_name:name,
+    //             committee_code:code
+    //          },
+    //         dataType: 'text',
+    //         success:function(response){
 
-                    setTimeout(function(){
-                        $('#bn-submit').trigger('click');
-                    },1500);
+    //                 // setTimeout(function(){
+    //                 //     $('#bn-submit').trigger('click');
+    //                 // },1500);
                    
 
-            },
-            error:function(xhr,status,err){
-                console.log(err);
-            }
-        });
+    //         },
+    //         error:function(xhr,status,err){
+    //             console.log(err);
+    //         }
+    //     });
         
-    });
+    // });
 
 
     function showCommitteeMembers(id){

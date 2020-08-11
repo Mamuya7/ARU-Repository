@@ -54,12 +54,14 @@
 <div class="modal fade" id="updateDirectorate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class = "modal-dialog modal-md">
         <div class = "modal-content">
+        <form id="update-directorate" method="post">
+            {{csrf_field()}}
             <div class = "modal-header bg-primary">      
                 <button type = "button" class="close" data-dismiss = "modal">×</button>
             </div>
             <div class = "modal-body">
-                <form action="" method="post">
-                    {{csrf_field()}}
+                
+
                     <input type="text" id="r_id" class="form-control" name="role_id" hidden>
                     <div class="row">
                         <div class="col-md-12">
@@ -79,11 +81,13 @@
                 </form>    
             </div>
             <div class = "modal-footer">
-                <button type="button" id="update-directorate" class="btn btn-md btn-primary mt-1 mb-1">update</button>
+                <button type="submit" class="btn btn-md btn-primary mt-1 mb-1">update</button>
                 <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
             </div>
+        </form>
         </div>
     </div>
+    </form>
 </div>
 
 
@@ -100,13 +104,21 @@
                 data:{directorate_id : id},
                 dataType: 'json',
                 success:function(response){
-                    // displayForm(response);
-                    console.log(response);
+                     displayForm(response);
+                    // console.log(response);
                 },
                 error:function(xhr,status,err){
                     console.log(err);
                 }
         });
+    }
+
+    function displayForm(data){
+        // console.log (data.id);
+        $('#name').val(data.directorate_name);
+        $('#code').val(data.directorate_code);
+
+        $('#update-directorate').attr('action',"updateDirectorate/"+data.id);
     }
 </script>
 @endsection
