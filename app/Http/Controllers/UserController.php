@@ -32,9 +32,10 @@ class UserController extends Controller
 
         
         $roles = DB::table('roles')->get();
+        $departments = DB::table('departments')->get();
 
 
-        return view('user.index',['user' => $users,'roles'=>$roles]);
+        return view('user.index',['user' => $users,'roles'=>$roles,'departments'=>$departments]);
     //    return view('user.index');
     }
 
@@ -62,13 +63,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $userId = $request->input('user_id');
-        $roleId = $request->input('role_id');
+        $userId = $request->input('userId');
+        $roleId = $request->input('roles');
 
-        $post = DB::table('role_user')->insert([
-            'user_id' => $userId, 
-            'role_id' => $roleId
-          ]);
+
+        Users::find($userId)->roles()->attach($roleId);
+        
+
+        // $post = DB::table('role_user')->insert([
+        //     'user_id' => $userId, 
+            
+        //     'role_id' => $roleId
+        //   ]);
         return back();
     
     }
@@ -95,9 +101,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
+        $users = DB::table('users')
+        ->join('departments','departments.id','=','users.department_id')
+        ->where('users.id','=',$user->id)
+        ->get();
+        echo json_encode($users);
         
+      
     }
 
     
@@ -111,7 +123,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**
@@ -120,8 +132,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy(User $user)
+    {     
+        DB::transaction(function() use($user){
+            DB::table('role_user')->where('user_id',$user->id)->delete();    
+            DB::table('users')->where('id',$user->id)->delete();                
+        });
+        return back();
     }
 }

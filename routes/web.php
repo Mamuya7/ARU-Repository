@@ -126,6 +126,8 @@ Route::post('updateDirectorate/{directorates}', 'DirectoratesController@update')
 Route::get('getUserRole/{id}','UserController@show')->name('getUserRole');
 Route::get('viewUsers','UserController@index')->name('viewUsers');
 Route::post('assignRole', 'UserController@store');
+Route::delete('deleteUser/{user}','UserController@destroy');
+Route::post('editUser/{user}','UserController@edit');
 
 
 

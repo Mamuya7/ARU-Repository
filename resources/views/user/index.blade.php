@@ -31,11 +31,16 @@
                                     <td>
                                         <button type="button" onclick="displayRole({{ $users->id }})"  class="btn btn-primary btn-sm btn-square mt-1 mb-1" data-toggle="modal" data-target="#largeModal">View</button>
                                        
-                                        <button type="button" onclick="editUser({{ $users->id }})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDirectorate">update</button> 
-                                    
+                                        <button type="button" onclick="editUser({{ $users->id }})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateUser">update</button> 
+                                    </td>
 										<!-- <button type="button" class="btn btn-primary btn-sm btn-square mt-1 mb-1">Update</button> -->
-                                        
-										<button type="button" class="btn btn-primary btn-sm btn-square mt-1 mb-1">delete</button>
+                                    <td>    
+                                    <form action="deleteUser/{{$users->id }}" method="post" class="dis-inline">
+                
+                                        {{csrf_field()}}
+                                            {{method_field('DELETE')}}
+                                            <button type="submit" class="btn btn-sm btn-square btn-primary mt-1 mb-1">Delete</button>
+                                        </form> 
                                     </td>
                                 </tr>
                             @endforeach
@@ -57,7 +62,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="assignRole" method="post">
+                    <!-- <form action="assignRole" method="post"> -->
                         <div class="modal-body">
                             
                                 <div class="row" style="margin-top:40px"> 
@@ -88,11 +93,12 @@
 
                                                 <div class="table-responsive">
                                                         <table class="table card-table text-nowrap">   
-                                                        <input type="text" name="user_id" id="user_details" hidden>
+                                                        <input type="text" name="user_id" id="user_details" value="$user->id" hidden>
                                                             @foreach($roles as $role)
                                                                 <tr class="border-bottom">
-                                                                    <td><input type="checkbox" name="role_id" value="{{$role->id}}" id="check-box"></td>
+                                                                    <td><input type="checkbox" name="role_id" value="{{ $role->id}}" id="check-box"></td>
                                                                     <td style="margin-left:-20px;" id="check-click">{{ $role->role_name}}</td>
+                                                                    
                                                                 </tr>
                                                             @endforeach 
                                                             <!-- <tr class="border-bottom">
@@ -110,18 +116,150 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Assign Role</button>
+                            <button type="button" class="btn btn-primary" id="assign-btn">Assign Role</button>
                         </div>
-                    </form>    
+                    <!-- </form>     -->
                 </div>
             </div>
         </div>
     </div>
 
 
+
+    <div class="modal fade" id="updateUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class = "modal-dialog modal-xl">
+            <div class = "modal-content">
+                <form id="update-user" method="post">
+                    {{csrf_field()}}
+                    <div class = "modal-header bg-primary">      
+                        <button type = "button" class="close" data-dismiss = "modal">×</button> 
+                    </div>
+                    <div class = "modal-body">
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input id="first_name" type="text" class="form-control @error('name') is-invalid @enderror" name="first_name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                        
+                           @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
+                            <select id="gender" name="gender" class="form-control select2 w-100" >
+                                <option value="none" selected="selected" disabled>Select Gender</option>
+                                <option value="male" class="text-md">Male</option>
+                                <option value="female" class="text-md">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">email</label>
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="Ardhi{{date('Y')}}" required>
+
+                            @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input id="last_name" type="text" class="form-control @error('name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}" required autocomplete="last_name" autofocus>
+
+                            @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror          
+                        </div>
+
+                      
+
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <select id="department" name="department" class="form-control select2 w-100" >
+                                <option value="none" selected="selected" disabled>Select Department</option>
+                            @foreach($departments as $department)
+                                <option value="{{$department->id}}" class="text-md">{{$department->department_name}}</option>
+                            @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" value="Ardhi{{date('Y')}}" required>
+                        </div>
+                    </div>
+                         
+                </div>
+                    <div class = "modal-footer">
+                        <!-- <button type="submit" class="btn btn-md btn-primary mt-1 mb-1">update</button> -->
+
+                            <button type="submit" class="btn btn-primary">update</button>
+                    
+                        <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </div>
+
     
 
     <script>
+
+
+        function editUser(id){
+            $.ajax({
+                url: '/editUser/'+id,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success:function(response){
+                    // displayForm(response);
+                    // console.log(response.first_name);
+                    response.forEach(users => {
+                    //    console.log(users.first_name); 
+                        $('#first_name').val(users.first_name);
+                        $('#email').val(users.email);
+                        $('#last_name').val(users.last_name);
+                        $('#gender').val(users.gender);
+                        $('#department').val(users.department_name);
+                        
+                        
+                    });
+                
+                },
+                error:function(xhr,status,err){
+                    console.log(err);
+                }
+        });
+        }
+
+        function displayForm(data){
+            
+        }
 
         function displayRole(id){
 
@@ -166,6 +304,42 @@
             });
         })
         
+
+        $('#assign-btn').click(function(){
+            // alert("asdfghjk");
+            var id = $('#user_details').val();
+            var selected = [];
+            $('#check-box:checked').each(function() {
+                selected.push($(this).attr('value'));
+            });
+            // console.log(selected);
+
+            $.ajax({
+                url: '/assignRole',
+                type: 'post',
+                data:{
+                    userId:id,
+                    roles : selected
+                },
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success:function(response){
+                    // console.log(response);
+                    displayUserRoles(response);
+                    
+                },
+                error:function(xhr,status,err){
+                    console.log(err);
+                }
+            });
+        })
+
+
+        // function assignRole(id){
+        //     alert(id);
+        // }
 
     </script>
 
