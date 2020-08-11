@@ -6,8 +6,8 @@
         <input type="search" name="" id="" class="form-control" placeholder="search.....">
     </div>
     <div>
-        @if($school)
-            @foreach($school as $meeting)
+        @if($school_directorate)
+            @foreach($school_directorate as $meeting)
         <form action="show_meeting/{{$meeting->meeting_id}}" method="post" class="cursor-default meeting">
         @csrf
         <div class="card border-warning p-2 m-1 hover-warning">

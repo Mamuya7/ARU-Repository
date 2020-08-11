@@ -5,11 +5,11 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="d-flex justify-content-center">
-                <input type="text" id="title" class="form-control text-center text-uppercase text-xl" value="{{$meeting->meeting_title}}" disabled>
+                <input type="text" id="title" class="form-control text-center text-uppercase text-xl" value="{{$specificMeeting->meeting->meeting_title}}" disabled>
             </div>
         </div>
         <div class="col-lg-2">
-            <span class="text-xl">{{$meeting->meeting_date}}</span>
+            <span class="text-xl">{{$specificMeeting->meeting->meeting_date}}</span>
         </div>
         <div class="col-lg-2 text-right">
             <span class="fab">
@@ -24,7 +24,7 @@
             <div class="d-flex flex-column">
                 <div class="pb-2">
                     <textarea name="" id="" cols="30" rows="10" class="form-control" disabled>
-                        {{$meeting->meeting_description}}
+                        {{$specificMeeting->meeting->meeting_description}}
                     </textarea>
                 </div>
                 <div class="pt-2">
@@ -66,7 +66,7 @@
                             <input type="text" id="secretary" value="{{($secr === null)? 'Not Selected': $secr->last_name.' '.$secr->first_name}}" class="form-control" disabled>
                         </div>
                         <div class="col-lg-3">
-                            @if((!$meeting->wasHeld()) && (Auth::User()->id == $chair->id))
+                            @if((!$specificMeeting->meeting->wasHeld()) && (Auth::User()->id == $chair->id))
                             <button class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Change</button>
                             @endif
                         </div>
@@ -91,7 +91,7 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                                 <div class="d-flex flex-column h-100vh">
-                                    @if(!$meeting->wasHeld())
+                                    @if(!$specificMeeting->meeting->wasHeld())
                                     <div class="border-ardhi box-fit hover-ardhi cursor-default mb-3" data-toggle="modal" data-target="#largeModal">
                                         <span class="fas fa-plus-square text-xl text-black pl-1 pt-1"></span>
                                         <span class="p-2 font-weight-800">Invite Member</span>
@@ -159,7 +159,7 @@
                 @endforeach
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="changesecretary({{json_encode(url('changesecretary/'.$meeting->id))}})">Save changes</button>
+                <button type="button" class="btn btn-primary" onclick="changesecretary({{json_encode(url('changesecretary/'.$specificMeeting->meeting->id))}})">Save changes</button>
                 <button type="button" id="close-change-secretary" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -245,7 +245,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="close-attendence" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="getattendence({{json_encode($members)}},{{json_encode(url('create_attendence/'.$meeting->id))}})">Submit</button>
+                <button type="button" class="btn btn-primary" onclick="getattendence({{json_encode($members)}},{{json_encode(url('create_attendence/'.$specificMeeting->meeting->id))}})">Submit</button>
             </div>
         </div>
     </div>
@@ -260,7 +260,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{url('uploadfile').'/'.$meeting->id}}" method="post" id="upload-form" enctype="multipart/form-data">
+                <form action="{{url('uploadfile').'/'.$specificMeeting->meeting->id}}" method="post" id="upload-form" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-lg-6">
@@ -274,7 +274,7 @@
                             <div class="card h-75">
                                 <div class="card-header">
                                     <h2>Select File Type</h2>
-                                    <input type="text" name="meeting_id" value="{{$meeting->id}}" hidden>
+                                    <input type="text" name="meeting_id" value="{{$specificMeeting->meeting->id}}" hidden>
                                 </div>
                                 <div class="card-body">
                                     <div class="d-flex flex-column justify-content-center h-100">
