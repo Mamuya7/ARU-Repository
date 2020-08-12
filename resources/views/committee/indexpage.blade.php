@@ -7,7 +7,7 @@
         <div class="card-header bg-transparent">
             <div class="row align-items-center">
                 <div class="col">
-                    <h2 class="mb-0">Committees</h2>
+                    <h2 class="mb-0">Registered Committees</h2>
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
 
 <div class="modal fade" id="largeModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 style="font-weight:bold;font-size:18px;align:center;">USERS FOUND IN THE COMMITTEE</h4>
@@ -76,7 +76,6 @@
                                             <th>Last Name</th>
                                             <th>Gender</th>
                                             <th>Email </th>
-                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="showData">
@@ -162,40 +161,8 @@
         $('#update-committee').attr('action',"updateCommittee/"+data.id);
     }
 
-    // $('#btn-submit').click(function(){
-    //     var name = $("#name").val();
-    //     var code = $("#code").val();
-    //     var id = $("#com_id").val();
-
-    //     $.ajax({
-    //         url: '/updateCommittee/'+id,
-    //         type: 'POST',
-    //         headers: {
-    //             'X-CSRF-TOKEN': '{{csrf_token()}}'
-    //         },
-    //         data:{
-    //             committee_name:name,
-    //             committee_code:code
-    //          },
-    //         dataType: 'text',
-    //         success:function(response){
-
-    //                 // setTimeout(function(){
-    //                 //     $('#bn-submit').trigger('click');
-    //                 // },1500);
-                   
-
-    //         },
-    //         error:function(xhr,status,err){
-    //             console.log(err);
-    //         }
-    //     });
-        
-    // });
-
-
+  
     function showCommitteeMembers(id){
-        // console.log(id);
         $.ajax({
             url: '/CommitteeMembers/'+id,
             type: 'GET',
@@ -205,6 +172,8 @@
             dataType: 'json',
             success:function(response){
                 showCommitteUsers(response);
+                // console.log(response);
+                
                 
             },
             error:function(xhr,status,err){
@@ -223,9 +192,6 @@
                list+="<td>"+users.last_name+"</td>";
                list+="<td>"+users.email+"</td>";
                list+="<td>"+users.email+"</td>";
-               list+="<td>";
-               list+="<button type='button' class='btn btn-primary'>remove</button>"
-               list+="</td>";
                list+="</tr>";
             
             });

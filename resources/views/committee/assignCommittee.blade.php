@@ -4,32 +4,8 @@
 <form action="assignUserCommittee" method="post">
 @csrf
 <div class="row" style="margin-top:40px"> 
+ 
     <div class="col-md-7 col-lg-7">
-        <div class="card  shadow">
-            <div class="table-responsive table-primary">
-                <table class="table card-table text-nowrap">
-                    <tr class="border-bottom">
-                        <th></th>
-                        <th>FULL NAME</th>
-                        <th>DEPARTMENT</th>
-                    </tr>
-                    @foreach($user as $users)
-                    <tr class="border-bottom">
-                        <td><input type="checkbox" name="user_id[]" value="{{ $users->user_id }}"></td>
-                        <td class="text-left" >{{ $users->full_name }}</td>
-                        <!-- <td>kilango12345@gmail.com</td> -->
-                        <td class="text-left">{{ $users->department }}</td>
-                    </tr>
-                    @endforeach
-                    
-            
-                </table>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="col-md-5 col-lg-5">
         <div class="card shadow">
             <div class="card-body">
                 <h4 class="card-title">AllCommittees</h4>
@@ -47,6 +23,31 @@
             </div>
         </div>
     </div>
+
+    <div class="col-md-5 col-lg-5">
+        <div class="card  shadow">
+            <div class="table-responsive table-primary">
+                <table class="table card-table text-nowrap">
+                    <tr class="border-bottom">
+                        <th></th>
+                        <th>ROLES</th>
+                        <!-- <th>DEPARTMENT</th> -->
+                    </tr>
+                    @foreach($roles as $roles)
+                    <tr class="border-bottom">
+                        <td><input type="checkbox" name="role_id[]" value="{{ $roles->id }}"></td>
+                        <td class="text-left" >{{ $roles->role_name }}</td>
+                      
+                    </tr>
+                    @endforeach
+                    
+            
+                </table>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 <div class="row">
     <div class="col-lg-10 col-md-10"></div>

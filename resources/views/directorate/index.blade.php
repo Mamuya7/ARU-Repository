@@ -6,7 +6,7 @@
 <div class="card  shadow">
     <div class="card-body ">               
         <div class="card-header bg-transparent border-bottom-0">
-            <h2>DIRECTORATES</h2>
+            <h2>ADMINISTRATION DIRECTORATES</h2>
             {{$directorates}}
         </div>
         <div class="emp-tab">

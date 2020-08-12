@@ -15,7 +15,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-label">Department Name</label>
-                                    <input type="text" class="form-control" name="department_name" placeholder="Department Name">
+                                    <input type="text" class="form-control" name="department_name" placeholder="Department Name" required>
                                 </div>
                             </div>
                         </div>
@@ -24,7 +24,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-label">Department Code</label>
-                                    <input type="text" class="form-control" name="department_code" placeholder="Department Name">
+                                    <input type="text" class="form-control" name="department_code" placeholder="Department Name" required>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group custom-control custom-radio">
-                                    <input type="radio" id="defaultChecked" name="department-type" class="custom-control-input" value="2">
+                                    <input type="radio" id="defaultChecked" name="department-type" class="custom-control-input" value="2" required>
                                     <label for="defaultChecked" class="custom-control-label">Directorate</label>                                                        
                                 </div>
                             </div>
@@ -47,7 +47,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <select name="school_directorate_id" id="dirschool" class="form-control selectpicker" data-live-search="true">
+                                    <select name="school_directorate_id" id="dirschool" class="form-control selectpicker" data-live-search="true" required>
                                         <option value="" id="direct_selected" selected disabled></option>
                                         <option data-tokens="" value=""></option>   
                                     </select>

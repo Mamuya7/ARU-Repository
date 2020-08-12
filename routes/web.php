@@ -118,11 +118,11 @@ Route::get('assignCommittee','CommitteeController@display');
 
 // Route::get('commiteeUnasigned','CommitteeController@showUsers')->name('commiteeUnasigned');
 
-// Committee users
-Route::get('createUserCommittee', 'CommitteeUserController@create')->name('createUserCommittee');
-Route::post('assignUserCommittee', 'CommitteeUserController@store')->name('assignUserCommittee');
+// Committee roles
+Route::get('createUserCommittee', 'CommitteeRoleController@create')->name('createUserCommittee');
+Route::post('assignUserCommittee', 'CommitteeRoleController@store')->name('assignUserCommittee');
 // Route::post('CommitteeMembers/{committeeUser}', 'CommitteeUserController@show')->name('CommitteeMembers');
-Route::get('CommitteeMembers/{id}','CommitteeUserController@display')->name('CommitteeMembers');
+Route::get('CommitteeMembers/{committee}','CommitteeRoleController@show')->name('CommitteeMembers');
 
 
 
@@ -149,7 +149,7 @@ Route::post('updateDirectorate/{directorates}', 'DirectoratesController@update')
 
 //users
 Route::get('getUserRole/{id}','UserController@show')->name('getUserRole');
-Route::get('viewUsers','UserController@index')->name('viewUsers');
+Route::get('viewUsers','UserController@index')->name('view-Users');
 Route::post('assignRole', 'UserController@store');
 Route::delete('deleteUser/{user}','UserController@destroy');
 Route::post('editUser/{user}','UserController@edit');

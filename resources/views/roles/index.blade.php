@@ -5,7 +5,7 @@
 <div class="card  shadow">
     <div class="card-body ">               
         <div class="card-header bg-transparent border-bottom-0">
-            <h2>ROLES</h2>
+            <h2>REGISTERED ROLES</h2>
         </div>
         <div class="emp-tab">
             <div class="table-responsive">

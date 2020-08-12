@@ -10,7 +10,7 @@
                     <a class="slide-item" href="{{ route('register') }}">Add User</a>
                 </li>
                 <li>
-                    <a href="{{ route('viewUsers') }}" class="slide-item" >View Users</a>
+                    <a href="{{ route('view-Users') }}" class="slide-item" >View Users</a>
                 </li>
                 <li>
                     <!-- <a href="" class="slide-item">Assign Role</a> -->

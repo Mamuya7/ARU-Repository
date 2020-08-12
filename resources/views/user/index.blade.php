@@ -15,19 +15,18 @@
                                 <tr>
                                     <th>Full Name</th>
                                     <th>Gender</th>
-                                    <th>Email </th>
+                                    <th>Email</th>
                                     <th>Department</th>
-                                     <th>Action</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($user as $users)
-                                    
+                                @foreach($user as $users)                                 
                                 <tr >
                                     <td>{{ $users->full_name }}</td>
                                     <td>{{ $users->gender }}</td>
                                     <td>{{ $users->email }} </td>
-                                    <td class="text-nowrap" >{{ $users->department }}</td>
+                                    <td class="text-nowrap">{{ $users->department }}</td>
                                     <td>
                                         <button type="button" onclick="displayRole({{ $users->id }})"  class="btn btn-primary btn-sm btn-square mt-1 mb-1" data-toggle="modal" data-target="#largeModal">View</button>
                                        
@@ -35,15 +34,15 @@
                                     </td>
 										<!-- <button type="button" class="btn btn-primary btn-sm btn-square mt-1 mb-1">Update</button> -->
                                     <td>    
-                                    <form action="deleteUser/{{$users->id }}" method="post" class="dis-inline">
+                                        <form action="deleteUser/{{$users->id }}" method="post" class="dis-inline">
                 
-                                        {{csrf_field()}}
+                                            {{csrf_field()}}
                                             {{method_field('DELETE')}}
                                             <button type="submit" class="btn btn-sm btn-square btn-primary mt-1 mb-1">Delete</button>
                                         </form> 
                                     </td>
                                 </tr>
-                            @endforeach
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -54,13 +53,11 @@
 
 
     <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="modal-title" id="largeModalLabel">Modal title</h2>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <h2 class="modal-title" id="largeModalLabel">ASSIGN USER ROLES</h2>
+                        <button type = "button" class="close" data-dismiss = "modal">×</button>
                     </div>
                     <!-- <form action="assignRole" method="post"> -->
                         <div class="modal-body">
@@ -86,30 +83,27 @@
 
 
                                     <div class="col-md-6 col-lg-6">
-                                        <div class="card shadow">
-                                    
+                                    <form action="assignRole" method="post" id="assign-form">
+                                        @csrf
+                                        <div class="card shadow">                                  
                                             <div class="card-body">
                                                 <h4 class="card-title">All Roles</h4>
-
                                                 <div class="table-responsive">
-                                                        <table class="table card-table text-nowrap">   
-                                                        <input type="text" name="user_id" id="user_details" value="$user->id" hidden>
-                                                            @foreach($roles as $role)
-                                                                <tr class="border-bottom">
-                                                                    <td><input type="checkbox" name="role_id" value="{{ $role->id}}" id="check-box"></td>
-                                                                    <td style="margin-left:-20px;" id="check-click">{{ $role->role_name}}</td>
-                                                                    
-                                                                </tr>
-                                                            @endforeach 
-                                                            <!-- <tr class="border-bottom">
-
-                                                            </tr> -->
-
-                                                        </table>
+                                                    <table class="table card-table text-nowrap" style="height: 250px;overflow: auto;">   
+                                                    <input type="text" name="userId" id="user_details" value="$user->id" hidden>
+                                                        @foreach($roles as $role)
+                                                            <tr class="border-bottom">
+                                                                <td><input type="checkbox" name="roles[]" value="{{ $role->id}}" id="check-box"></td>
+                                                                <td id="check-click">{{ $role->role_name}}</td>    
+                                                            </tr>
+                                                        @endforeach 
+                                                        
+                                                    </table>
                                                 </div>
                                             </div>
                                     
                                         </div>
+                                    </form> 
                                     </div>
                                 </div>
                                             
@@ -127,8 +121,9 @@
 
 
     <div class="modal fade" id="updateUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class = "modal-dialog modal-xl">
+        <div class ="modal-dialog modal-xl">
             <div class = "modal-content">
+    
                 <form id="update-user" method="post">
                     {{csrf_field()}}
                     <div class = "modal-header bg-primary">      
@@ -168,17 +163,6 @@
                                 @enderror
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Password</label>
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="Ardhi{{date('Y')}}" required>
-
-                            @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            
-                        </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
@@ -197,27 +181,22 @@
                         <div class="form-group">
                             <label class="form-label">Department</label>
                             <select id="department" name="department" class="form-control select2 w-100" >
-                                <option value="none" selected="selected" disabled>Select Department</option>
+                                <option id="department"  selected="selected" disabled></option>
                             @foreach($departments as $department)
                                 <option value="{{$department->id}}" class="text-md">{{$department->department_name}}</option>
                             @endforeach
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Confirm Password</label>
-                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" value="Ardhi{{date('Y')}}" required>
-                        </div>
                     </div>
                          
                 </div>
-                    <div class = "modal-footer">
-                        <!-- <button type="submit" class="btn btn-md btn-primary mt-1 mb-1">update</button> -->
-
-                            <button type="submit" class="btn btn-primary">update</button>
+                <div class = "modal-footer">
                     
-                        <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
-                    </div>
+                        <button type="submit" class="btn btn-primary mt-1 mb-1">update</button>
+                
+                    <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
+                </div>
                 </form> 
             </div>
         </div>
@@ -237,18 +216,21 @@
                 },
                 dataType: 'json',
                 success:function(response){
-                    // displayForm(response);
-                    // console.log(response.first_name);
-                    response.forEach(users => {
-                    //    console.log(users.first_name); 
-                        $('#first_name').val(users.first_name);
-                        $('#email').val(users.email);
-                        $('#last_name').val(users.last_name);
-                        $('#gender').val(users.gender);
-                        $('#department').val(users.department_name);
+                     console.log(response);
+                    
+                    
+
+                        $('#first_name').val(response.first_name);
+                        $('#email').val(response.email);
+                        $('#last_name').val(response.last_name);
+                        $('#gender').val(response.gender);
+                        $('#department').val(response.department_name);
+                        $('#department').val(response.departmentable_id);
+                        $(this).children("option:selected").val();
+
                         
                         
-                    });
+              
                 
                 },
                 error:function(xhr,status,err){
@@ -257,9 +239,7 @@
         });
         }
 
-        function displayForm(data){
-            
-        }
+    
 
         function displayRole(id){
 
@@ -286,15 +266,21 @@
             $('#user_details').val(data.users);
             var list ="";
             data.roles.forEach(role => {
+
                 list+="<tr>";
-                list+="<td><input type='checkbox' name='' value=''></td>";
-                list+="<td>"+role.role_name+"</td>";   
-                list+="<td><button type='button' class='btn btn-primary'>remove</button></td>";
+                // list+="<td id='user-role'><input type='checkbox' name='' value='"+role.id+"'></td>";
+                list+="<td onclick='unAssignRole(role.id)'>"+role.role_name+"</td>";   
+                list+="<td><button type='button' class='btn btn-rol btn-primary'>remove</button></td>";
                 list+="</tr>";
+                
             });
             $('#tabe-data').empty();
             $('#tabe-data').append(list);
       
+        }
+
+        function unAssignRole(id){
+            console.log(id);
         }
 
         $('#check-clck').click(function(){
@@ -306,35 +292,40 @@
         
 
         $('#assign-btn').click(function(){
-            // alert("asdfghjk");
-            var id = $('#user_details').val();
-            var selected = [];
-            $('#check-box:checked').each(function() {
-                selected.push($(this).attr('value'));
-            });
-            // console.log(selected);
+            $('#assign-form').trigger("submit");
 
-            $.ajax({
-                url: '/assignRole',
-                type: 'post',
-                data:{
-                    userId:id,
-                    roles : selected
-                },
-                headers: {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                },
-                dataType: 'json',
-                success:function(response){
-                    // console.log(response);
-                    displayUserRoles(response);
+            // var id = $('#user_details').val();
+            // var selected = [];
+            // $('#check-box:checked').each(function() {
+            //     selected.push($(this).attr('value'));
+            // });
+
+            // $.ajax({
+            //     url: '/assignRole',
+            //     type: 'post',
+            //     data:{
+            //         userId:id,
+            //         roles : selected
+            //     },
+            //     headers: {
+            //         'X-CSRF-TOKEN': '{{csrf_token()}}'
+            //     },
+            //     dataType: 'json',
+            //     success:function(response){
+            //         console.log(response);
+            //         $(document).reload();
                     
-                },
-                error:function(xhr,status,err){
-                    console.log(err);
-                }
-            });
-        })
+            //     },
+            //     error:function(xhr,status,err){
+            //         console.log(err);
+            //     }
+            // });
+        });
+
+
+        // $('#unassign-btn').click(function(){
+        //     alert("asdfghjk");
+        // });
 
 
         // function assignRole(id){

@@ -16,6 +16,13 @@ class Roles extends Model
         'role_name', 'role_code',
     ];
 
+
+    public function committees()
+    {
+        return $this->belongsToMany('App\Committee','committee_role','role_id','committee_id');
+    }
+
+
     public function user()
     {
         return $this->belongsToMany('App\User','role_user','role_id','user_id')

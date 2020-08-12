@@ -66,16 +66,13 @@ class UserController extends Controller
         $userId = $request->input('userId');
         $roleId = $request->input('roles');
 
+        User::find($userId)->roles()->attach($roleId);
 
-        Users::find($userId)->roles()->attach($roleId);
+        return redirect('viewUsers');
         
-
-        // $post = DB::table('role_user')->insert([
-        //     'user_id' => $userId, 
-            
-        //     'role_id' => $roleId
-        //   ]);
-        return back();
+            // echo json_encode("Role inserted successifully");
+        
+        // return redirect('viewUsers');
     
     }
 
@@ -106,7 +103,7 @@ class UserController extends Controller
         $users = DB::table('users')
         ->join('departments','departments.id','=','users.department_id')
         ->where('users.id','=',$user->id)
-        ->get();
+        ->first();
         echo json_encode($users);
         
       

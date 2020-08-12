@@ -5,9 +5,9 @@
     <div class="row">
         <div class="col-lg-8 col-md-7 col-sm-0 col-xs-0">
             <div class="login-r">
-                <h1 class="text-primary">IMRS</h1>
-                <h1 class="amis-lcase">Institutional Meeting Repository System</h1>
-                <p>Ardhi University Meeting Repository System is a system created to enable storing and retrieving meeting document delivarables.</p>
+                <h1 class="text-primary">IMMRS</h1>
+                <h1 class="amis-lcase">Institutional Meeting Minutes Repository System</h1>
+                <p>Ardhi University Meeting Minutes Repository System is a system created to enable storing and retrieving meeting document delivarables.</p>
                 <ul>
                     <li>Meeting Creation Process Automation.</li>
                     <li>Minutes, Matter Arising, Attendence and Attachments storage.</li>

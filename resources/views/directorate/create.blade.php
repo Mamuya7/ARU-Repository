@@ -16,14 +16,14 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="form-label">Directorate Name</label>
-                            <input type="text" class="form-control" name="directorate_name" placeholder="Directorate Name">
+                            <input type="text" class="form-control" name="directorate_name" placeholder="Directorate Name" required>
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="form-label">Diretorate Code</label>
-                            <input type="text" class="form-control" name="directorate_code" placeholder="Directorate Code">
+                            <input type="text" class="form-control" name="directorate_code" placeholder="Directorate Code" required>
                         </div>
                     </div>
             

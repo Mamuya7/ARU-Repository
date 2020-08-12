@@ -16,14 +16,14 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="form-label">Committee Name</label>
-                            <input type="text" class="form-control" name="committee_name" placeholder="Committee Name">
+                            <input type="text" class="form-control" name="committee_name" placeholder="Committee Name" required>
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="form-label">Committee Code</label>
-                            <input type="text" class="form-control" name="committee_code" placeholder="Committee Code">
+                            <input type="text" class="form-control" name="committee_code" placeholder="Committee Code" required>
                         </div>
                     </div>
             

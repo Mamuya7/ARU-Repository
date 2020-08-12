@@ -53,7 +53,6 @@
         </div>
     </div>
 
-    <!-- <input type='button' class="btn btn-primary mt-1 mb-1" value='Conform alert 2' id='click4'> -->
 
                          
 
@@ -125,27 +124,6 @@
            
     }
 
-        // $(document).ready(function(){
-        //         $("#click4").on("click", function(e){
-        //         swal({
-        //             title: "Are you sure?",
-        //             text: "You want to delete these item",
-        //             type: "warning",
-        //             showCancelButton: true,
-        //             confirmButtonClass: "btn-danger",
-        //             confirmButtonText: "Yes, delete it!",
-        //             cancelButtonText: "No, cancel!",
-        //             closeOnConfirm: false,
-        //             closeOnCancel: false
-        //         }, function(isConfirm) {
-        //             if (isConfirm) {
-        //                 swal("Deleted!", "Your imaginary file has been deleted.", "success");
-        //             } else {
-        //                 swal("Cancelled", "Your imaginary file is safe :)", "error");
-        //             }
-        //         });
-        //      });
-        // });
     
 
    
