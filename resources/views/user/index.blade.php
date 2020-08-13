@@ -227,7 +227,7 @@
                         $('#last_name').val(response.last_name);
                         $('#gender').val(response.gender);
                         // $('#department').val(response.department_name);
-                        $('#department').val(response.departmentable_id);
+                        $('#department').val(response.department_id);
                         // $(this).children("option:selected").val();
 
                         

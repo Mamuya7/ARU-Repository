@@ -105,8 +105,6 @@ class UserController extends Controller
         ->where('users.id','=',$user->id)
         ->first();
         echo json_encode($users);
-        
-      
     }
 
     

@@ -100,6 +100,7 @@ Route::get('showDepartment', 'DepartmentsController@index')->name('showDepartmen
 Route::delete('deletedepartment/{departments}','DepartmentsController@destroy');
 Route::post('editDepartment/{departments}','DepartmentsController@edit');
 Route::post('showdirectoryschools','DepartmentsController@displaySChool')->name('showdirectoryschools');
+Route::post('fetchdepartments','DepartmentsController@fetch');
 
 //schools
 Route::get('showschools','SchoolsController@index')->name('showschools');
@@ -137,6 +138,7 @@ Route::post('storeRole', 'RolesController@store');
 Route::post('editRole/{roles}','RolesController@edit');
 Route::delete('deleteRole/{roles}','RolesController@destroy');
 Route::post('updateRole', 'RolesController@updateRole');
+Route::post('fetchroles', 'RolesController@fetch');
 
 
 
@@ -157,7 +159,6 @@ Route::get('viewUsers','UserController@index')->name('view-Users');
 Route::post('assignRole', 'UserController@store');
 Route::delete('deleteUser/{user}','UserController@destroy');
 Route::post('editUser/{user}','UserController@edit');
-
 Route::post('removeRole/{id}','UserController@removeRole');
 
 

@@ -160,10 +160,6 @@
                             <label class="form-label">Role</label>
                             <select id="role" name="role" class="form-control select2 w-100" >
                                 <option value="none" selected="selected" disabled>Select Role</option>
-
-                            @foreach($roles as $role)
-                                <option value="{{$role->id}}" class="text-md">{{$role->role_name}}</option>
-                            @endforeach
                             </select>
                         </div>
 
@@ -171,9 +167,6 @@
                             <label class="form-label">Department</label>
                             <select id="department" name="department" class="form-control select2 w-100" >
                                 <option value="none" selected="selected" disabled>Select Department</option>
-                            @foreach($departments as $department)
-                                <option value="{{$department->id}}" class="text-md">{{$department->department_name}}</option>
-                            @endforeach
                             </select>
                         </div>
 
@@ -199,25 +192,57 @@
 
 <script>
     $(document).ready(function(){
+        $.ajax({
+                url: '/fetchroles',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success:function(response){
+                    attachRoles(response);
+                },
+                error:function(xhr,status,err){
+                    console.log(err);
+                }
+            });
+        $.ajax({
+                url: '/fetchdepartments',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success:function(response){
+                    attachDepartments(response);
+                },
+                error:function(xhr,status,err){
+                    console.log(err);
+                }
+            });
+    });
 
-        function displayDepartment(){
-            $.ajax({
-            url: '/show department',
-            type: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{csrf_token()}}'
-            },
-            dataType: 'json',
-            success:function(response){
-                SchoolDirectorate.setSchools(response.schools);
-                SchoolDirectorate.setDirectorates(response.directorates);
-            },
-            error:function(xhr,status,err){
-                console.log(err);
-            }
+    const attachDepartments = (departments) =>{
+        let list = "";
+        departments.forEach(department => {
+            let option = '<option value="'+
+                department.id+'" class="text-md">'+
+                department.department_name+' ('+department.department_code+')'+'</option>';
+            list += option;
         });
-        }
-    })
+        $('#department').append(list);
+    }
+
+    const attachRoles = (roles) =>{
+        let list = "";
+        roles.forEach(role => {
+            let option = '<option value="'+
+                role.id+'" class="text-md">'+
+                role.role_name+' ('+role.role_code+')'+'</option>';
+            list += option;
+        });
+        $('#role').append(list);
+    }
 </script>
 
 @endsection

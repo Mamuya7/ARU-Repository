@@ -62,6 +62,10 @@ class RolesController extends Controller
         //return view('roles.index');
     }
 
+    public function fetch()
+    {
+        echo Roles::all();
+    }
     /**
      * Show the form for editing the specified resource.
      *

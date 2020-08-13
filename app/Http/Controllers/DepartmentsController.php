@@ -73,6 +73,10 @@ class DepartmentsController extends Controller
 
     }
 
+    public function fetch()
+    {
+        echo Department::all();
+    }
     /**
      * Display the specified resource.
      *
