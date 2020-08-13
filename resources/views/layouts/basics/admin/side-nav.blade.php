@@ -97,7 +97,7 @@
                 </li>
                 @endif
                 <li>
-                    <a href="{{ url('view_meeting')}}" class="slide-item">View Meeting</a>
+                    <!-- <a href="{{ url('view_meeting')}}" class="slide-item">View Meeting</a> -->
                 </li>
             </ul>
         </li>

@@ -58,8 +58,7 @@
 </form>
 
 <script>
-
-$('#btn-submit').click(function(){
+// $('#btn-submit').click(function(){
     // var userID = [];
     // var roleID = [];
     
@@ -92,7 +91,7 @@ $('#btn-submit').click(function(){
         //     }
         // });
         
-});
+// });
 
 </script>
 

@@ -9,7 +9,7 @@
                 <h1 class="amis-lcase">Institutional Meeting Minutes Repository System</h1>
                 <p>Ardhi University Meeting Minutes Repository System is a system created to enable storing and retrieving meeting document delivarables.</p>
                 <ul>
-                    <li>Meeting Creation Process Automation.</li>
+                    <li>Meeting Creation Process.</li>
                     <li>Minutes, Matter Arising, Attendence and Attachments storage.</li>
                     <li>Search and Retrieval of past Meetings with associated Attachments.</li>
                     <li>History and Backtracking of Meeting with associated Attachments</li>

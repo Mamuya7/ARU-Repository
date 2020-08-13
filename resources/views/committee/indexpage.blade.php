@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 
 @section('content')
-{{$committees}}
 <div class="col-xl-12">
     <div class="card  shadow">
         <div class="card-header bg-transparent">
@@ -41,12 +40,12 @@
                     </tr>
                     @endforeach
                 </table>
-                {{ $committees->links() }}
+            
             </div>
         </div>
     </div>
 </div>
-{{$committees}}
+{{$committees->links() }}
 
 
 <div class="modal fade" id="largeModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

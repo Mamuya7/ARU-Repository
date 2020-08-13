@@ -154,6 +154,11 @@ Route::post('assignRole', 'UserController@store');
 Route::delete('deleteUser/{user}','UserController@destroy');
 Route::post('editUser/{user}','UserController@edit');
 
+Route::post('removeRole/{id}','UserController@removeRole');
+
+
+
+
 
 
 

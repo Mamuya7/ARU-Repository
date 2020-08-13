@@ -4,7 +4,7 @@
 								
     <div class="card shadow">
         <div class="card-header table-primary border-0">
-            <h2 class=" mb-0">All Users</h2>
+            <h2 class=" mb-0">All Staffs</h2>
         </div>
         <div class="">
             <div class="grid-margin">
@@ -28,7 +28,7 @@
                                     <td>{{ $users->email }} </td>
                                     <td class="text-nowrap">{{ $users->department }}</td>
                                     <td>
-                                        <button type="button" onclick="displayRole({{ $users->id }})"  class="btn btn-primary btn-sm btn-square mt-1 mb-1" data-toggle="modal" data-target="#largeModal">View</button>
+                                        <button type="button" onclick="displayRole({{ $users->id }})"  class="btn btn-primary btn-sm btn-square mt-1 mb-1" data-toggle="modal" data-target="#largeModal">Roles</button>
                                        
                                         <button type="button" onclick="editUser({{ $users->id }})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateUser">update</button> 
                                     </td>
@@ -43,14 +43,16 @@
                                     </td>
                                 </tr>
                                 @endforeach
+                               
                             </tbody>
+                           
                         </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    {{ $user->links() }}
 
     <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
@@ -69,7 +71,7 @@
                                             <div class="table-responsive table-primary">
                                                 <table class="table card-table text-nowrap">
                                                     <tr class="border-bottom">
-                                                        <th></th>
+                                                        <!-- <th></th> -->
                                                         <th>User Roles</th>
                                                     </tr>
                                                     <tbody id='tabe-data'>
@@ -181,7 +183,7 @@
                         <div class="form-group">
                             <label class="form-label">Department</label>
                             <select id="department" name="department" class="form-control select2 w-100" >
-                                <option id="department"  selected="selected" disabled></option>
+                                <option   selected="selected" disabled></option>
                             @foreach($departments as $department)
                                 <option value="{{$department->id}}" class="text-md">{{$department->department_name}}</option>
                             @endforeach
@@ -224,9 +226,9 @@
                         $('#email').val(response.email);
                         $('#last_name').val(response.last_name);
                         $('#gender').val(response.gender);
-                        $('#department').val(response.department_name);
+                        // $('#department').val(response.department_name);
                         $('#department').val(response.departmentable_id);
-                        $(this).children("option:selected").val();
+                        // $(this).children("option:selected").val();
 
                         
                         
@@ -263,14 +265,14 @@
         }
 
         function displayUserRoles(data){
-            $('#user_details').val(data.users);
+             $('#user_details').val(data.users); 
             var list ="";
             data.roles.forEach(role => {
 
-                list+="<tr>";
+                list+="<tr id='role"+role.id+"'>";
                 // list+="<td id='user-role'><input type='checkbox' name='' value='"+role.id+"'></td>";
-                list+="<td onclick='unAssignRole(role.id)'>"+role.role_name+"</td>";   
-                list+="<td><button type='button' class='btn btn-rol btn-primary'>remove</button></td>";
+                list+="<td >"+role.role_name+"</td>";   
+                list+="<td><button type='button' onclick='unAssignRole("+role.id+")' class='btn btn-rol btn-primary'>un Assign</button></td>";
                 list+="</tr>";
                 
             });
@@ -280,7 +282,26 @@
         }
 
         function unAssignRole(id){
-            console.log(id);
+         var userId = $('#user_details').val();
+            $("#role"+id).remove();
+            $.ajax({
+                url: '/removeRole/'+id,
+                type: 'POST',
+                data:{
+                    userID : userId
+                },
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success:function(response){
+                     console.log(response);
+                                   
+                },
+                error:function(xhr,status,err){
+                    console.log(err);
+                }
+            });
         }
 
         $('#check-clck').click(function(){
@@ -323,13 +344,13 @@
         });
 
 
-        // $('#unassign-btn').click(function(){
-        //     alert("asdfghjk");
-        // });
+
 
 
         // function assignRole(id){
         //     alert(id);
+           
+        //     alert("#role"+id);
         // }
 
     </script>

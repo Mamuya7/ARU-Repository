@@ -14,7 +14,7 @@ class CommitteeController extends Controller
      */
     public function index()
     {
-        $committee = DB::table('committees')->paginate(10);
+        $committee = DB::table('committees')->paginate(7);
         return view('committee.indexpage',['committees' => $committee]);
     }
 

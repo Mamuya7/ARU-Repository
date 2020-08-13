@@ -28,7 +28,7 @@ class UserController extends Controller
         $users = DB::table('departments')
         ->join('users','users.department_id','=','departments.id')
         ->select(DB::raw('CONCAT(users.first_name," ",users.last_name) as full_name'),'users.id as id','users.gender as gender','users.email as email','departments.department_name as department')
-        ->get();
+        ->paginate(10);
 
         
         $roles = DB::table('roles')->get();
@@ -136,5 +136,13 @@ class UserController extends Controller
             DB::table('users')->where('id',$user->id)->delete();                
         });
         return back();
+    }
+
+    public function removeRole(Request $request,$id){
+        $userId = $request->input('userID');
+        // consol($userId);
+
+        User::find($userId)->roles()->detach($id);
+        echo json_encode('successifully');
     }
 }
