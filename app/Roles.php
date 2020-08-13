@@ -13,8 +13,15 @@ class Roles extends Model
      * @var array
      */
     protected $fillable = [
-        'role_name', 'role_code',
+        'role_name', 'role_code','role_type'
     ];
+
+
+    public function committees()
+    {
+        return $this->belongsToMany('App\Committee','committee_role','role_id','committee_id');
+    }
+
 
     public function user()
     {

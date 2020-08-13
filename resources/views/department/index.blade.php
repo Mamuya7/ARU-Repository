@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="modal fade" id="updateDepartment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <h2 class="modal-title" id="largeModalLabel">Modal title</h2>
@@ -28,6 +28,26 @@
                                 <input type="text" class="form-control" id="code" placeholder="Department Name">
                             </div>
                         </div>
+
+<!--                         
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label">Schools/Directorate</label>
+                                <input type="text" class="form-control" id="school" placeholder="Department Name">
+                            </div>
+                        </div> -->
+
+
+                        
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <!-- <label class="form-label">Schools/Directorate</label> -->
+                                    <select name="school_directorate_id" id="school" class="form-control selectpicker" data-live-search="true">
+                                        <option value="" id="direct_selected" selected disabled></option>
+                                        <!-- <option data-tokens="" value=""></option>    -->
+                                    </select>
+                                </div>
+                            </div>
 
                     </div>
                 </form>
@@ -71,6 +91,7 @@
                                         <tr>                                            
                                             <th>Department Name</th>
                                             <th>Department Code</th>
+                                            <!-- <th>School Name</th> -->
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -80,10 +101,11 @@
                                         
                                         <td>{{$department->department_name}}</td>
                                         <td>{{$department->department_code}}</td>
+                                        <!-- <td>{{$department->school_name}}</td> -->
                                         <td>   <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button>
                                         </td>
                                         <td>
-                                            <form action="/deletedepartment/{{$department->id}}" >
+                                            <form action="/deletedepartment/{{$department->id}}" method="post">
                                                 {{csrf_field()}}
                                                 {{method_field('DELETE')}} 
                                                 <button type="submit" class="btn btn-sm btn-square btn-danger mt-1 mb-1">Delete</button>
@@ -111,6 +133,7 @@
                                             
                                             <th>Department Name</th>
                                             <th>Department Code</th>
+                                            <!-- <th>Directorate Name</th> -->
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -120,16 +143,20 @@
                                         
                                         <td>{{$department->department_name}}</td>
                                         <td>{{$department->department_code}}</td>
-                                        <td>   <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button> 
-                                        
-                                            <!-- /deletedepartment/{{$department->id}} -->
+                                        <!-- <td>{{$department->directorate_name}}</td> -->
+                                        <td> 
+                                          <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button> 
+                                        </td>
+
+                                        <td>
+                                            <form action="/deletedepartment/{{$department->id}}" method="post" class="dis-inline">
                                                 {{csrf_field()}}
                                                 {{method_field('DELETE')}}
                                                 <button type="submit" class="btn btn-sm btn-square btn-danger mt-1 mb-1">Delete</button>
                                             </form>                                
                                         </td>
                                     </tr>
-                                        @endforeach
+                                    @endforeach
                 
 
                                     </tbody>
@@ -155,7 +182,6 @@ function editDepartment(did){
         },
         dataType: 'json',
         success:function(response){
-            // console.log(response);
             displayForm(response);
         },
         error:function(xhr,status,err){
@@ -166,12 +192,37 @@ function editDepartment(did){
 
 
 
-function displayForm(data){
+    function displayForm(data){
 
-    $('#name').val(data.department_name);
-    $('#code').val(data.department_code);
+        if(data.isDirectorate){         
+            $('#name').val(data.department.department_name);
+            $('#code').val(data.department.department_code);
+                     
+            var list ="";
+            list+="<option value='"+data.parent.id+"' selected>"+data.parent.directorate_name+"</option>";  
+            data.parents.forEach(directorate => {
+              list+="<option value='"+directorate.id+">"+directorate.directorate_name+"</option>";
+                       
+            });
+        
+            $('#school').append(list);
             
-}
+        }
+
+        else{
+            $('#name').val(data.department.department_name);
+            $('#code').val(data.department.department_code); 
+            
+            var list ="";
+            list+="<option value='"+data.parent.id+"' selected>"+data.parent.school_name+"</option>";   
+            data.parents.forEach(school => {
+              list+="<option value='"+school.id+"'>"+school.school_name+"</option>";          
+            });
+            $('#school').empty();
+            $('#school').append(list);
+        }
+                
+    }
 </script>
 
 @endsection

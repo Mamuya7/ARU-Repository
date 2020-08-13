@@ -53,41 +53,42 @@
         </div>
     </div>
 
-    <!-- <input type='button' class="btn btn-primary mt-1 mb-1" value='Conform alert 2' id='click4'> -->
 
                          
 
     <div class="modal fade" id="updateSchool" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class = "modal-dialog modal-md">
             <div class = "modal-content">
-                <div class = "modal-header bg-primary">      
-                    <button type = "button" class="close" data-dismiss = "modal">×</button>
-                    <!-- <h4 class = "modal-title">Warning</h4> -->
-                </div>
-                <div class = "modal-body">
-                    <form action="" method="post">
-                        {{csrf_field()}}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="form-label">School Name</label>
-                                    <input type="text" id="name" class="form-control" name="school_name">
+                <form id="update-school" method="post">
+                    {{csrf_field()}}
+                    <div class = "modal-header bg-primary">      
+                        <button type = "button" class="close" data-dismiss = "modal">×</button>
+                    
+                    </div>
+                    <div class = "modal-body">
+                    
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">School Name</label>
+                                        <input type="text" id="name" class="form-control" name="school_name">
+                                    </div>
                                 </div>
-                            </div>
-                        
+                            
 
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="form-label">School Code</label>
-                                    <input type="text" id="code" class="form-control" name="school_code">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">School Code</label>
+                                        <input type="text" id="code" class="form-control" name="school_code">
+                                    </div>
                                 </div>
-                            </div>
-                    </form>    
-                </div>
-                <div class = "modal-footer">
-                    <button type="button" class="btn btn-md btn-primary mt-1 mb-1">update</button>
-                    <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
-                </div>
+                        
+                    </div>
+                    <div class = "modal-footer">
+                        <button type="submit" class="btn btn-md btn-primary mt-1 mb-1">update</button>
+                        <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
+                    </div>
+                </form> 
             </div>
         </div>
     </div>
@@ -115,33 +116,14 @@
 
 
     function displayForm(data){
-
+            $('#id').val(data.id);
             $('#name').val(data.school_name);
             $('#code').val(data.school_code);
+            
+            $('#update-school').attr('action',"updateSchool/"+data.id);
            
     }
 
-        $(document).ready(function(){
-                $("#click4").on("click", function(e){
-                swal({
-                    title: "Are you sure?",
-                    text: "You want to delete these item",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "btn-danger",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel!",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                }, function(isConfirm) {
-                    if (isConfirm) {
-                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
-                    } else {
-                        swal("Cancelled", "Your imaginary file is safe :)", "error");
-                    }
-                });
-             });
-        });
     
 
    

@@ -15,14 +15,21 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="form-label">Role Name</label>
-                            <input type="text" class="form-control" name="role_name" placeholder="Role Name">
+                            <input type="text" class="form-control" name="role_name" placeholder="Role Name" required>
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="form-label">Role Code</label>
-                            <input type="text" class="form-control" name="role_code" placeholder="Role Name">
+                            <input type="text" class="form-control" name="role_code" placeholder="Role Name" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label">Role type</label>
+                            <input type="text" class="form-control" name="role_type" placeholder="Role type" required>
                         </div>
                     </div>
 

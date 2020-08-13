@@ -28,8 +28,8 @@
                     <label for="chairman">Meeting type</label>
                     <select name="meeting_type" id="meeting_type" class="form-control">
                         <option value="null" selected disabled></option>
-                        <option value="department">Accademic Departmental Meeting</option>
-                        <option value="department">Administartive Departmental Meeting</option>
+                        <option value="accademic">Accademic Departmental Meeting</option>
+                        <option value="administrative">Administartive Departmental Meeting</option>
                         <option value="school">School Meeting</option>
                         <option value="directorate">Directorate Meeting</option>
                         <option value="committee">Committee Meeting</option>

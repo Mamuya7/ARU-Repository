@@ -4,6 +4,8 @@
 <script src="{{ asset('ansta/plugins/jquery/dist/jquery.min.js') }}"></script>
 <script src="{{ asset('ansta/js/popper.js') }}"></script>
 <script src="{{ asset('ansta/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+<!-- boootstrap4 -->
+<script src="{{ asset('bootstrap4/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('ansta/plugins/chart-circle/circle-progress.min.js') }}"></script>
 
 <!-- Optional JS -->

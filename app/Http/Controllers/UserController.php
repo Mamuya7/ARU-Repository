@@ -28,13 +28,14 @@ class UserController extends Controller
         $users = DB::table('departments')
         ->join('users','users.department_id','=','departments.id')
         ->select(DB::raw('CONCAT(users.first_name," ",users.last_name) as full_name'),'users.id as id','users.gender as gender','users.email as email','departments.department_name as department')
-        ->get();
+        ->paginate(10);
 
         
         $roles = DB::table('roles')->get();
+        $departments = DB::table('departments')->get();
 
 
-        return view('user.index',['user' => $users,'roles'=>$roles]);
+        return view('user.index',['user' => $users,'roles'=>$roles,'departments'=>$departments]);
     //    return view('user.index');
     }
 
@@ -62,7 +63,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $userId = $request->input('userId');
+        $roleId = $request->input('roles');
+
+        User::find($userId)->roles()->attach($roleId);
+
+        return redirect('viewUsers');
+        
+            // echo json_encode("Role inserted successifully");
+        
+        // return redirect('viewUsers');
+    
     }
 
     /**
@@ -72,10 +83,11 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
+    {   
+        $user = $id;
         $roles = User::find($id)->roles;
         $role = DB::table('roles')->get();
-        echo json_encode($roles);
+        echo json_encode(['roles'=>$roles,'users'=>$user]);
     
         // return view('department/index',['departments' => $departments])
     }
@@ -86,10 +98,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
+        $users = DB::table('users')
+        ->join('departments','departments.id','=','users.department_id')
+        ->where('users.id','=',$user->id)
+        ->first();
+        echo json_encode($users);
         
+      
     }
+
+    
 
     /**
      * Update the specified resource in storage.
@@ -100,7 +120,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**
@@ -109,8 +129,20 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy(User $user)
+    {     
+        DB::transaction(function() use($user){
+            DB::table('role_user')->where('user_id',$user->id)->delete();    
+            DB::table('users')->where('id',$user->id)->delete();                
+        });
+        return back();
+    }
+
+    public function removeRole(Request $request,$id){
+        $userId = $request->input('userID');
+        // consol($userId);
+
+        User::find($userId)->roles()->detach($id);
+        echo json_encode('successifully');
     }
 }

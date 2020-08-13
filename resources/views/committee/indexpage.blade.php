@@ -1,13 +1,12 @@
 @extends('layouts.admin')
 
 @section('content')
-{{$committees}}
 <div class="col-xl-12">
     <div class="card  shadow">
         <div class="card-header bg-transparent">
             <div class="row align-items-center">
                 <div class="col">
-                    <h2 class="mb-0">Committees</h2>
+                    <h2 class="mb-0">Registered Committees</h2>
                 </div>
             </div>
         </div>
@@ -41,17 +40,17 @@
                     </tr>
                     @endforeach
                 </table>
-                {{ $committees->links() }}
+            
             </div>
         </div>
     </div>
 </div>
-{{$committees}}
+{{$committees->links() }}
 
 
 <div class="modal fade" id="largeModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 style="font-weight:bold;font-size:18px;align:center;">USERS FOUND IN THE COMMITTEE</h4>
@@ -76,7 +75,6 @@
                                             <th>Last Name</th>
                                             <th>Gender</th>
                                             <th>Email </th>
-                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="showData">
@@ -97,35 +95,35 @@
 <div class="modal fade" id="updateRole" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class = "modal-dialog modal-md">
         <div class = "modal-content">
-            <div class = "modal-header bg-gradient-cyan">      
-                <button type = "button" class="close" data-dismiss = "modal">×</button>
-            </div>
-            <div class="modal-body">
-                <form action="" method="post">
-                    {{csrf_field()}}
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label">Committee Name</label>
-                                <input type="text" id="name" class="form-control" name="committee_name">
+            <form id="update-committee" method="post">
+                <div class = "modal-header bg-gradient-cyan">      
+                    <button type = "button" class="close" data-dismiss = "modal">×</button>
+                </div>
+                <div class="modal-body">
+                        {{csrf_field()}}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label">Committee Name</label>
+                                    <input type="text" id="name" class="form-control" name="committee_name">
+                                </div>
                             </div>
-                        </div>
-                    
+                        
 
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label">Committee Code</label>
-                                <input type="text" id="code" class="form-control" name="committee_code">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label">Committee Code</label>
+                                    <input type="text" id="code" class="form-control" name="committee_code">
+                                </div>
                             </div>
-                        </div>
 
-                        <input type="text" id="com_id" class="form-control" name="id" hidden>
-                </form>    
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btn-submit" class="btn btn-md btn-primary mt-1 mb-1" data-dismiss="modal" >update</button>
-                <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
-            </div>
+                            <input type="text" id="com_id" class="form-control" name="id" hidden>   
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-md btn-primary mt-1 mb-1" >update</button>
+                    <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
+                </div>
+            </form> 
         </div>
     </div>
 </div>
@@ -159,43 +157,11 @@
         $('#com_id').val(data.id);
         $('#name').val(data.committee_name);
         $('#code').val(data.committee_code);
-
+        $('#update-committee').attr('action',"updateCommittee/"+data.id);
     }
 
-    $('#btn-submit').click(function(){
-        var name = $("#name").val();
-        var code = $("#code").val();
-        var id = $("#com_id").val();
-
-        $.ajax({
-            url: '/updateCommittee/'+id,
-            type: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{csrf_token()}}'
-            },
-            data:{
-                committee_name:name,
-                committee_code:code
-             },
-            dataType: 'json',
-            success:function(response){
-
-                    setTimeout(function(){
-                        $('#bn-submit').trigger('click');
-                    },1500);
-                   
-
-            },
-            error:function(xhr,status,err){
-                console.log(err);
-            }
-        });
-        
-    });
-
-
+  
     function showCommitteeMembers(id){
-        // console.log(id);
         $.ajax({
             url: '/CommitteeMembers/'+id,
             type: 'GET',
@@ -205,6 +171,8 @@
             dataType: 'json',
             success:function(response){
                 showCommitteUsers(response);
+                // console.log(response);
+                
                 
             },
             error:function(xhr,status,err){
@@ -223,9 +191,6 @@
                list+="<td>"+users.last_name+"</td>";
                list+="<td>"+users.email+"</td>";
                list+="<td>"+users.email+"</td>";
-               list+="<td>";
-               list+="<button type='button' class='btn btn-primary'>remove</button>"
-               list+="</td>";
                list+="</tr>";
             
             });

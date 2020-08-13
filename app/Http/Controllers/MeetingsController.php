@@ -75,14 +75,16 @@ class MeetingsController extends Controller
             $meeting = new Meeting;
             $meeting->meeting_title =  $request->input('title');
             $meeting->meeting_description = $request->input('description');
-            $meeting->meeting_type = $type;
+            $meeting->meeting_type = (($type === "accademic") || ($type === "administrative"))? "department" : $type;
             $meeting->meeting_date = $request->input('date');
             $meeting->user_id = Auth::User()->id;
 
             $meeting->save();
 
-            if($type === "department"){
-                $this->create_department_meetings($meeting);
+            if($type === "accademic"){
+                $this->create_school_department_meetings($meeting);
+            }elseif($type === "administrative"){
+                $this->create_directorate_department_meetings($meeting);
             }elseif($type === "school"){
                 $this->create_school_meetings($meeting);
             }elseif ($type === "directorate") {
@@ -194,21 +196,35 @@ class MeetingsController extends Controller
         echo json_encode($meeting);
     }
 
-    protected function create_department_meetings($meeting)
+    protected function create_school_department_meetings($meeting)
     {
-        $departments = Department::all();
-        foreach ($departments as $department) {
-            if ($department->belongsToSchool()) {
+        $schools = School::all();
+        foreach ($schools as $school) {
+            foreach ($school->departments as $department) {
                 $departmentMeeting = DepartmentMeeting::create([
                     "meeting_id" => $meeting->id,
                     "department_id" => $department->id,
                     "secretary_id" => null,
                     "meeting_time" => null
-                ]); 
+                ]);
             }
         }
     }
 
+    protected function create_directorate_department_meetings($meeting)
+    {
+        $directorates = Directorate::all();
+        foreach ($directorates as $directorate) {
+            foreach ($directorate->departments as $department) {
+                $departmentMeeting = DepartmentMeeting::create([
+                    "meeting_id" => $meeting->id,
+                    "department_id" => $department->id,
+                    "secretary_id" => null,
+                    "meeting_time" => null
+                ]);
+            }
+        }
+    }
     protected function create_school_meetings($meeting)
     {
         $schools = School::all();
@@ -219,7 +235,7 @@ class MeetingsController extends Controller
                 "secretary_id" => null,
                 "meeting_time" => null
             ]); 
-    }
+        }
     }
     protected function create_directorate_meetings($meeting)
     {

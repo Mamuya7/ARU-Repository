@@ -5,7 +5,7 @@
 <div class="card  shadow">
     <div class="card-body ">               
         <div class="card-header bg-transparent border-bottom-0">
-            <h2>ROLES</h2>
+            <h2>REGISTERED ROLES</h2>
         </div>
         <div class="emp-tab">
             <div class="table-responsive">
@@ -24,9 +24,9 @@
                             <!-- <td>{{$role->id}}</td> -->
                             <td>{{$role->role_name}}</td>
                             <td>{{$role->role_code}}</td>
-                            <td>  
+                            <!-- <td>  
                              <button type="button" onclick="editRole({{$role->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateRole">update</button> 
-                            </td>
+                            </td> -->
                             <td>
                                 <form action="/deleteRole/{{$role->id}}" method="post" class="dis-inline">
                             
@@ -41,6 +41,7 @@
 
                     </tbody>
                 </table>
+                {{$roles->links()}}
             </div>
         </div>
     </div>

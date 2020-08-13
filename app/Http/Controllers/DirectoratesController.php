@@ -68,7 +68,7 @@ class DirectoratesController extends Controller
      * @param  \App\Directorates  $directorates
      * @return \Illuminate\Http\Response
      */
-    public function edit(Directorates $directorates)
+    public function edit(Directorate $directorates)
     {
             echo $directorates;
     }
@@ -80,9 +80,17 @@ class DirectoratesController extends Controller
      * @param  \App\Directorates  $directorates
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Directorates $directorates)
+    public function update(Request $request, Directorate $directorates)
     {
-        //
+            $name = $request->input('directorate_name');
+            $code = $request->input('directorate_code');
+
+            $directorates->update([
+                "directorate_name" => $name,
+                "directorate_code" => $code
+            ]);
+
+            return redirect()->route('displayDirectorates');
     }
 
     /**
@@ -91,7 +99,7 @@ class DirectoratesController extends Controller
      * @param  \App\Directorates  $directorates
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Directorates $directorates)
+    public function destroy(Directorate $directorates)
     {
         DB::transaction(function() use($directorates){
             DB::table('directorates')->where('id',$directorates->id)->delete();

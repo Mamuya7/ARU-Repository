@@ -4,7 +4,7 @@
 								
     <div class="card shadow">
         <div class="card-header table-primary border-0">
-            <h2 class=" mb-0">Primary Table</h2>
+            <h2 class=" mb-0">All Staffs</h2>
         </div>
         <div class="">
             <div class="grid-margin">
@@ -15,156 +15,233 @@
                                 <tr>
                                     <th>Full Name</th>
                                     <th>Gender</th>
-                                    <th>Email </th>
+                                    <th>Email</th>
                                     <th>Department</th>
-                                     <th>Action</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($user as $users)
-                                    
+                                @foreach($user as $users)                                 
                                 <tr >
                                     <td>{{ $users->full_name }}</td>
                                     <td>{{ $users->gender }}</td>
                                     <td>{{ $users->email }} </td>
-                                    <td class="text-nowrap" >{{ $users->department }}</td>
+                                    <td class="text-nowrap">{{ $users->department }}</td>
                                     <td>
-                                        <button type="button" onclick="displayRole({{ $users->id }})"  class="btn btn-primary btn-sm btn-square mt-1 mb-1" data-toggle="modal" data-target="#largeModal">View</button>
-										<button type="button" class="btn btn-primary btn-sm btn-square mt-1 mb-1">Update</button>
-                                        
-										<button type="button" class="btn btn-primary btn-sm btn-square mt-1 mb-1">delete</button>
+                                        <button type="button" onclick="displayRole({{ $users->id }})"  class="btn btn-primary btn-sm btn-square mt-1 mb-1" data-toggle="modal" data-target="#largeModal">Roles</button>
+                                       
+                                        <button type="button" onclick="editUser({{ $users->id }})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateUser">update</button> 
+                                    </td>
+										<!-- <button type="button" class="btn btn-primary btn-sm btn-square mt-1 mb-1">Update</button> -->
+                                    <td>    
+                                        <form action="deleteUser/{{$users->id }}" method="post" class="dis-inline">
+                
+                                            {{csrf_field()}}
+                                            {{method_field('DELETE')}}
+                                            <button type="submit" class="btn btn-sm btn-square btn-primary mt-1 mb-1">Delete</button>
+                                        </form> 
                                     </td>
                                 </tr>
-                            @endforeach
+                                @endforeach
+                               
                             </tbody>
+                           
                         </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {{ $user->links() }}
 
-
-
-
-    
     <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-            <div class="modal-content">
-                   
-                <div class="modal-body">
-                    <!-- <p class="mb-0">A small river named Duden flows by their place and supplies it with the necessary regelialia.</p> -->
-                
-                        <div class="card-header">
-
-                            <div class="nav-wrapper">
-                                <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0 active border" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="fe fe-home mr-2"></i>UserDetails</a>
-                                    </li>
-                                    
-                                    <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0 border" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="fe fe-message-circle mr-2"></i>User Role</a>
-                                    </li>
-                                </ul>
-                                
-                              </div>
-                        </div>
-                        <div class="card-body">
-                           
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="largeModalLabel">ASSIGN USER ROLES</h2>
+                        <button type = "button" class="close" data-dismiss = "modal">×</button>
+                    </div>
+                    <!-- <form action="assignRole" method="post"> -->
+                        <div class="modal-body">
                             
-                                <div class="card-body ">
-                                    <div class="tab-content" id="myTabContent">
-                                    <button type="button btn-primary" class="close" data-dismiss="modal" aria-label="Close">                    
+                                <div class="row" style="margin-top:40px"> 
                             
-                                        <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="card  shadow">
+                                            <div class="table-responsive table-primary">
+                                                <table class="table card-table text-nowrap">
+                                                    <tr class="border-bottom">
+                                                        <!-- <th></th> -->
+                                                        <th>User Roles</th>
+                                                    </tr>
+                                                    <tbody id='tabe-data'>
+                                                
+                                                    </tbody>
                                             
-                                        <div class="table-responsive border ">
-                                            <table class="table row table-borderless w-100 m-0 ">
-                                                <tbody class="col-lg-6 p-0">
-                                                    <tr>
-                                                        <td><strong>Full Name :</strong> Cori Stover</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Location :</strong> USA</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Languages :</strong> English, German, Spanish.</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>DOB :</strong> 18/02/1992</td>
-                                                    </tr>
-                                                </tbody>
-                                                <tbody class="col-lg-6 p-0">
-                                                    <tr>
-                                                        <td><strong>Occupation :</strong> Administrator</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Website :</strong> ansta.com</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Email :</strong> coristover@ansta.com</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Phone :</strong> +222-6652-6325</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-													 
-                                      
-                                            
-                                        </div>
-                                       
-                                        <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
-                                            <div class="row">
-                                                <P><h2>USER ROLES</h2></P>
+                                                </table>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-7">
-                                                <ul id="sortable1" class="list-group connectedSortable">
-                                                        
-                                                    </ul>
-                                                </div>
-
-                                                <div class="col-md-5">
-                                                @foreach($roles as $role)
-                                                    <ul id="sortable2" class="list-group connectedSortable">
-                                                        <li class="list-group-item">{{$role->role_name}}</li>
-                                                        <!-- <li class="list-group-item">Bird</li>
-                                                        <li class="list-group-item">Falcon</li>
-                                                        <li class="list-group-item">Mouse</li> -->
-                                                    </ul>
-                                                @endforeach    
-                                                            
-                                                </div>
-                    
-                                            </div>     
                                         </div>
                                     </div>
+
+
+                                    <div class="col-md-6 col-lg-6">
+                                    <form action="assignRole" method="post" id="assign-form">
+                                        @csrf
+                                        <div class="card shadow">                                  
+                                            <div class="card-body">
+                                                <h4 class="card-title">All Roles</h4>
+                                                <div class="table-responsive">
+                                                    <table class="table card-table text-nowrap" style="height: 250px;overflow: auto;">   
+                                                    <input type="text" name="userId" id="user_details" value="$user->id" hidden>
+                                                        @foreach($roles as $role)
+                                                            <tr class="border-bottom">
+                                                                <td><input type="checkbox" name="roles[]" value="{{ $role->id}}" id="check-box"></td>
+                                                                <td id="check-click">{{ $role->role_name}}</td>    
+                                                            </tr>
+                                                        @endforeach 
+                                                        
+                                                    </table>
+                                                </div>
+                                            </div>
+                                    
+                                        </div>
+                                    </form> 
+                                    </div>
                                 </div>
-                        
+                                            
                         </div>
-    							
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="assign-btn">Assign Role</button>
+                        </div>
+                    <!-- </form>     -->
                 </div>
-               
             </div>
         </div>
     </div>
 
 
 
+    <div class="modal fade" id="updateUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class ="modal-dialog modal-xl">
+            <div class = "modal-content">
+    
+                <form id="update-user" method="post">
+                    {{csrf_field()}}
+                    <div class = "modal-header bg-primary">      
+                        <button type = "button" class="close" data-dismiss = "modal">×</button> 
+                    </div>
+                    <div class = "modal-body">
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input id="first_name" type="text" class="form-control @error('name') is-invalid @enderror" name="first_name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                        
+                           @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
 
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
+                            <select id="gender" name="gender" class="form-control select2 w-100" >
+                                <option value="none" selected="selected" disabled>Select Gender</option>
+                                <option value="male" class="text-md">Male</option>
+                                <option value="female" class="text-md">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">email</label>
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input id="last_name" type="text" class="form-control @error('name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}" required autocomplete="last_name" autofocus>
+
+                            @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror          
+                        </div>
+
+                      
+
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <select id="department" name="department" class="form-control select2 w-100" >
+                                <option   selected="selected" disabled></option>
+                            @foreach($departments as $department)
+                                <option value="{{$department->id}}" class="text-md">{{$department->department_name}}</option>
+                            @endforeach
+                            </select>
+                        </div>
+
+                    </div>
+                         
+                </div>
+                <div class = "modal-footer">
+                    
+                        <button type="submit" class="btn btn-primary mt-1 mb-1">update</button>
+                
+                    <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
+                </div>
+                </form> 
+            </div>
+        </div>
+    </div>
 
     
 
     <script>
-            
-        $(document).ready(function(){
-            $("#sortable1, #sortable2").sortable({
-                connectWith: ".connectedSortable"
-            });
+
+
+        function editUser(id){
+            $.ajax({
+                url: '/editUser/'+id,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success:function(response){
+                     console.log(response);
+                    
+                    
+
+                        $('#first_name').val(response.first_name);
+                        $('#email').val(response.email);
+                        $('#last_name').val(response.last_name);
+                        $('#gender').val(response.gender);
+                        // $('#department').val(response.department_name);
+                        $('#department').val(response.departmentable_id);
+                        // $(this).children("option:selected").val();
+
+                        
+                        
+              
+                
+                },
+                error:function(xhr,status,err){
+                    console.log(err);
+                }
         });
+        }
+
+    
 
         function displayRole(id){
 
@@ -176,6 +253,7 @@
                 },
                 dataType: 'json',
                 success:function(response){
+                    // console.log(response);
                     displayUserRoles(response);
                     
                 },
@@ -187,24 +265,93 @@
         }
 
         function displayUserRoles(data){
-            
+             $('#user_details').val(data.users); 
             var list ="";
-            data.forEach(role => {
-                list +="<li class='list-group-item'>";
-                list+=role.role_name;
-                list +="</li>";
-            });
-            $('#sortable1').empty();
-            $('#sortable1').append(list);
+            data.roles.forEach(role => {
 
-            // data.forEach(school => {
-            //         list += '<option data-tokens="'+school.school_name +" "+ school.school_code;
-            //         list += '" value="'+school.id+'">'+school.school_name+ " (" +school.school_code +")"+'</option>'; 
-            //     });
-            // $('#sortable1').append(list);
-           
+                list+="<tr id='role"+role.id+"'>";
+                // list+="<td id='user-role'><input type='checkbox' name='' value='"+role.id+"'></td>";
+                list+="<td >"+role.role_name+"</td>";   
+                list+="<td><button type='button' onclick='unAssignRole("+role.id+")' class='btn btn-rol btn-primary'>un Assign</button></td>";
+                list+="</tr>";
+                
+            });
+            $('#tabe-data').empty();
+            $('#tabe-data').append(list);
+      
         }
+
+        function unAssignRole(id){
+         var userId = $('#user_details').val();
+            $("#role"+id).remove();
+            $.ajax({
+                url: '/removeRole/'+id,
+                type: 'POST',
+                data:{
+                    userID : userId
+                },
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success:function(response){
+                     console.log(response);
+                                   
+                },
+                error:function(xhr,status,err){
+                    console.log(err);
+                }
+            });
+        }
+
+        $('#check-clck').click(function(){
+            // $('#check-box').checked = true;
+            $("#check-box").click(function(){
+                $("#myCheck").prop("checked", true);
+            });
+        })
         
+
+        $('#assign-btn').click(function(){
+            $('#assign-form').trigger("submit");
+
+            // var id = $('#user_details').val();
+            // var selected = [];
+            // $('#check-box:checked').each(function() {
+            //     selected.push($(this).attr('value'));
+            // });
+
+            // $.ajax({
+            //     url: '/assignRole',
+            //     type: 'post',
+            //     data:{
+            //         userId:id,
+            //         roles : selected
+            //     },
+            //     headers: {
+            //         'X-CSRF-TOKEN': '{{csrf_token()}}'
+            //     },
+            //     dataType: 'json',
+            //     success:function(response){
+            //         console.log(response);
+            //         $(document).reload();
+                    
+            //     },
+            //     error:function(xhr,status,err){
+            //         console.log(err);
+            //     }
+            // });
+        });
+
+
+
+
+
+        // function assignRole(id){
+        //     alert(id);
+           
+        //     alert("#role"+id);
+        // }
 
     </script>
 

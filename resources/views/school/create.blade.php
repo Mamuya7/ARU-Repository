@@ -16,20 +16,14 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="form-label">School Name</label>
-                            <input type="text" class="form-control" name="school_name" placeholder="School Name">
+                            <input type="text" class="form-control" name="school_name" placeholder="School Name" required>
                         </div>
                     </div>
-                    <!-- <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="form-label">School Name</label>
-                            <input type="text" class="form-control" name="example-text-input" placeholder="School Name">
-                        </div>
-                    </div> -->
 
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="form-label">School Code</label>
-                            <input type="text" class="form-control" name="school_code" placeholder="School Code">
+                            <input type="text" class="form-control" name="school_code" placeholder="School Code" required>
                         </div>
                     </div>
             

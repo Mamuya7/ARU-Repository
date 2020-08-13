@@ -99,7 +99,17 @@ class DepartmentsController extends Controller
     {
         // $school = DB::table('schools')->get();
         //echo json_encode(["department" => $departments]);
-        echo $departments;
+        $isDirectorate = false;
+        if($departments->departmentable->getMorphClass() == School::class){
+            $isDirectorate = false;
+            $parents =  School::all();
+        }
+        if($departments->departmentable->getMorphClass() == Directorate::class){
+            $isDirectorate = true;
+            $parents = Directorate::all();
+        }
+        echo json_encode(['department' => $departments, 'isDirectorate' => $isDirectorate,
+         'parent' => $departments->departmentable, 'parents' => $parents]);
     }
 
     /**
@@ -127,7 +137,9 @@ class DepartmentsController extends Controller
             DB::table('departments')->where('id',$departments->id)->delete(); 
         });
 
-        // return redirect('showDepartment');
+        return redirect()->route('showDepartment');
+
+        
     }
 
     public function displaySChool(){

@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Committee;
+use App\CommitteeRole;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\DB;
 
-class CommitteeUserController extends Controller
+class CommitteeRoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,11 +26,6 @@ class CommitteeUserController extends Controller
     public function create()
     {
         
-        // $users = DB::table('departments')
-        // ->join('users','users.department_id','=','departments.id')
-        // ->select(DB::raw('CONCAT(users.first_name," ",users.last_name) as full_name'),'users.id as user_id','departments.department_name as department')
-        // ->paginate(10);
-
         $roles = DB::table('roles')->paginate();
 
         $committee = DB::table('committees')->paginate(10);
@@ -47,7 +41,7 @@ class CommitteeUserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $roles = $request->input('role_id');
         $committee_id = $request->input('committee');
 
@@ -59,31 +53,22 @@ class CommitteeUserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\CommitteeUser  $committeeUser
+     * @param  \App\CommitteeRole  $committeeRole
      * @return \Illuminate\Http\Response
      */
-    public function show(CommitteeUser $committeeUser)
+    public function show(Committee $committee)
     {
-        // 
-    }
-
-    public function display(Committee $committee)
-    {
-        $committeeUsers = Committee::find($id)->users;
-        echo json_encode($committeeUsers);
-
        
-    
+       echo json_encode($committee->committeeUsers());
     }
-
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\CommitteeUser  $committeeUser
+     * @param  \App\CommitteeRole  $committeeRole
      * @return \Illuminate\Http\Response
      */
-    public function edit(CommitteeUser $committeeUser)
+    public function edit(CommitteeRole $committeeRole)
     {
         //
     }
@@ -92,10 +77,10 @@ class CommitteeUserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CommitteeUser  $committeeUser
+     * @param  \App\CommitteeRole  $committeeRole
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CommitteeUser $committeeUser)
+    public function update(Request $request, CommitteeRole $committeeRole)
     {
         //
     }
@@ -103,10 +88,10 @@ class CommitteeUserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\CommitteeUser  $committeeUser
+     * @param  \App\CommitteeRole  $committeeRole
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CommitteeUser $committeeUser)
+    public function destroy(CommitteeRole $committeeRole)
     {
         //
     }
