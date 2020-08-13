@@ -3,127 +3,147 @@
 @section('content')
 <div class="p-1">
     <div class="row">
-        <div class="col-lg-8">
-            <div class="d-flex justify-content-center">
-                <input type="text" id="title" class="form-control text-center text-uppercase text-xl" value="{{$specificMeeting->meeting->meeting_title}}" disabled>
-            </div>
-        </div>
-        <div class="col-lg-2">
-            <span class="text-xl">{{$specificMeeting->meeting->meeting_date}}</span>
-        </div>
-        <div class="col-lg-2 text-right">
-            <span class="fab">
-                <span class="fas fa-edit text-xl round-p5-ardhi color-ardhi hover-ardhi shadow"></span>
-                <span class="ion-person-stalker text-xl round-p5-ardhi color-ardhi hover-ardhi"
-                 data-toggle="modal" data-target="#attendence"></span>
-            </span>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-xl-7 col-lg-7 col-md-8">
-            <div class="d-flex flex-column">
-                <div class="pb-2">
-                    <textarea name="" id="" cols="30" rows="10" class="form-control" disabled>
-                        {{$specificMeeting->meeting->meeting_description}}
-                    </textarea>
+            <div class="row p-2">
+                <div class="col-lg-3">
+                    <span class="text-lg">Meeting Title:</span>
                 </div>
-                <div class="pt-2">
-                    <span>Attachments</span>
-                    <div class="row">
-                        @foreach($documents as $document)
-                        <div class="col-lg-3">
-                            <div class="document card shadow">
-                                <div class="card-body">
-                                    <img src="{{ $document->icon($document->document_extension)}}" alt="document" />
-                                    <span onclick="downloadfile({{json_encode($document)}},{{json_encode(url('downloadfile'))}})">
-                                        <i class="fe fe-download"></i>
-                                    </span>
+                <div class="col-lg-9">
+                    <div class="d-flex justify-content-start">
+                        <input type="text" id="title" class="form-control text-left text-uppercase text-xl" value="{{$specificMeeting->meeting->meeting_title}}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-2">
+                <div class="col-lg-3">
+                    <span class="text-lg">Meeting Date:</span>
+                </div>
+                <div class="col-lg-9">
+                    <span class="text-xl">{{$specificMeeting->meeting->meeting_date}}</span>
+                </div>
+            </div>
+            <div class="row p-2">
+                <div class="col-lg-3">
+                    <span class="text-lg">Meeting Description:</span>
+                </div>
+                <div class="col-lg-9">
+                    <div>
+                        <textarea cols="30" rows="5" class="form-control text-left" disabled>
+                            {{$specificMeeting->meeting->meeting_description}}
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="d-flex flex-column">
+                    <div class="p-2">
+                        <span class="text-lg">Attachments</span>
+                        <div class="row">
+                            @foreach($documents as $document)
+                            <div class="col-lg-3">
+                                <div class="document card shadow">
+                                    <div class="card-body">
+                                        <img src="{{ $document->icon($document->document_extension)}}" alt="document" />
+                                        <span onclick="downloadfile({{json_encode($document)}},{{json_encode(url('downloadfile'))}})">
+                                            <i class="fe fe-download"></i>
+                                        </span>
+                                    </div>
+                                    <div class="card-footer p-1">
+                                        <h3 class="text-capitalize">{{$document->document_type}}</h3>
+                                    </div>
                                 </div>
-                                <div class="card-footer p-1">
-                                    <h3 class="text-capitalize">{{$document->document_type}}</h3>
+                            </div>
+                            @endforeach
+                            <div id="attachments" class="col-lg-3"  data-toggle="modal" data-target="#attachment-modal">
+                                <div id="create-attachment" class="hover-ardhi box-md">
+                                    <span class="fas fa-plus"></span>
                                 </div>
                             </div>
                         </div>
-                        @endforeach
                     </div>
-                    <span>Add Attachments</span>
-                    <div id="attachments" class="row"  data-toggle="modal" data-target="#attachment-modal">
-                        <div id="create-attachment" class="col-lg-3 hover-ardhi box-md">
-                            <span class="fas fa-plus"></span>
+                    <div class="pt-2">
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <label class="text-lg" for="chairman">Chairman</label>
+                                <input type="text" id="chairman" value="{{($chair === null)? 'Not Selected': $chair->last_name.' '.$chair->first_name}}" class="form-control" disabled>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <div class="row">
-                        <div class="col-lg-9">
-                            <label for="chairman">Chairman</label>
-                            <input type="text" id="chairman" value="{{($chair === null)? 'Not Selected': $chair->last_name.' '.$chair->first_name}}" class="form-control" disabled>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-9">
-                            <label for="secretary">Secretary</label>
-                            <input type="text" id="secretary" value="{{($secr === null)? 'Not Selected': $secr->last_name.' '.$secr->first_name}}" class="form-control" disabled>
-                        </div>
-                        <div class="col-lg-3">
-                            @if((!$specificMeeting->meeting->wasHeld()) && (Auth::User()->id == $chair->id))
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Change</button>
-                            @endif
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <label class="text-lg" for="secretary">Secretary</label>
+                                <input type="text" id="secretary" value="{{($secr === null)? 'Not Selected': $secr->last_name.' '.$secr->first_name}}" class="form-control" disabled>
+                            </div>
+                            <div class="col-lg-3">
+                                @if((!$specificMeeting->meeting->wasHeld()) && (Auth::User()->id == $chair->id))
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Change</button>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-xl-5 col-lg-5 col-md-4">
-            <div class="shadow">
-                <div class="nav-wrapper">
-                    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0 active border" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="fas fa-user-tie mr-2"></i>Members</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0 border" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="fas fa-tags mr-2"></i>History</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card shadow mb-0">
-                    <div class="card-body pt-2 pl-3 pr-3">
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
-                                <div class="d-flex flex-column h-100vh">
-                                    @if(!$specificMeeting->meeting->wasHeld())
-                                    <div class="border-ardhi box-fit hover-ardhi cursor-default mb-3" data-toggle="modal" data-target="#largeModal">
-                                        <span class="fas fa-plus-square text-xl text-black pl-1 pt-1"></span>
-                                        <span class="p-2 font-weight-800">Invite Member</span>
-                                    </div>
-                                    @endif
-                                    @foreach($members as $member)
-                                    <div class="border-bottom hover-normal p-2 cursor-default">
-                                        <p class="font-weight-700"></p>
-                                        <div class="d-flex justify-content-between">
-                                            <span class="text-capitalize">{{$member->first_name}}
-                                                @if($member->id == Auth::User()->id)
-                                                <span class="text-uppercase bg-green text-white ml-2 p-1">you</span>
-                                                @endif
-                                            </span>
-                                            @if(($chair !== null) && ($chair->id == $member->id))
-                                            <span class="text-capitalize text-red">Chairman</span>
-                                            @elseif(($secr !== null) && ($secr->id == $member->id))
-                                            <span class="text-capitalize text-green">Secretary</span>
-                                            @else
-                                            <span class="text-capitalize">Member</span>
-                                            @endif
+            <div class="row">
+                <div class="shadow col-xl-12 col-lg-12 col-md-12">
+                    <div class="nav-wrapper">
+                        <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0 active border" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="fas fa-user-tie mr-2"></i>Members</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0 border" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="fas fa-tags mr-2"></i>History</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card shadow mb-0">
+                        <div class="card-body pt-2 pl-3 pr-3">
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                                    <div class="d-flex flex-column h-100vh">
+                                        @if((!$specificMeeting->meeting->wasHeld()) && (Auth::User()->id == $chair->id)))
+                                        <div class="border-ardhi box-fit hover-ardhi cursor-default mb-3" data-toggle="modal" data-target="#largeModal">
+                                            <span class="fas fa-plus-square text-xl text-black pl-1 pt-1"></span>
+                                            <span class="p-2 font-weight-800">Invite Member</span>
                                         </div>
+                                        @endif
+                                        @foreach($members as $member)
+                                        <div class="border-bottom hover-normal p-2 cursor-default">
+                                            <p class="font-weight-700"></p>
+                                            <div class="d-flex justify-content-between">
+                                                <span class="text-capitalize">{{$member->first_name}}
+                                                    @if($member->id == Auth::User()->id)
+                                                    <span class="text-uppercase bg-green text-white ml-2 p-1">you</span>
+                                                    @endif
+                                                </span>
+                                                @if(($chair !== null) && ($chair->id == $member->id))
+                                                <span class="text-capitalize text-red">Chairman</span>
+                                                @elseif(($secr !== null) && ($secr->id == $member->id))
+                                                <span class="text-capitalize text-green">Secretary</span>
+                                                @else
+                                                <span class="text-capitalize">Member</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
                                     </div>
-                                   @endforeach
                                 </div>
-                            </div>
-                            <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                <div class="d-flex flex-column h-100vh">
+                                <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                    <div class="d-flex flex-column h-100vh">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-right p-2">
+                    <span class="text-right fab">
+                        <span class="fas fa-edit text-xl round-p5-ardhi color-ardhi hover-ardhi shadow"></span>
+                        <span class="ion-person-stalker text-xl round-p5-ardhi color-ardhi hover-ardhi"
+                        data-toggle="modal" data-target="#attendence"></span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -260,7 +280,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{url('uploadfile').'/'.$specificMeeting->meeting->id}}" method="post" id="upload-form" enctype="multipart/form-data">
+                <form action="{{url('store_meeting_documents').'/'.$specificMeeting->meeting->id}}" method="post" id="upload-form" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-lg-6">

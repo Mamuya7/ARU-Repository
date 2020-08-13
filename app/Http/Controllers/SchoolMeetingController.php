@@ -131,6 +131,7 @@ class SchoolMeetingController extends Controller
                 }
             }
         }
+        
         return view('meeting.show',["specificMeeting" => $schoolMeeting, 
         "documents" => $schoolMeeting->documents,
         "chair" => $chair, "secr" => $secr, "members" => $members]);

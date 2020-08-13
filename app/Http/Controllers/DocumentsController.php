@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Documents;
+use Auth;
+use App\Meeting;
+use App\Document;
+use App\SchoolMeeting;
+use App\DepartmentMeeting;
 use Illuminate\Http\Request;
 
 class DocumentsController extends Controller
@@ -42,9 +46,48 @@ class DocumentsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Meeting $meeting)
     {
-        //
+        if($request->hasFile('file-upload')){
+            $dir = 'public/documents/';
+            $filetype = $request->input('file-type');
+            $ext = $request->file('file-upload')->extension();
+
+            $path = $request->file('file-upload')->store($dir.$filetype);
+
+            if($path !== null){
+                $document = $this->create_document([
+                    "type" => $filetype,
+                    "path" => $path,
+                    "extension" => $ext]);
+                
+                if($meeting->ofDepartment()){
+                    $departmentMeeting = DepartmentMeeting::where('meeting_id',$meeting->id)
+                                        ->where(function($query){
+                                                $query->where('department_id',Auth::User()->department_id);
+                                        })->get();
+                    $departmentMeeting->first()->documents()->save($document);
+                }elseif ($meeting->ofDirectorate()) {
+                    $dir_id = Auth::User()->directorate()->id;
+                    $directorateMeeting = DirectorateMeeting::where('meeting_id',$meeting->id)
+                                        ->where(function($query)use($dir_id){
+                                            $query->where('directorate_id',$dir_id);
+                                        })->get();
+                    $directorateMeeting->first()->documents()->save($document);
+                }elseif ($meeting->ofSchool()) {
+                    $school_id = Auth::User()->school()->id;
+                    $schoolMeeting = SchoolMeeting::find($school_id)->where('meeting_id',$meeting->id)
+                                        ->where(function($query)use($school_id){
+                                            $query->where('school_id',$school_id);
+                                        })->get();
+                    $schoolMeeting->first()->documents()->save($document);
+                }elseif ($meeting->ofCommittee()) {
+                    # code...
+                }
+            }
+        }
+
+        return back();
     }
 
     /**
@@ -90,5 +133,15 @@ class DocumentsController extends Controller
     public function destroy(Documents $documents)
     {
         //
+    }
+
+    protected function create_document($docInfo){
+        $document = new Document([
+            'document_name' => "",
+            'document_type' => $docInfo["type"],
+            'document_url' => $docInfo["path"],
+            'document_extension' => $docInfo["extension"]
+        ]);
+        return $document;
     }
 }

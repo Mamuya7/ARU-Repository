@@ -30,7 +30,11 @@ class Meeting extends Model
     }
     public function school()
     {
-        return $this->belongsToMany('App\School','school_meeting','meeting_id','school_id');
+        return $this->belongsToMany('App\School','school_meetings','meeting_id','school_id');
+    }
+    public function directorates()
+    {
+        return $this->belongsToMany('App\Directorate','directorate_meeting','meeting_id','directorate_id');
     }
     public function committee()
     {

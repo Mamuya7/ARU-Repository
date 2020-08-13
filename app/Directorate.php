@@ -14,4 +14,8 @@ class Directorate extends Model
     {
         return $this->morphMany('App\Department','departmentable');
     }
+    public function meetings()
+    {
+        return $this->belongsToMany('App\Meeting','directorate_meeting','directorate_id','meeting_id');
+    }
 }

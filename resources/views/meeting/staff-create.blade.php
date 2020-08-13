@@ -130,7 +130,7 @@
             // $('#members').append(members);
 
             $('input').click(function(){
-                $('#output').hide();
+                $('#output').remove();
             });
         });
 

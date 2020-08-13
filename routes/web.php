@@ -30,9 +30,11 @@ Route::get('view_meeting',function(){
     }elseif (Auth::User()->hasRole('director')) {
         return redirect()->route('viewDirectorateMeeting');
     }elseif (Auth::User()->hasRole('head')) {
-        return redirect()->route('viewDepartmentMeeting');
+        return redirect()->route('viewDepartmentMeetings');
     }elseif (Auth::User()->hasRole('system administrator')) {
         return redirect()->route('viewGeneralMeetings');
+    }else{
+        return redirect()->route('viewDepartmentMeetings');
     }
 });
 Route::get('create_meeting',function(){
@@ -64,7 +66,6 @@ Route::get('view_general_meetings','MeetingsController@view')->name('viewGeneral
 Route::get('store_general_meetings','MeetingsController@store')->name('storeGeneralMeetings');
 Route::post('fetch_meeting_members','MeetingsController@fetch');
 Route::post('show_meeting/{meeting}','MeetingsController@show');
-Route::post('uploadfile/{meeting}','MeetingsController@uploadFile');
 Route::post('downloadfile','MeetingsController@downloadFile');
 Route::post('changesecretary/{meeting}','MeetingsController@changeSecretary');
 Route::post('create_attendence/{meeting}','MeetingsController@createAttendence');
@@ -88,6 +89,9 @@ Route::get('view_department_meeting','DepartmentMeetingController@index')->name(
 Route::get('create_department_meeting','DepartmentMeetingController@create')->name('createDepartmentMeeting');
 Route::get('show_department_meeting/{departmentMeeting}','DepartmentMeetingController@show')->name('showDepartmentMeeting');
 Route::post('store_department_meeting','DepartmentMeetingController@store')->name('storeDepartmentMeeting');
+
+// Documents routes
+Route::post('store_meeting_documents/{meeting}','DocumentsController@store')->name('storeMeetingDocuments');
 
 // Departments
 Route::get('AddDepartment', 'DepartmentsController@create')->name('AddDepartment');

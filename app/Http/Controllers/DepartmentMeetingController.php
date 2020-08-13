@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use DB;
 Use App\User;
+use App\School;
 use App\DepartmentMeeting;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,7 +19,6 @@ class DepartmentMeetingController extends Controller
      */
     public function index()
     {
-
         if(Auth::User()->department->belongsToSchool()){
             $sch_id = School::whereHas('departments',function(Builder $query){
                     $query->where('id','=',Auth::User()->department_id);
@@ -51,12 +52,6 @@ class DepartmentMeetingController extends Controller
 
         if(Auth::User()->hasRole('head')){
             $result = ["heads" => array(), "staffs" => array(), "display" => "", "title" => "Create Department Meeting"];
-
-            // $sch_id = School::whereHas('departments',function(Builder $query){
-            //     $query->where('id','=',Auth::User()->department_id);
-            // })->first()->id;
-
-            // $departments = School::find($sch_id)->departments;
 
             foreach(Auth::User()->department->users as $user){
                 array_push($result['staffs'],$user);
