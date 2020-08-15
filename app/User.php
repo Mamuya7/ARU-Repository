@@ -51,31 +51,31 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Committee','committee_user','user_id','committee_id');
     }
 
-    public function hasRole($role)
+    public function hasRoleType($role)
     {
         foreach ($this->roles as $value) {
-            if($value->role_name === $role){
+            if($value->role_type === $role){
                 return true;
             }
         }
         return false;
     }
 
-    public function userHasRole( $role)
+    public function hasRoleCode( $role)
     {
         foreach ($this->roles as $value) {
-            if($value->role_name === $role){
+            if($value->role_code === $role){
                 return true;
             }
         }
         return false;
     }
 
-    public function hasBothRoles($role1,$role2)
+    public function hasBothRoleTypes($role1,$role2)
     {
         $r1 = false; $r2 = false;
         foreach ($this->roles as $value) {
-            if($value->role_name === $role1){
+            if($value->role_type === $role1){
                 $r1 = true;
             }
             if($value->role_name === $role2){
@@ -86,11 +86,11 @@ class User extends Authenticatable
         return ($r1 && $r2);
     }
 
-    public function hasAnyRole($roles)
+    public function hasAnyRoleType($roles)
     {
         foreach ($this->roles as $value) {
             foreach ($roles as $role) {
-                if($value->role_name === $role){
+                if($value->role_type === $role){
                     return true;
                 }
             }

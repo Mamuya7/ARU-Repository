@@ -18,4 +18,9 @@ class Directorate extends Model
     {
         return $this->belongsToMany('App\Meeting','directorate_meeting','directorate_id','meeting_id');
     }
+    public function role()
+    {
+        return $this->belongsTo('App\Roles','directorate_head');
+    }
+    
 }

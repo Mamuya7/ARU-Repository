@@ -35,4 +35,9 @@ class Roles extends Model
         return $this->belongsToMany('App\Meeting','meeting_roles','role_id','meeting_id')
                     ->withPivot('id');
     }
+
+    public function directorate()
+    {
+        return $this->hasOne('App\Directorate','directorate_head');
+    }
 }

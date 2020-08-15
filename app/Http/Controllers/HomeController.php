@@ -24,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if(Auth::User()->hasRole('system administrator')){
+        if(Auth::User()->hasRoleType('system administrator')){
             return view('home.admin');
         }
         return view('home.staff');

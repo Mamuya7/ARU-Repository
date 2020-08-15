@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+use App\Directorate;
 use App\DirectorateMeeting;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class DirectorateMeetingController extends Controller
 {  /**
@@ -34,7 +37,7 @@ class DirectorateMeetingController extends Controller
     {
         $result = ["heads" => array(), "staffs" => array(), "display" => "", "title" => "Create Directorate Meeting"];
 
-        if(Auth::User()->hasRole('director')){
+        if(Auth::User()->hasRoleType('director')){
 
             $sch_id = Directorate::whereHas('departments',function(Builder $query){
                 $query->where('id','=',Auth::User()->department_id);
@@ -44,7 +47,7 @@ class DirectorateMeetingController extends Controller
 
             foreach($departments as $department){
                 foreach($department->users as $user){
-                    if($user->hasRole('head')){
+                    if($user->hasRoleType('head')){
                         array_push($result['heads'],$user);
                     }
                 }

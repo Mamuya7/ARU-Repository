@@ -17,8 +17,10 @@ class CreateDirectoratesTable extends Migration
             $table->bigIncrements('id');
             $table->string('directorate_name');
             $table->string('directorate_code');
+            $table->bigInteger('directorate_head')->unsigned();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->foreign('directorate_head')->references('id')->on('roles');
         });
     }
 
