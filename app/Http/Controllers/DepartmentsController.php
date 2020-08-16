@@ -145,6 +145,16 @@ class DepartmentsController extends Controller
 
         
     }
+    public function departmentStaff(Department $departments)
+    {  
+        $data = Array();
+
+        foreach ($departments->users as $user) {
+            $data2 = ["user" => $user, "roles" => $user->roles];
+            array_push($data,$data2);
+        }
+        echo json_encode($data);
+    }
 
     public function displaySChool(){
         $school = School::all();

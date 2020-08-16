@@ -138,7 +138,9 @@ class SchoolMeetingController extends Controller
         "documents" => $schoolMeeting->documents,
         "chair" => $chair, "secr" => $secr, "members" => $members,
         "resources" => [
-            "urls" => ["change_secretary" => "change_school_meeting_secretary"]
+            "urls" => ["change_secretary" => "change_school_meeting_secretary",
+            "invitation_link" => url('store_school_meeting_invitations/'.$schoolMeeting->id)
+            ]
         ]]);
     }
 
@@ -160,9 +162,19 @@ class SchoolMeetingController extends Controller
      * @param  \App\SchoolMeeting  $schoolMeeting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SchoolMeeting $schoolMeeting)
+    public function invite(Request $request, SchoolMeeting $schoolMeeting)
     {
-        //
+        $data = $request->input('data');
+        DB::transaction(function() use($data,$schoolMeeting){
+            foreach ($data as $value) {
+                $schoolMeeting->invitations()->updateOrCreate(
+                    ["user_id" => $value['user_id']],
+                    ["user_id" => $value['user_id'], "role_id" => $value['role_id']]
+                );
+            }
+        });
+
+        echo json_encode($schoolMeeting);
     }
 
     /**

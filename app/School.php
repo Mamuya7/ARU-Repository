@@ -24,7 +24,7 @@ class School extends Model
     //     return $this->belongsToMany('App\Department','department_school','school_id','department_id')
     //                 ->withPivot('school_id','department_id');
     // }
-    public function meeting()
+    public function meetings()
     {
         return $this->belongsToMany('App\Meeting','school_meetings','school_id','meeting_id')
                         ->withPivot('id','school_id','meeting_id');

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use DB;
 use Auth;
+use App\User;
+use App\Roles;
 use App\Meeting;
+use App\Committee;
 use App\Document;
 use App\DepartmentMeeting;
 use App\SchoolMeeting;
@@ -12,6 +15,7 @@ use App\CommitteeMeeting;
 use App\DirectorateMeeting;
 use App\School;
 use App\Department;
+use App\Directorate;
 use App\Attendence;
 use Response;
 use Illuminate\Http\Request;
@@ -111,7 +115,6 @@ class MeetingsController extends Controller
         $members = array();
         $documents = array();
         if($meeting->ofDepartment()){
-            // $members = Auth::User()->department->users;
             $departmentMeeting = $meeting->departmentMeetings()->where('department_id',Auth::User()->department_id)->first();
             return redirect()->route('showDepartmentMeeting',[$departmentMeeting]);
         }elseif ($meeting->ofSchool()) {
@@ -119,7 +122,16 @@ class MeetingsController extends Controller
             // return redirect('show_school_meeting/'.$schoolmeeting->id);
             return redirect()->route('showSchoolMeeting',[$schoolMeeting]);
         }elseif ($meeting->ofDirectorate()) {
-            $directorateMeeting = $meeting->directorateMeetings()->where('school_id',Auth::User()->directorate()->id)->first();
+            $directorate = new Directorate;
+
+            if(Auth::User()->department->belongsToDirectorate()){
+                $directorate = Directorate::whereHas('departments',function(Builder $query){
+                        $query->where('id','=',Auth::User()->department_id);
+                    })->first();
+            }elseif(Auth::User()->department->belongsToSchool()){
+                $directorate = Directorate::withDirectorAs(Auth::User()->roles()->where('role_type','director')->first()->role_code);
+            }
+            $directorateMeeting = $meeting->directorateMeetings()->where('directorate_id',$directorate->id)->first();
             return redirect()->route('showDirectorateMeeting',[$directorateMeeting]);
         }
         $chair = $meeting->getChairman();
@@ -171,6 +183,22 @@ class MeetingsController extends Controller
         //
     }
 
+    public function invitation()
+    {
+        $data = Array();
+        foreach (User::all() as $user) {
+            $data2 = Array("user" => $user, "roles" => $user->roles);
+            array_push($data,$data2);
+        }
+
+        echo json_encode([
+            "users" => $data,
+            "departments" => Department::all(),
+            "directorates" => Directorate::all(),
+            "committees" => Committee::all(),
+            "roletypes" => Roles::select(['role_type'])->distinct('role_type')->get()
+        ]);
+    }
     public function downloadFile(Request $request)
     {
         $document = $request->input('document');

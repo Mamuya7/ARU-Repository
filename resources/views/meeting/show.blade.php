@@ -168,7 +168,7 @@
                             <div class="row">
                                 <div class="col-lg-7">
                                     @if((!$specificMeeting->meeting->wasHeld()) && (Auth::User()->id == $chair->id))
-                                    <div class="border-ardhi box-fit hover-ardhi cursor-default mb-3" data-toggle="modal" data-target="#largeModal">
+                                    <div id="invite" onclick="inviteMembers({{json_encode(url('invitation_details'))}})" class="border-ardhi box-fit hover-ardhi cursor-default mb-3" data-toggle="modal" data-target="#largeModal">
                                         <span class="fas fa-plus-square text-xl text-black pl-1 pt-1"></span>
                                         <span class="p-2 font-weight-800">Invite Member</span>
                                     </div>
@@ -190,7 +190,7 @@
                                             <div class="custom-switches-stacked">
                                                 <label class="custom-switch">
                                                     <input type="radio" id="all-present" name="all-status" value="1" class="custom-switch-input">
-                                                    <span class="custom-switch-indicator custom-switch-indicator-square"></span>
+                                                    <span class="custom-switch-indicator"></span>
                                                     <span class="custom-switch-description row">All Present</span>
                                                 </label>
                                             </div>
@@ -199,7 +199,7 @@
                                             <div class="custom-switches-stacked">
                                                 <label class="custom-switch">
                                                     <input type="radio" id="all-abscent" name="all-status" value="2" class="custom-switch-input">
-                                                    <span class="custom-switch-indicator custom-switch-indicator-square"></span>
+                                                    <span class="custom-switch-indicator"></span>
                                                     <span class="custom-switch-description">All Abscent</span>
                                                 </label>
                                             </div>
@@ -208,7 +208,7 @@
                                             <div class="custom-switches-stacked">
                                                 <label class="custom-switch">
                                                     <input type="radio" id="all-missed" name="all-status" value="3" class="custom-switch-input">
-                                                    <span class="custom-switch-indicator custom-switch-indicator-square"></span>
+                                                    <span class="custom-switch-indicator"></span>
                                                     <span class="custom-switch-description">All Missed</span>
                                                 </label>
                                             </div>
@@ -262,7 +262,7 @@
                                                         @else
                                                         <input type="radio" name="{{$member['profile']->id}}" value="attended" class="custom-switch-input present" required>
                                                         @endif
-                                                        <span class="custom-switch-indicator custom-switch-indicator-square"></span>
+                                                        <span class="custom-switch-indicator"></span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -275,7 +275,7 @@
                                                         @else
                                                         <input type="radio" name="{{$member['profile']->id}}" value="missed" class="custom-switch-input abscent" required>
                                                         @endif
-                                                        <span class="custom-switch-indicator custom-switch-indicator-square"></span>
+                                                        <span class="custom-switch-indicator"></span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -288,7 +288,7 @@
                                                         @else
                                                         <input type="radio" name="{{$member['profile']->id}}" value="noreport" class="custom-switch-input missed" required>
                                                         @endif
-                                                        <span class="custom-switch-indicator custom-switch-indicator-square"></span>
+                                                        <span class="custom-switch-indicator"></span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -398,11 +398,84 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p class="mb-0">A small river named Duden flows by their place and supplies it with the necessary regelialiaxx.</p>
+                <div class="row p-1">
+                    <div class="col-lg-4">
+                        <span class="row text-left">Filter By</span></div>
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-4">
+                        <div class="d-flex justify-content-end">
+                            <span><input type="search" name="" id="search-field" class="form-control" placeholder="search...."></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="d-flex flex-column">
+                            <span>Departments</span>
+                            <span>
+                                <select name="" id="filterby-department" class="form-control" onchange="filterby({{json_encode(url('department_staff/'))}},'#filterby-department')">
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="d-flex flex-column">
+                            <span>Directorates</span>
+                            <span>
+                                <select name="" id="filterby-directorate" class="form-control" onchange="filterby({{json_encode(url('directorate_staff/'))}},'#filterby-directorate')">
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="d-flex flex-column">
+                            <span>Committees</span>
+                            <span>
+                                <select name="" id="filterby-committee" class="form-control" onchange="filterby({{json_encode(url('committee_staff/'))}},'#filterby-committee')">
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="d-flex flex-column">
+                            <span>Role Types</span>
+                            <span>
+                                <select name="" id="filterby-roletype" class="form-control" onchange="filterbyRole({{json_encode(url('roles_staff/'))}},'#filterby-roletype')">
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row card">
+                    <div class="card-header">
+                        <div class="row border-bottom p-1">
+                            <div class="col-lg-2">
+                                <div class="custom-switches-stacked">
+                                    <label class="custom-switch">
+                                        <input type="checkbox" id="invites-check" value="1" class="custom-switch-input">
+                                        <span class="custom-switch-indicator custom-switch-indicator-square"></span>
+                                        <span class="custom-switch-description">All</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <span class="text-lg">First Name</span>
+                            </div>
+                            <div class="col-lg-3">
+                                <span class="text-lg">Last Name</span>
+                            </div>
+                            <div class="col-lg-3">
+                                <span class="text-lg">Invite by Role</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" id="invitation-list">
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Add Members</button>
+                <button type="button" class="btn btn-primary" onclick="saveInvitation({{json_encode($resources['urls']['invitation_link'])}})">Invite Members</button>
             </div>
         </div>
     </div>
@@ -489,6 +562,8 @@
 			}
 		});
 
+        var users = Array();
+
         $(document).ready(function(){
         
             $('.datepicker').datepicker({
@@ -508,6 +583,23 @@
                 }
             });
 
+            $('#search-field').keyup(function(event){
+                let letters = event.target.value;
+                $('#invitation-list').empty();
+            
+                users.forEach(row => {
+                    if(letters.trim().length !== 0){
+                        if(matchesCriteria(row,letters)){
+                            let list = createInvitationList(row);;
+                            $('#invitation-list').append(list);
+                        }
+                    }else{
+                        let list = createInvitationList(row);
+                        $('#invitation-list').append(list);
+                    }
+                });
+            });
+
             $('input:radio[name=all-status]').change(function(){
                 if($('#all-present').is(':checked')){
                     $('.present').prop('checked',true);
@@ -517,6 +609,19 @@
                 }
                 if($('#all-missed').is(':checked')){
                     $('.missed').prop('checked',true);
+                }
+            });
+
+            $('.invites').change(function(){console.log('hello');
+                if($('input.invites').not(':checked').length > 0){
+                    $('#invites-check').prop('checked',false);
+                }
+            });
+            $('#invites-check').change(function(){
+                if($(this).is(':checked')){
+                    $('.invites').prop('checked',true);
+                }else{
+                    $('.invites').prop('checked',false);
                 }
             });
 
@@ -555,9 +660,13 @@
                 }
             }
 
-            postdata(data,path);
+            postdata(data,path,function(){
+                showSuccess('Recorded Successfully!!');
+                $('#but4').trigger('click');
+                $('#close-attendence').trigger('click');
+            });
         }
-        const postdata = (data,path) => {
+        const postdata = (data,path,method) => {
             $.ajax({
                 url: path,
                 type:'post',
@@ -567,14 +676,86 @@
                 data: {'data':data},
                 dataType:'json',
                 success: function(response){
-                    showSuccess('Recorded Successfully!!');
-                    $('#but4').trigger('click');
-                    $('#close-attendence').trigger('click');
+                    method(response);
                 },
                 error: function(xhr,status,error){
 
                 }
             });
+        }
+        const getdata = (path,package,method) => {
+            $.ajax({
+                url: path,
+                type:'post',
+                headers: {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                data:{"data":package},
+                dataType:'json',
+                success: function(response){
+                    method(response);
+                },
+                error: function(xhr,status,error){
+
+                }
+            });
+        }
+
+        const saveInvitation = (path) =>{
+            invites = Array();
+            $('input[name=invitation]:checked').each(function () {
+                invites.push({"user_id" : this.value, "role_id" : $('#role'+this.value).val()});
+            });
+            postdata(invites,path,function(results){
+                console.log(results);
+            });
+        }
+
+// function to fetch members from database by selected criteria 
+        const filterby = (path,element) =>{
+            let id = $(element).val();
+            path +="/"+ id;
+
+            getdata(path,null,function(data){
+                users = data;
+                showInvitationList(data);
+            });
+        }
+        const filterbyRole = (path,element) =>{
+            let type = $(element).val();
+
+            getdata(path,type,function(data){
+                users = data;
+                showInvitationList(data);
+            });
+        }
+
+        const inviteMembers = (path) =>{
+            getdata(path,null,function(data){
+                let users_list = "";
+                users = data.users;
+                showInvitationList(data.users);
+
+                let dep_list = ""; let dir_list = ""; let com_list = ""; let role_list = "";
+                dep_list = createDepartmentOptions(data.departments);
+                dir_list = createDirectorateOptions(data.directorates);
+                com_list = createCommitteeOptions(data.committees);
+                role_list = createRoleOptions(data.roletypes);
+
+                $('#filterby-department').empty();
+                $('#filterby-department').append(dep_list);
+
+                $('#filterby-directorate').empty();
+                $('#filterby-directorate').append(dir_list);
+
+                $('#filterby-committee').empty();
+                $('#filterby-committee').append(com_list);
+
+                $('#filterby-roletype').empty();
+                $('#filterby-roletype').append(role_list);
+                
+            });
+
         }
 
         const downloadfile = (document,path) => {
@@ -609,6 +790,35 @@
             }
 
         }
+        
+        function matchesCriteria(row,letters){
+            if(isMatched(row.user.first_name.toLowerCase(),letters.trim().toLowerCase())){
+                return true;
+            }else if(isMatched(row.user.last_name.toLowerCase(),letters.trim().toLowerCase())){
+                return true;
+            }else if(isMatched(row.user.username.toLowerCase(),letters.trim().toLowerCase())){
+                return true;
+            }else{
+                row.roles.forEach(role => {
+                    if(isMatched(role.role_name.toLowerCase(),letters.trim().toLowerCase())){
+                        return true;
+                    }else if(isMatched(role.role_type.toLowerCase(),letters.trim().toLowerCase())){
+                        return true;
+                    }
+                });
+                return false;
+            }
+            return false;
+        }
+
+        function isMatched(word,letters){
+            if(word.search(letters) >= 0){
+                return true;
+            }else{
+                return false;
+            }
+            return false;
+        }
         const createAttachment = () =>{
             let att = '<div class="col-lg-3">';
                     att += '<div class="card">';
@@ -618,6 +828,78 @@
                     att += '</div>';    
             att  +=  '</div>';
             return att;
+        }
+
+        const createDepartmentOptions = (departments) =>{
+            let data = '<option value="">All Departments</option>';
+            departments.forEach(dep => {
+                data += '<option value="' + dep.id + '">';
+                data += dep.department_name + '('+dep.department_code+')</option>';
+            });
+            return data;
+        }
+        const createDirectorateOptions = (directorates) =>{
+            let data = '<option value="">All Directorates</option>';
+            directorates.forEach(dir => {
+                data += '<option value="' + dir.id + '">';
+                data += dir.directorate_name + '('+dir.directorate_code+')</option>';
+            });
+            return data;
+        }
+        const createCommitteeOptions = (committees) =>{
+            let data = '<option value="">All Committees</option>';
+            committees.forEach(com => {
+                data += '<option value="' + com.id + '">';
+                data += com.committee_name + '('+com.committee_code+')</option>';
+            });
+            return data;
+        }
+        const createRoleOptions = (roles) =>{
+            let data = '<option value="">All Roles</option>';
+            roles.forEach(role => {
+                data += '<option value="' + role.role_type + '">';
+                data += '<span class="text-capitalize">' + role.role_type + '</span></option>';
+            });
+            return data;
+        }
+        const createInvitationList = (person) =>{
+            
+            let list = '<div class="row border-bottom p-1">';
+                list +=    '<div class="col-lg-2">';
+                list +=        '<div class="custom-switches-stacked">';
+                list +=            '<label class="custom-switch">';
+                list +=                '<input type="checkbox" name="invitation" value="'+person.user.id+'" class="invites custom-switch-input">';
+                list +=                '<span class="custom-switch-indicator custom-switch-indicator-square"></span>';
+                list +=            '</label>';
+                list +=        '</div>';
+                list +=    '</div>';
+                list +=    '<div class="col-lg-3"><span>'+person.user.first_name+'</span></div>';
+                list +=    '<div class="col-lg-3"><span>'+person.user.last_name+'</span></div>';
+                list +=    '<div class="col-lg-3">';
+                list +=            '<div>';
+                list +=                '<select name="role'+person.user.id+'" id="role'+person.user.id+'" class="form-control">';
+                                            person.roles.forEach(role => {
+                                                if(role.role_type == 'staff'){
+                list +=                    '<option value="'+role.id+'" selected>'+role.role_name+" (" +role.role_code+')</option>';
+                                                }else{
+                list +=                    '<option value="'+role.id+'">'+role.role_name+" (" +role.role_code+')</option>';
+                                                }
+                                            });
+                list +=                '</select>';
+                list +=            '</div>';
+                list +=        '</div>';
+                list +=    '</div>';
+
+            return list;
+        }
+
+        const showInvitationList = (data) =>{
+            let users_list = "";
+            data.forEach(element => {
+                    users_list += createInvitationList(element);
+                });
+                $('#invitation-list').empty();
+                $('#invitation-list').append(users_list);
         }
 	</script>
 @endsection

@@ -51,6 +51,31 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Committee','committee_user','user_id','committee_id');
     }
 
+    public function department()
+    {
+        return $this->belongsTo('App\Department');
+    }
+    public function attendences()
+    {
+        return $this->hasMany('App\Attendence');
+    }
+
+    public function school()
+    {
+        $school_id = School::whereHas('departments',function(Builder $query){
+            $query->where('id','=',$this->department_id);
+        })->first()->id;
+        return School::find($school_id);
+    }
+
+    public function directorate()
+    {
+        $directorate_id = Directorate::whereHas('departments',function(Builder $query){
+            $query->where('id','=',$this->department_id);
+        })->first()->id;
+        return Directorate::find($directorate_id);
+    }
+
     public function hasRoleType($role)
     {
         foreach ($this->roles as $value) {
@@ -96,26 +121,5 @@ class User extends Authenticatable
             }
         }
         return false;
-    }
-
-    public function school()
-    {
-        $school_id = School::whereHas('departments',function(Builder $query){
-            $query->where('id','=',$this->department_id);
-        })->first()->id;
-        return School::find($school_id);
-    }
-
-    public function directorate()
-    {
-        $directorate_id = Directorate::whereHas('departments',function(Builder $query){
-            $query->where('id','=',$this->department_id);
-        })->first()->id;
-        return Directorate::find($directorate_id);
-    }
-
-    public function department()
-    {
-        return $this->belongsTo('App\Department');
     }
 }

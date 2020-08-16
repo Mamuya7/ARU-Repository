@@ -139,7 +139,9 @@ class DepartmentMeetingController extends Controller
         return view('meeting.show',["specificMeeting" => $departmentMeeting, 
         "documents" => $departmentMeeting->documents,
         "chair" => $chair, "secr" => $secretary, "members" => $members, "resources" => [
-            "urls" => ["change_secretary" => "change_department_meeting_secretary/"]
+            "urls" => ["change_secretary" => "change_department_meeting_secretary/",
+            "invitation_link" => url('store_department_meeting_invitations/'.$departmentMeeting->id)
+            ]
         ]]);
     }
 
@@ -161,9 +163,19 @@ class DepartmentMeetingController extends Controller
      * @param  \App\DepartmentMeeting  $departmentMeeting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DepartmentMeeting $departmentMeeting)
+    public function invite(Request $request, DepartmentMeeting $departmentMeeting)
     {
-        //
+        $data = $request->input('data');
+        DB::transaction(function() use($data,$departmentMeeting){
+            foreach ($data as $value) {
+                $departmentMeeting->invitations()->updateOrCreate(
+                    ["user_id" => $value['user_id']],
+                    ["user_id" => $value['user_id'], "role_id" => $value['role_id']]
+                );
+            }
+        });
+
+        echo json_encode($departmentMeeting);
     }
 
     /**

@@ -78,6 +78,18 @@
                                 <input type="text" id="code" class="form-control" name="directorate_code">
                             </div>
                         </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label">Diretorate Head</label>
+                                <select name="directorate_head" id="head" class="form-control">
+                                    <option value="null" selected disabled></option>
+                                    @foreach($roles as $role)
+                                    <option value="{{$role->id}}">{{$role->role_name ." (". $role->role_code.")"}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                 </form>    
             </div>
             <div class = "modal-footer">
@@ -117,6 +129,7 @@
         // console.log (data.id);
         $('#name').val(data.directorate_name);
         $('#code').val(data.directorate_code);
+        $('#head').val(data.directorate_head);
 
         $('#update-directorate').attr('action',"updateDirectorate/"+data.id);
     }

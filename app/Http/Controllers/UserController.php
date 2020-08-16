@@ -107,7 +107,15 @@ class UserController extends Controller
         echo json_encode($users);
     }
 
-    
+    public function fetch()
+    {
+        $data = Array();
+        foreach (User::all() as $user) {
+            $data2 = Array("user" => $user, "roles" => $user->roles);
+            array_push($data,$data2);
+        }
+        echo json_encode($data);
+    }
 
     /**
      * Update the specified resource in storage.
