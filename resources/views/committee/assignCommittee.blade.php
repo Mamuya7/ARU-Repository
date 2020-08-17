@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
+
 <form action="assignUserCommittee" method="post">
 @csrf
 <div class="row" style="margin-top:40px"> 

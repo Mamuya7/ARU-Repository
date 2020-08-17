@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Directorate;
-// use DB;
+use App\Roles;;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -24,9 +24,9 @@ class DirectoratesController extends Controller
      */
     public function index()
     {
-        // $directorate = DB::table('directorates')->paginate();
-        $directorate = Directorate::select(['id','directorate_name','directorate_code'])->withCount('departments')->paginate(10);
-        return view('directorate.index',['directorates' => $directorate]);
+        $roles = Roles::where('role_type','director')->get();
+        $directorate = Directorate::select(['id','directorate_name','directorate_code','directorate_head'])->withCount('departments')->paginate(10);
+        return view('directorate.index',['directorates' => $directorate, "roles" => $roles]);
     }
 
     /**
@@ -36,7 +36,8 @@ class DirectoratesController extends Controller
      */
     public function create()
     {
-        return view('directorate.create');
+        $roles = Roles::where('role_type','director')->get();
+        return view('directorate.create',["roles" => $roles]);
     }
 
     /**
@@ -84,10 +85,12 @@ class DirectoratesController extends Controller
     {
             $name = $request->input('directorate_name');
             $code = $request->input('directorate_code');
+            $head = $request->input('directorate_head');
 
             $directorates->update([
                 "directorate_name" => $name,
-                "directorate_code" => $code
+                "directorate_code" => $code,
+                "directorate_head" => $head
             ]);
 
             return redirect()->route('displayDirectorates');
@@ -107,6 +110,18 @@ class DirectoratesController extends Controller
         
         return redirect('displayDirectorates');
        
+    }
+    public function directorateStaff(Directorate $directorate)
+    {  
+        $data = Array();
+
+        foreach ($directorate->departments as $department) {
+            foreach ($department->users as $user) {
+                $data2 = ["user" => $user, "roles" => $user->roles];
+                array_push($data,$data2);
+            }
+        }
+        echo json_encode($data);
     }
 }
 

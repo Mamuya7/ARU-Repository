@@ -39,7 +39,8 @@ class SchoolMeetingController extends Controller
         $school_meetings = DB::table('meetings')->join('school_meetings','meetings.id','=','school_meetings.meeting_id')
                             ->select('meetings.*','school_meetings.id as child_id','school_meetings.*')
                             ->where('school_meetings.school_id','=',$sch_id)
-                            ->orderBy('meetings.meeting_date','desc')->get();         
+                            ->orderBy('meetings.meeting_date','desc')->get();
+                            
         return view('meeting.staff-view',["school_directorate" => $school_meetings, "department" => $department_meetings]);
     }
 
@@ -50,7 +51,7 @@ class SchoolMeetingController extends Controller
      */
     public function create()
     {
-            if(Auth::User()->hasRole('dean')){
+            if(Auth::User()->hasRoleType('dean')){
                 $result = ["heads" => array(), "staffs" => array(), "display" => "", "title" => "Create School Meeting"];
 
                 $sch_id = School::whereHas('departments',function(Builder $query){
@@ -61,12 +62,12 @@ class SchoolMeetingController extends Controller
 
                 foreach($departments as $department){
                     foreach($department->users as $user){
-                        if($user->hasRole('head')){
+                        if($user->hasRoleType('head')){
                             array_push($result['heads'],$user);
                         }
                     }
                 }
-                if(Auth::User()->hasBothRoles('head','dean')){
+                if(Auth::User()->hasBothRoleTypes('head','dean')){
                     $result['display'] = "d-none";
                 }
 
@@ -121,12 +122,13 @@ class SchoolMeetingController extends Controller
         $school_departments = School::find($schoolMeeting->school_id)->departments;
         foreach ($school_departments as $department) {
             foreach ($department->users as $user) {
-                if($user->hasRole('head')){
-                    array_push($members,$user);
-                }elseif($user->hasRole('dean')){
+                $data = array("profile" => $user, "attendence" => null);
+                if($user->hasRoleType('head')){
+                    array_push($members,$data);
+                }elseif($user->hasRoleType('dean')){
                     $chair = $user;
-                    array_push($members,$user);
-                }elseif($user->hasRole('administrative officer')){
+                    array_push($members,$data);
+                }elseif($user->hasRoleType('administrative officer')){
                     $secr = $user;
                 }
             }
@@ -134,7 +136,12 @@ class SchoolMeetingController extends Controller
         
         return view('meeting.show',["specificMeeting" => $schoolMeeting, 
         "documents" => $schoolMeeting->documents,
-        "chair" => $chair, "secr" => $secr, "members" => $members]);
+        "chair" => $chair, "secr" => $secr, "members" => $members,
+        "resources" => [
+            "urls" => ["change_secretary" => "change_school_meeting_secretary",
+            "invitation_link" => url('store_school_meeting_invitations/'.$schoolMeeting->id)
+            ]
+        ]]);
     }
 
     /**
@@ -155,9 +162,19 @@ class SchoolMeetingController extends Controller
      * @param  \App\SchoolMeeting  $schoolMeeting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SchoolMeeting $schoolMeeting)
+    public function invite(Request $request, SchoolMeeting $schoolMeeting)
     {
-        //
+        $data = $request->input('data');
+        DB::transaction(function() use($data,$schoolMeeting){
+            foreach ($data as $value) {
+                $schoolMeeting->invitations()->updateOrCreate(
+                    ["user_id" => $value['user_id']],
+                    ["user_id" => $value['user_id'], "role_id" => $value['role_id']]
+                );
+            }
+        });
+
+        echo json_encode($schoolMeeting);
     }
 
     /**

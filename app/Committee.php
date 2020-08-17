@@ -39,7 +39,7 @@ class Committee extends Model
         $roles = $this->roles;
         foreach ($users as $user) {
             foreach ($roles as $role) {
-                if($user->hasRole($role->role_name)){
+                if($user->hasRoleType($role->role_name)){
                     array_push($committee_users,$user);
                     break;
                 }

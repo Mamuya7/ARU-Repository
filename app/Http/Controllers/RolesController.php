@@ -113,6 +113,19 @@ class RolesController extends Controller
         
         return redirect('displayRoles');
     }
+    public function roleStaff(Request $request)
+    {  
+        $data = Array();
+        $type = $request->input('data');
+        $roles = Roles::where('role_type',$type)->get();
 
+        foreach ($roles as $role) {
+            foreach ($role->user as $user) {
+                $data2 = ["user" => $user, "roles" => $user->roles];
+                array_push($data,$data2);
+            }
+        }
+        echo json_encode($data);
+    }
 }
 

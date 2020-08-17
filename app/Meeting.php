@@ -111,7 +111,7 @@ class Meeting extends Model
         {
             foreach (Auth::User()->department->users as $user) {
                 $member = User::find($user->id);
-                if($member->userHasRole('head')){
+                if($member->userhasRoleType('head')){
                     return $user;
                 }
             }

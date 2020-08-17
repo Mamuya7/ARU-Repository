@@ -11,7 +11,7 @@
                     <div class="media d-flex">
                         <div class="media-body text-left">
                             <h4 class="text-white">Your Meetngs</h4>
-                            <h2 class="text-white mb-0">88568</h2>
+                            <h2 class="text-white mb-0">{{$all_meetings}}</h2>
                         </div>
                         <div class="align-self-center">
                             <!-- <i class="fe fe-shopping-cart text-white font-large-2 float-right"></i> -->
@@ -29,7 +29,7 @@
                     <div class="media d-flex">
                         <div class="media-body text-left">
                             <h4 class="text-white">Past Meetings</h4>
-                            <h2 class="text-white mb-0">25568</h2>
+                            <h2 class="text-white mb-0">{{$past_meetings}}</h2>
                         </div>
                         <div class="align-self-center">
                             <!-- <i class="fe fe-bar-chart text-white font-large-2 float-right"></i> -->
@@ -47,7 +47,7 @@
                     <div class="media d-flex">
                         <div class="media-body text-left">
                             <h4 class="text-white">Coming Meetings</h4>
-                            <h2 class="text-white mb-0">236</h2>
+                            <h2 class="text-white mb-0">{{$coming_meetings}}</h2>
                         </div>
                         <div class="align-self-center">
                             <!-- <i class="fe fe-mail success font-large-2 text-white float-right"></i> -->
@@ -64,7 +64,7 @@
                 <div class="card-body">
                     <div class="widget text-center text-white">
                         <small class="text-white-50">Attended</small>
-                        <h2 class="text-xxl text-white">8342</h2>
+                        <h2 class="text-xxl text-white">{{$attended_meetings}}</h2>
                     </div>
                 </div>
             </div>
@@ -84,7 +84,7 @@
                 <div class="card-body">
                     <div class="widget text-center">
                         <small class="text-white-50">Missed with Report</small>
-                        <h2 class="text-xxl text-white">29</h2>
+                        <h2 class="text-xxl text-white">{{$abscent_meetings}}</h2>
                     </div>
                 </div>
             </div>
@@ -94,7 +94,7 @@
                 <div class="card-body">
                     <div class="widget text-center">
                         <small class="text-white-50">Missed Without Report</small>
-                        <h2 class="text-xxl text-white">851</h2>
+                        <h2 class="text-xxl text-white">{{$missed_meetings}}</h2>
                     </div>
                 </div>
             </div>

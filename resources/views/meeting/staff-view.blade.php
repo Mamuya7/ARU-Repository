@@ -17,7 +17,10 @@
                     <div>{{$meeting->meeting_description}}</div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
-                    <div class="text-lg">{{$meeting->meeting_date}}</div>
+                    <div class="d-flex justify-content-around">
+                        <span class="text-lg">{{$meeting->meeting_date}}</span>
+                        <span class="text-lg">SCH/DIR</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -36,7 +39,10 @@
                     <div>{{$meeting->meeting_description}}</div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
-                    <div class="text-lg">{{$meeting->meeting_date}}</div>
+                    <div class="d-flex justify-content-around">
+                        <span class="text-lg">{{$meeting->meeting_date}}</span>
+                        <span class="text-lg">DEP</span>
+                    </div>
                 </div>
             </div>
         </div>

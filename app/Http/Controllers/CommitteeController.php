@@ -14,7 +14,7 @@ class CommitteeController extends Controller
      */
     public function index()
     {
-        $committee = DB::table('committees')->paginate(7);
+        $committee = DB::table('committees')->paginate(8);
         return view('committee.indexpage',['committees' => $committee]);
     }
 
@@ -99,5 +99,17 @@ class CommitteeController extends Controller
         });
 
         return back();
+    }
+    public function committeeStaff(Committee $committee)
+    {  
+        $data = Array();
+
+        foreach ($committee->roles as $role) {
+            foreach ($role->users as $user) {
+                $data2 = ["user" => $user, "roles" => $user->roles];
+                array_push($data,$data2);
+            }
+        }
+        echo json_encode($data);
     }
 }

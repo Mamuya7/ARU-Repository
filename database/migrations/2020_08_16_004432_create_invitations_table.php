@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDirectoratesTable extends Migration
+class CreateInvitationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,16 @@ class CreateDirectoratesTable extends Migration
      */
     public function up()
     {
-        Schema::create('directorates', function (Blueprint $table) {
+        Schema::create('invitations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('directorate_name');
-            $table->string('directorate_code');
-            $table->bigInteger('directorate_head')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('role_id')->unsigned();
+            $table->bigInteger('invitationable_id')->unsigned();
+            $table->string('invitationable_type');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-            $table->foreign('directorate_head')->references('id')->on('roles');
+            $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -31,6 +33,6 @@ class CreateDirectoratesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('directorates');
+        Schema::dropIfExists('invitations');
     }
 }

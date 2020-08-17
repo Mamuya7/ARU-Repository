@@ -91,7 +91,7 @@
         <li class="slide">
             <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fe fe-map"></i><span class="side-menu__label">Meeting</span><i class="angle fa fa-angle-right"></i></a>
             <ul class="slide-menu">
-                @if(Auth::User()->hasAnyRole(['system administrator']))
+                @if(Auth::User()->hasAnyRoleType(['system administrator']))
                 <li>
                     <a href="{{ url('create_meeting')}}" class="slide-item">Create Meeting</a>
                 </li>

@@ -51,51 +51,13 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Committee','committee_user','user_id','committee_id');
     }
 
-    public function hasRole($role)
+    public function department()
     {
-        foreach ($this->roles as $value) {
-            if($value->role_name === $role){
-                return true;
-            }
-        }
-        return false;
+        return $this->belongsTo('App\Department');
     }
-
-    public function userHasRole( $role)
+    public function attendences()
     {
-        foreach ($this->roles as $value) {
-            if($value->role_name === $role){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function hasBothRoles($role1,$role2)
-    {
-        $r1 = false; $r2 = false;
-        foreach ($this->roles as $value) {
-            if($value->role_name === $role1){
-                $r1 = true;
-            }
-            if($value->role_name === $role2){
-                $r2 = true;
-            }
-        }
-
-        return ($r1 && $r2);
-    }
-
-    public function hasAnyRole($roles)
-    {
-        foreach ($this->roles as $value) {
-            foreach ($roles as $role) {
-                if($value->role_name === $role){
-                    return true;
-                }
-            }
-        }
-        return false;
+        return $this->hasMany('App\Attendence');
     }
 
     public function school()
@@ -114,8 +76,50 @@ class User extends Authenticatable
         return Directorate::find($directorate_id);
     }
 
-    public function department()
+    public function hasRoleType($role)
     {
-        return $this->belongsTo('App\Department');
+        foreach ($this->roles as $value) {
+            if($value->role_type === $role){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasRoleCode( $role)
+    {
+        foreach ($this->roles as $value) {
+            if($value->role_code === $role){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasBothRoleTypes($role1,$role2)
+    {
+        $r1 = false; $r2 = false;
+        foreach ($this->roles as $value) {
+            if($value->role_type === $role1){
+                $r1 = true;
+            }
+            if($value->role_name === $role2){
+                $r2 = true;
+            }
+        }
+
+        return ($r1 && $r2);
+    }
+
+    public function hasAnyRoleType($roles)
+    {
+        foreach ($this->roles as $value) {
+            foreach ($roles as $role) {
+                if($value->role_type === $role){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

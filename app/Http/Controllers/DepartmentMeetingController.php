@@ -6,6 +6,7 @@ use Auth;
 use DB;
 Use App\User;
 use App\School;
+use App\Meeting;
 use App\DepartmentMeeting;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,26 +20,30 @@ class DepartmentMeetingController extends Controller
      */
     public function index()
     {
-        if(Auth::User()->department->belongsToSchool()){
-            $sch_id = School::whereHas('departments',function(Builder $query){
-                    $query->where('id','=',Auth::User()->department_id);
-                })->first()->id;
-
-            $meetings = DB::table('meetings')->join('school_meetings','meetings.id','=','school_meetings.meeting_id')
-                    ->where('school_meetings.school_id','=',$sch_id)
-                    ->orderBy('meetings.meeting_date','desc')->get();
-        }elseif (Auth::User()->department->belongsToDirectorate()) {
-            $dir_id = Directorate::whereHas('departments',function(Builder $query){
-                    $query->where('id','=',Auth::User()->department_id);
-                })->first()->id;
-
-            $meetings = DB::table('meetings')->join('directorate_meetings','meetings.id','=','directorate_meetings.meeting_id')
-                    ->where('directorate_meetings.school_id','=',$dir_id)
-                    ->orderBy('meetings.meeting_date','desc')->get();
+        $meetings = Array(); $department_meetings = Array();
+        if(Auth::User()->hasRoleType('head')){
+            if(Auth::User()->department->belongsToSchool()){
+                $sch_id = School::whereHas('departments',function(Builder $query){
+                        $query->where('id','=',Auth::User()->department_id);
+                    })->first()->id;
+    
+                $meetings = DB::table('meetings')->join('school_meetings','meetings.id','=','school_meetings.meeting_id')
+                        ->where('school_meetings.school_id','=',$sch_id)
+                        ->orderBy('meetings.meeting_date','desc')->get();
+            }elseif (Auth::User()->department->belongsToDirectorate()) {
+                $dir_id = Directorate::whereHas('departments',function(Builder $query){
+                        $query->where('id','=',Auth::User()->department_id);
+                    })->first()->id;
+    
+                $meetings = DB::table('meetings')->join('directorate_meetings','meetings.id','=','directorate_meetings.meeting_id')
+                        ->where('directorate_meetings.school_id','=',$dir_id)
+                        ->orderBy('meetings.meeting_date','desc')->get();
+            }
         }
         $department_meetings = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
                         ->where('department_meeting.department_id','=',Auth::User()->department_id)
-                        ->orderBy('meetings.meeting_date','desc')->get();         
+                        ->orderBy('meetings.meeting_date','desc')->get();
+
         return view('meeting.staff-view',["school_directorate" => $meetings, "department" => $department_meetings]);
     }
 
@@ -50,13 +55,13 @@ class DepartmentMeetingController extends Controller
     public function create()
     {
 
-        if(Auth::User()->hasRole('head')){
+        if(Auth::User()->hasRoleType('head')){
             $result = ["heads" => array(), "staffs" => array(), "display" => "", "title" => "Create Department Meeting"];
 
             foreach(Auth::User()->department->users as $user){
                 array_push($result['staffs'],$user);
             }
-            if(Auth::User()->hasBothRoles('head','dean')){
+            if(Auth::User()->hasBothRoleTypes('head','dean')){
                 $result['display'] = "d-none";
             }
 
@@ -104,16 +109,40 @@ class DepartmentMeetingController extends Controller
     public function show(DepartmentMeeting $departmentMeeting)
     {
         $users = Auth::User()->department->users;
-        $chair = new User;
+        $chair = new User; $secretary = new User;
+        $attendence = $departmentMeeting->attendences;
+        $members = Array();
+
         foreach ($users as $user) {
-            if($user->hasRole('head')){
+            if($user->hasRoleType('head')){
                 $chair = $user;
             }
+
+            if($user->id === $departmentMeeting->secretary_id){
+                $secretary = $user;
+            }
+
+            $data = array("profile" => $user, "attendence" => null);
+
+            if(sizeof($attendence) > 0){
+                foreach ($attendence as $value) {
+                    if($value->user_id == $user->id){
+                        $data["attendence"] = $value->status;
+                        break;
+                    }
+                }
+            }
+
+            array_push($members,$data);
         }
 
         return view('meeting.show',["specificMeeting" => $departmentMeeting, 
         "documents" => $departmentMeeting->documents,
-        "chair" => $chair, "secr" => null, "members" => $users]);
+        "chair" => $chair, "secr" => $secretary, "members" => $members, "resources" => [
+            "urls" => ["change_secretary" => "change_department_meeting_secretary/",
+            "invitation_link" => url('store_department_meeting_invitations/'.$departmentMeeting->id)
+            ]
+        ]]);
     }
 
     /**
@@ -134,9 +163,19 @@ class DepartmentMeetingController extends Controller
      * @param  \App\DepartmentMeeting  $departmentMeeting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DepartmentMeeting $departmentMeeting)
+    public function invite(Request $request, DepartmentMeeting $departmentMeeting)
     {
-        //
+        $data = $request->input('data');
+        DB::transaction(function() use($data,$departmentMeeting){
+            foreach ($data as $value) {
+                $departmentMeeting->invitations()->updateOrCreate(
+                    ["user_id" => $value['user_id']],
+                    ["user_id" => $value['user_id'], "role_id" => $value['role_id']]
+                );
+            }
+        });
+
+        echo json_encode($departmentMeeting);
     }
 
     /**
@@ -148,5 +187,12 @@ class DepartmentMeetingController extends Controller
     public function destroy(DepartmentMeeting $departmentMeeting)
     {
         //
+    }
+
+    public function changeSecretary(Request $request, DepartmentMeeting $departmentMeeting)
+    {
+        $secretary_id = $request->input('secretary');
+        $departmentMeeting->update(["secretary_id" => $secretary_id]);
+        return back()->with("response","Secretary Updated Successfully");
     }
 }
