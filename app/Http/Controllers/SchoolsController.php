@@ -117,4 +117,9 @@ class SchoolsController extends Controller
       
         return back();
     }
+    public function fetch()
+    {
+        $data = School::select('id','school_name as name','school_code as code')->get();
+        echo json_encode($data);
+    }
 }

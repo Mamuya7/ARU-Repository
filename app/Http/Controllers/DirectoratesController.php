@@ -63,6 +63,12 @@ class DirectoratesController extends Controller
         //
     }
 
+    public function fetch()
+    {
+        $data = Directorate::select('id','directorate_name as name','directorate_code as code')->get();
+        echo json_encode($data);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

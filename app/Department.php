@@ -31,7 +31,7 @@ class Department extends Model
     public function meetings()
     {
         return $this->belongsToMany('App\Meeting','department_meeting','department_id','meeting_id')
-                    ->withPivot('department_id','meeting_id','secretary_id');
+                    ->withPivot('id as pivot_id','department_id','meeting_id');
     }
 
     //logical functions

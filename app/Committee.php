@@ -24,7 +24,8 @@ class Committee extends Model
 
     public function meeting()
     {
-        return $this->belongsToMany('App\Meeting','committee_meeting','committee_id','meeting_id');
+        return $this->belongsToMany('App\Meeting','committee_meeting','committee_id','meeting_id')
+                    ->withPivot('id as pivot_id','committee_id','meeting_id');
     }
 
     public function users()

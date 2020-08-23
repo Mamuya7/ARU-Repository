@@ -26,12 +26,12 @@ class CommitteeRoleController extends Controller
     public function create()
     {
         
-        $roles = DB::table('roles')->paginate(8);
+        $roles = DB::table('roles')->get();
 
-        $committee = DB::table('committees')->paginate(8);
+        $committee = DB::table('committees')->paginate(9);
 
 
-        return view('committee/assignCommittee',['roles' => $roles,'committee'=>$committee]);
+        return view('committee/assignCommittee',['roles' => $roles,'committees'=>$committee]);
     }
 
     /**

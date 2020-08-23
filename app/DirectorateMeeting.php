@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class DirectorateMeeting extends Model
 {
+    public $table = "directorate_meetings";
+    
     protected $fillable = ["meeting_id","directorate_id"];
     
     public function meeting()

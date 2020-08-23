@@ -46,11 +46,6 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
-    public function committees()
-    {
-        return $this->belongsToMany('App\Committee','committee_user','user_id','committee_id');
-    }
-
     public function department()
     {
         return $this->belongsTo('App\Department');
@@ -121,5 +116,28 @@ class User extends Authenticatable
             }
         }
         return false;
+    }
+
+    public function isCommitteeMember()
+    {
+        foreach ($this->roles as $role) {
+            if($role->committees->count() > 0){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getCommittees()
+    {
+        $committees = collect();
+        foreach ($this->roles as $role) {
+            // $committees->union($role->committees());
+            foreach ($role->committees as $committee) {
+                $committees->push($committee);
+            }
+        }
+        return $committees->unique();
     }
 }
