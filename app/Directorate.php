@@ -16,7 +16,8 @@ class Directorate extends Model
     }
     public function meetings()
     {
-        return $this->belongsToMany('App\Meeting','directorate_meeting','directorate_id','meeting_id');
+        return $this->belongsToMany('App\Meeting','directorate_meetings','directorate_id','meeting_id')
+                    ->withPivot('id as pivot_id','directorate_id','meeting_id');
     }
     public function role()
     {

@@ -10,7 +10,7 @@
                     <img src="{{ asset('ansta/img/circle.svg')}}" class="card-img-absolute" alt="circle-image">
                     <div class="media d-flex">
                         <div class="media-body text-left">
-                            <h4 class="text-white">Your Meetngs</h4>
+                            <h4 class="text-white">All Meetngs</h4>
                             <h2 class="text-white mb-0">{{$all_meetings}}</h2>
                         </div>
                         <div class="align-self-center">

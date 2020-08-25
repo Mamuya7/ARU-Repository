@@ -80,6 +80,7 @@ Route::get('create_school_meeting','SchoolMeetingController@create')->name('crea
 Route::get('show_school_meeting/{schoolMeeting}','SchoolMeetingController@show')->name('showSchoolMeeting');
 Route::get('store_school_meeting','SchoolMeetingController@store')->name('storeSchoolMeeting');
 Route::post('store_school_meeting_invitations/{schoolMeeting}','SchoolMeetingController@invite')->name('storeSchoolMeetingInvitation');
+Route::post('search_school_meetings','SchoolMeetingController@search')->name('searchSchoolMeetings');
 
 // DirectorateMeeting routes
 Route::get('view_directorate_meeting','DirectorateMeetingController@index')->name('viewDirectorateMeetings');
@@ -87,6 +88,7 @@ Route::get('create_directorate_meeting','DirectorateMeetingController@create')->
 Route::get('show_directorate_meeting/{directorateMeeting}','DirectorateMeetingController@show')->name('showDirectorateMeeting');
 Route::get('store_directorate_meeting','DirectorateMeetingController@store')->name('storeDirectorateMeeting');
 Route::get('store_directorate_meeting_invitations/{directorateMeeting}','DirectorateMeetingController@invite')->name('storeDirectorateMeetingInvitation');
+Route::post('search_directorate_meetings','DirectorateMeetingController@search')->name('searchDirectorateMeetings');
 
 // DepartmentMeeting routes
 Route::get('view_department_meeting','DepartmentMeetingController@index')->name('viewDepartmentMeetings');
@@ -95,6 +97,7 @@ Route::get('show_department_meeting/{departmentMeeting}','DepartmentMeetingContr
 Route::get('store_department_meeting','DepartmentMeetingController@store')->name('storeDepartmentMeeting');
 Route::post('change_department_meeting_secretary/{departmentMeeting}','DepartmentMeetingController@changeSecretary');
 Route::get('store_department_meeting_invitations/{departmentMeeting}','DepartmentMeetingController@invite')->name('storeDepartmentMeetingInvitation');
+Route::post('search_department_meetings','DepartmentMeetingController@search')->name('searchDepartmentMeetings');
 
 // Documents routes
 Route::post('store_meeting_documents/{meeting}','DocumentsController@store')->name('storeMeetingDocuments');
@@ -107,6 +110,8 @@ Route::delete('deletedepartment/{departments}','DepartmentsController@destroy');
 Route::post('editDepartment/{departments}','DepartmentsController@edit');
 Route::post('showdirectoryschools','DepartmentsController@displaySChool')->name('showdirectoryschools');
 Route::post('fetchdepartments','DepartmentsController@fetch');
+Route::post('fetch_academic_departments','DepartmentsController@academicDepartments');
+Route::post('fetch_administrative_departments','DepartmentsController@administrativeDepartments');
 Route::post('department_staff/{departments}','DepartmentsController@departmentStaff');
 
 //schools
@@ -116,6 +121,7 @@ Route::post('storeschools', 'SchoolsController@store');
 Route::delete('deleteschool/{schools}','SchoolsController@destroy');
 Route::post('editSchool/{schools}','SchoolsController@edit');
 Route::post('updateSchool/{schools}', 'SchoolsController@update');
+Route::post('fetch_schools', 'SchoolsController@fetch');
 
 //Committee Routes
 
@@ -125,6 +131,7 @@ Route::post('storesCommittee', 'CommitteeController@store');
 Route::post('editCommittee/{committee}','CommitteeController@edit');
 Route::post('updateCommittee/{committee}', 'CommitteeController@update');
 Route::delete('deleteCommitee/{committee}','CommitteeController@destroy');
+Route::post('fetch_committees', 'CommitteeController@fetch');
 Route::get('assignCommittee','CommitteeController@display');
 Route::post('committee_staff/{committee}','CommitteesController@committeeStaff');
 
@@ -156,6 +163,7 @@ Route::get('displayDirectorates','DirectoratesController@index')->name('displayD
 Route::delete('deletedirectorate/{directorates}','DirectoratesController@destroy');
 Route::post('editDirectorate/{directorates}','DirectoratesController@edit');
 Route::post('updateDirectorate/{directorates}', 'DirectoratesController@update');
+Route::post('fetch_directorates', 'DirectoratesController@fetch');
 Route::post('directorate_staff/{directorate}','DirectoratesController@directorateStaff');
 
 

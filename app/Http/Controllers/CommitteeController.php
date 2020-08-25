@@ -100,6 +100,11 @@ class CommitteeController extends Controller
 
         return back();
     }
+    public function fetch()
+    {  
+        $data = Committee::select('id','committee_name as name','committee_code as code')->get();
+        echo json_encode($data);
+    }
     public function committeeStaff(Committee $committee)
     {  
         $data = Array();

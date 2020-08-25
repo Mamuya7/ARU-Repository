@@ -155,6 +155,20 @@ class DepartmentsController extends Controller
         }
         echo json_encode($data);
     }
+    public function academicDepartments()
+    {  
+        $data = Department::whereHasMorph('departmentable','App\School')
+                ->select('id','department_name as name','department_code as code')->get();
+
+        echo json_encode($data);
+    }
+    public function administrativeDepartments()
+    {  
+        $data = Department::whereHasMorph('departmentable','App\Directorate')
+                ->select('id','department_name as name','department_code as code')->get();
+
+        echo json_encode($data);
+    }
 
     public function displaySChool(){
         $school = School::all();

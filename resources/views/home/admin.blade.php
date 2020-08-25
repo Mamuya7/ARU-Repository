@@ -11,7 +11,7 @@
                     <div class="media d-flex">
                         <div class="media-body text-left">
                             <h4 class="text-white">Registered staff</h4>
-                            <h2 class="text-white mb-0">488</h2>
+                            <h2 class="text-white mb-0">{{$academic_staff + $admin_staff}}</h2>
                         </div>
                         <div class="align-self-center">
                             <!-- <i class="fe fe-shopping-cart text-white font-large-2 float-right"></i> -->
@@ -29,7 +29,7 @@
                     <div class="media d-flex">
                         <div class="media-body text-left">
                             <h4 class="text-white">Academic Staff</h4>
-                            <h2 class="text-white mb-0">253</h2>
+                            <h2 class="text-white mb-0">{{$academic_staff}}</h2>
                         </div>
                         <div class="align-self-center">
                             <!-- <i class="fe fe-bar-chart text-white font-large-2 float-right"></i> -->
@@ -47,7 +47,7 @@
                     <div class="media d-flex">
                         <div class="media-body text-left">
                             <h4 class="text-white">Administration Staff</h4>
-                            <h2 class="text-white mb-0">234</h2>
+                            <h2 class="text-white mb-0">{{$admin_staff}}</h2>
                         </div>
                         <div class="align-self-center">
                             <!-- <i class="fe fe-mail success font-large-2 text-white float-right"></i> -->
@@ -64,7 +64,7 @@
                 <div class="card-body">
                     <div class="widget text-center text-white">
                         <small class="text-white-50">Departments</small>
-                        <h2 class="text-xxl text-white">22</h2>
+                        <h2 class="text-xxl text-white">{{$departments}}</h2>
                         <!-- <p class="mb-0"><span class="text-white"><i class="fas fa-caret-up text-white ml-1"></i> 4%</span>  last month</p> -->
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                 <div class="card-body">
                     <div class="widget text-center">
                         <small class="text-white-50">Committees</small>
-                        <h2 class="text-xxl text-white">15</h2>
+                        <h2 class="text-xxl text-white">{{$committees}}</h2>
                         <!-- <p class="mb-0"><span class="text-white"><i class="fas fa-caret-down text-white ml-1"></i> 5%</span> last month</p> -->
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                 <div class="card-body">
                     <div class="widget text-center">
                         <small class="text-white-50">Schools</small>
-                        <h2 class="text-xxl text-white">4</h2>
+                        <h2 class="text-xxl text-white">{{$schools}}</h2>
                         <!-- <p class="mb-0"><span class="text-white"><i class="fas fa-caret-up text-white ml-1"></i> 6%</span> last month</p> -->
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                 <div class="card-body">
                     <div class="widget text-center">
                         <small class="text-white-50">Directorates</small>
-                        <h2 class="text-xxl text-white">851</h2>
+                        <h2 class="text-xxl text-white">{{$directorates}}</h2>
                         <!-- <p class="mb-0"><span class="text-white"><i class="fas fa-caret-down text-white ml-1"></i> 8%</span> last month</p> -->
                     </div>
                 </div>

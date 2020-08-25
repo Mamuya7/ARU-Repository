@@ -71,9 +71,9 @@
                                 </div>
                                 <div class="col-lg-8">
                                     <div>
-                                        <textarea id="description" name="description" cols="30" rows="3" class="form-control text-left text-lg" disabled>
-                                            {{$specificMeeting->meeting->meeting_description}}
-                                        </textarea>
+                                        <textarea id="description" name="description" cols="30" rows="3" class="form-control text-left text-lg" disabled>{{
+                                            $specificMeeting->meeting->meeting_description
+                                        }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -446,8 +446,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row card">
-                    <div class="card-header">
+                <div class="row card p-0">
+                    <div class="card-header m-0">
                         <div class="row border-bottom p-1">
                             <div class="col-lg-2">
                                 <div class="custom-switches-stacked">
@@ -469,7 +469,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body" id="invitation-list">
+                    <div style="height: 350px; overflow:auto;" class="card-body p-0 m-0" id="invitation-list">
                     </div>
                 </div>
             </div>

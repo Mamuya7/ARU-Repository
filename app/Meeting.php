@@ -26,19 +26,22 @@ class Meeting extends Model
     public function departments()
     {
         return $this->belongsToMany('App\Department','department_meeting','meeting_id','department_id')
-                    ->withPivot('meeting_id','department_id','secretary_id');
+                    ->withPivot('id as pivot_id','department_id','meeting_id');
     }
-    public function school()
+    public function schools()
     {
-        return $this->belongsToMany('App\School','school_meetings','meeting_id','school_id');
+        return $this->belongsToMany('App\School','school_meetings','meeting_id','school_id')
+                    ->withPivot('id as pivot_id','school_id','meeting_id');
     }
     public function directorates()
     {
-        return $this->belongsToMany('App\Directorate','directorate_meeting','meeting_id','directorate_id');
+        return $this->belongsToMany('App\Directorate','directorate_meetings','meeting_id','directorate_id')
+                    ->withPivot('id as pivot_id','directorate_id','meeting_id');
     }
-    public function committee()
+    public function committees()
     {
-        return $this->belongsToMany('App\Committee','committee_meeting','meeting_id','committee_id');
+        return $this->belongsToMany('App\Committee','committee_meeting','meeting_id','committee_id')
+                    ->withPivot('id as pivot_id','committee_id','meeting_id');;
     }
     public function departmentMeetings()
     {

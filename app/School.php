@@ -27,7 +27,7 @@ class School extends Model
     public function meetings()
     {
         return $this->belongsToMany('App\Meeting','school_meetings','school_id','meeting_id')
-                        ->withPivot('id','school_id','meeting_id');
+                    ->withPivot('id as pivot_id','school_id','meeting_id');
     }
     public function schoolHeads()
     {

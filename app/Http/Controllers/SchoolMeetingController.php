@@ -28,20 +28,42 @@ class SchoolMeetingController extends Controller
      */
     public function index()
     {
+        $resources = ["meetings" => Array(),
+        "urls" => [
+            "search_path" => url('search_school_meetings')
+        ]];
+
         $sch_id = School::whereHas('departments',function(Builder $query){
                 $query->where('id','=',Auth::User()->department_id);
             })->first()->id;
 
-        $department_meetings = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
-                            ->select('meetings.*','department_meeting.id as child_id','department_meeting.*')
+        $department = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
+                            ->select('meetings.*','department_meeting.*','department_meeting.id as child_id')
                             ->where('department_meeting.department_id','=',Auth::User()->department_id)
-                            ->orderBy('meetings.meeting_date','desc')->get();
-        $school_meetings = DB::table('meetings')->join('school_meetings','meetings.id','=','school_meetings.meeting_id')
-                            ->select('meetings.*','school_meetings.id as child_id','school_meetings.*')
+                            ->orderBy('meetings.meeting_date','desc');
+        $school = DB::table('meetings')->join('school_meetings','meetings.id','=','school_meetings.meeting_id')
+                            ->select('meetings.*','school_meetings.*','school_meetings.id as child_id')
                             ->where('school_meetings.school_id','=',$sch_id)
-                            ->orderBy('meetings.meeting_date','desc')->get();
+                            ->orderBy('meetings.meeting_date','desc');
+        $com = false;
+        if(Auth::User()->isCommitteeMember()){
+            $committees = Auth::User()->getCommittees();
+            
+            $committee = DB::table('meetings')->join('committee_meeting','meetings.id','=','committee_meeting.meeting_id')
+                        ->select('meetings.*','committee_meeting.id','committee_meeting.meeting_id','committee_meeting.committee_id',
+                        'committee_meeting.secretary_id','committee_meeting.meeting_time','committee_meeting.created_at','committee_meeting.updated_at')
+                        ->whereIn('committee_meeting.committee_id',$committees->pluck("id"))
+                        ->orderBy('meetings.meeting_date','desc');
+            $com = true;
+        }
+        
+        if(!$com){
+            $resources["meetings"] = $school->union($department)->get();
+        }else{
+            $resources["meetings"] = $school->union($department)->union($committee)->get();
+        }
                             
-        return view('meeting.staff-view',["school_directorate" => $school_meetings, "department" => $department_meetings]);
+        return view('meeting.staff-view',["resources" => $resources]);
     }
 
     /**
@@ -145,14 +167,118 @@ class SchoolMeetingController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for searching the specified resource.
      *
-     * @param  \App\SchoolMeeting  $schoolMeeting
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function edit(SchoolMeeting $schoolMeeting)
+    public function search(Request $request)
     {
-        //
+        $resources = ["meetings" => Array(),
+        "urls" => [
+            "search_path" => url('search_school_meetings')
+        ]];
+        
+        $text = '%' . $request->input('search') . '%';
+        $unit = $request->input('unit-filter');
+        $time = $request->input('time-filter');
+        $dep = false; $sch = false; $com = false; $count = 0;
+
+        if(($unit === "all") || ($unit === "school")){
+            $sch_id = School::whereHas('departments',function(Builder $query){
+                    $query->where('id','=',Auth::User()->department_id);
+                })->first()->id;
+
+            $school = DB::table('meetings')->join('school_meetings','meetings.id','=','school_meetings.meeting_id')
+                    ->where('school_meetings.school_id','=',$sch_id);
+
+            if($time === "past"){
+                $school = $school->whereDate("meetings.meeting_date","<",date('Y-m-d'));
+            }elseif($time === "coming"){
+                $school = $school->whereDate("meetings.meeting_date",">=",date('Y-m-d'));
+            }elseif($time === "today"){
+                $school = $school->whereDate("meetings.meeting_date","=",date('Y-m-d'));
+            }
+
+            $school = $school->where(function($query) use($text){
+                $query->where('meetings.meeting_title','like',$text)
+                        ->orWhere('meetings.meeting_description','like',$text);
+            })->orderBy('meetings.meeting_date','desc');
+
+            $count += $school->count();
+            $sch = true;
+        }
+        if(($unit === "department") || ($unit === "all")){
+            $department = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
+                        ->where('department_meeting.department_id','=',Auth::User()->department_id);
+            
+            if($time === "past"){
+                $department = $department->whereDate("meetings.meeting_date","<",date('Y-m-d'));
+            }elseif($time === "coming"){
+                $department = $department->whereDate("meetings.meeting_date",">=",date('Y-m-d'));
+            }elseif($time === "today"){
+                $department = $department->whereDate("meetings.meeting_date","=",date('Y-m-d'));
+            }
+
+            $department = $department->where(function($query) use($text){
+                $query->where('meetings.meeting_title','like',$text)
+                        ->orWhere('meetings.meeting_description','like',$text);
+            })->orderBy('meetings.meeting_date','desc');
+
+            $count += $department->count();
+            $dep = true;
+        }
+        if(($unit === "committee") || ($unit === "all")){
+            $committees = Auth::User()->getCommittees();
+            
+            $committee = DB::table('meetings')->join('committee_meeting','meetings.id','=','committee_meeting.meeting_id')
+                        ->select('meetings.*','committee_meeting.id','committee_meeting.meeting_id','committee_meeting.committee_id',
+                        'committee_meeting.secretary_id','committee_meeting.meeting_time','committee_meeting.created_at','committee_meeting.updated_at')
+                        ->whereIn('committee_meeting.committee_id',$committees->pluck("id"))
+                        ->orderBy('meetings.meeting_date','desc');
+            
+            if($time === "past"){
+                $committee = $committee->whereDate("meetings.meeting_date","<",date('Y-m-d'));
+            }elseif($time === "coming"){
+                $committee = $committee->whereDate("meetings.meeting_date",">=",date('Y-m-d'));
+            }elseif($time === "today"){
+                $committee = $committee->whereDate("meetings.meeting_date","=",date('Y-m-d'));
+            }
+
+            $committee = $committee->where(function($query) use($text){
+                $query->where('meetings.meeting_title','like',$text)
+                        ->orWhere('meetings.meeting_description','like',$text);
+            })->orderBy('meetings.meeting_date','desc');
+
+            $count += $committee->count();
+            $com = true;
+        }
+
+        if($dep && $sch && $com){
+            $resources["meetings"] = $department->union($school)->union($committee)->get();
+        }elseif($dep && $sch && !$com){
+            $resources["meetings"] = $department->union($school)->get();
+        }elseif($dep && !$sch && $com){
+            $resources["meetings"] = $department->union($committee)->get();
+        }elseif(!$dep && $sch && $com){
+            $resources["meetings"] = $school->union($committee)->get();
+        }elseif($dep && !$sch && !$com){
+            $resources["meetings"] = $department->get();
+        }elseif(!$dep && $sch && !$com){
+            $resources["meetings"] = $school->get();
+        }elseif(!$dep && !$sch && $com){
+            $resources["meetings"] = $committee->get();
+        }
+
+        if($count === 0){
+            session(["noresult" => "No Results Found!!"]);
+        }else{
+            $request->session()->forget('noresult');
+        }
+        
+        $request->flash();
+
+        return view('meeting.staff-view',["resources" => $resources]);
     }
 
     /**

@@ -93,5 +93,7 @@
 		</div>
 	</div>
     @include('layouts.basics.admin.footer')
+
+	@yield('scripts')
 </body>
 </html>

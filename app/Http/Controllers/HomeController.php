@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use App\User;
 use App\School;
+use App\Department;
+use App\Committee;
 use App\Directorate;
 
 class HomeController extends Controller
@@ -27,7 +30,14 @@ class HomeController extends Controller
     public function index()
     {
         if(Auth::User()->hasRoleType('system administrator')){
-            return view('home.admin');
+            return view('home.admin',[
+                "admin_staff" => $this->administrativeStaffCount(),
+                "academic_staff" => $this->academicStaffCount(),
+                "departments" => $this->departmentCount(),
+                "committees" => $this->committeeCount(),
+                "schools" => $this->schoolCount(),
+                "directorates" => $this->directorateCount()
+            ]);
         }else{
             $past = $this->pastDepartmentMeetingsCount();
             $past += $this->pastSchoolMeetingsCount();
@@ -53,7 +63,34 @@ class HomeController extends Controller
                         "missed_meetings" => $missed
                     ]);
     }
-
+    public function directorateCount()
+    {
+        return Directorate::count();
+    }
+    public function schoolCount()
+    {
+        return School::count();
+    }
+    public function committeeCount()
+    {
+        return Committee::count();
+    }
+    public function departmentCount()
+    {
+        return Department::count();
+    }
+    public function administrativeStaffCount()
+    {
+        return User::join('role_user','users.id','=','role_user.user_id')
+                ->join('roles','role_user.role_id','=','roles.id')
+                ->where('role_name','administrative staff')->count();
+    }
+    public function academicStaffCount()
+    {
+        return User::join('role_user','users.id','=','role_user.user_id')
+                ->join('roles','role_user.role_id','=','roles.id')
+                ->where('role_name','academic staff')->count();
+    }
     public function pastDepartmentMeetingsCount()
     {
         return Auth::User()->department->meetings()->whereDate('meeting_date','<',date('Y-m-d'))->count();

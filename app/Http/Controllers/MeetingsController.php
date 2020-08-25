@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Auth;
+use DateTime;
 use App\User;
 use App\Roles;
 use App\Meeting;
@@ -77,6 +78,18 @@ class MeetingsController extends Controller
      */
     public function store(Request $request)
     {
+        $date = new DateTime($request->input('date'));
+        $today = new DateTime(date('Y-m-d'));
+
+        if($date < $today){
+            session([
+                "output" => "Incorrect Date!!",
+                "color" => "bg-danger"
+            ]);
+            $request->flash();
+            return back();
+        }
+
         DB::transaction(function() use($request){
             $type = $request->input('meeting_type');
             $meeting = new Meeting;
@@ -88,20 +101,22 @@ class MeetingsController extends Controller
 
             $meeting->save();
 
-            if($type === "accademic"){
-                $this->create_school_department_meetings($meeting);
-            }elseif($type === "administrative"){
-                $this->create_directorate_department_meetings($meeting);
+            if(($type === "accademic") || ($type === "administrative")){
+                $this->create_department_meetings($meeting, $request);
             }elseif($type === "school"){
-                $this->create_school_meetings($meeting);
+                $this->create_school_meetings($meeting, $request);
             }elseif ($type === "directorate") {
-                $this->create_directorate_meetings($meeting);
+                $this->create_directorate_meetings($meeting, $request);
             }elseif($type === "committee"){
-                $this->create_committee_meetings($meeting);
+                $this->create_committee_meetings($meeting, $request);
             }
         });
         
-        return back()->with('output','success');
+        session([
+            "output" => "Meeting created successfully!!",
+            "color" => "bg-success"
+        ]);
+        return back();
     }
 
     /**
@@ -133,6 +148,8 @@ class MeetingsController extends Controller
             }
             $directorateMeeting = $meeting->directorateMeetings()->where('directorate_id',$directorate->id)->first();
             return redirect()->route('showDirectorateMeeting',[$directorateMeeting]);
+        }elseif ($meeting->ofCommittee()) {
+            dd($meeting->committees);
         }
         $chair = $meeting->getChairman();
         $secr = $meeting->getSecretary();
@@ -284,57 +301,42 @@ class MeetingsController extends Controller
         echo json_encode($meeting);
     }
 
-    protected function create_school_department_meetings($meeting)
+    protected function create_department_meetings(Meeting $meeting, Request $request)
     {
-        $schools = School::all();
-        foreach ($schools as $school) {
-            foreach ($school->departments as $department) {
-                $departmentMeeting = DepartmentMeeting::create([
-                    "meeting_id" => $meeting->id,
-                    "department_id" => $department->id,
-                    "secretary_id" => null,
-                    "meeting_time" => null
-                ]);
-            }
+        $departments = $request->input('typeid');
+        $time = $request->input('time');
+
+        foreach ($departments as $department_id) {
+            $meeting->departments()->attach($department_id,["meeting_time" => $time]);
+        }
+    }
+    protected function create_school_meetings(Meeting $meeting, Request $request)
+    {
+        $schools = $request->input('typeid');
+        $time = $request->input('time');
+
+        foreach ($schools as $school_id) {
+            $meeting->schools()->attach($school_id,["meeting_time" => $time]);
+        }
+    }
+    protected function create_directorate_meetings(Meeting $meeting, Request $request)
+    {
+        $directorates = $request->input('typeid');
+        $time = $request->input('time');
+
+        foreach ($directorates as $directorate_id) {
+            $meeting->directorates()->attach($directorate_id,["meeting_time" => $time]);
         }
     }
 
-    protected function create_directorate_department_meetings($meeting)
+    protected function create_committee_meetings(Meeting $meeting, Request $request)
     {
-        $directorates = Directorate::all();
-        foreach ($directorates as $directorate) {
-            foreach ($directorate->departments as $department) {
-                $departmentMeeting = DepartmentMeeting::create([
-                    "meeting_id" => $meeting->id,
-                    "department_id" => $department->id,
-                    "secretary_id" => null,
-                    "meeting_time" => null
-                ]);
-            }
+        $committees = $request->input('typeid');
+        $time = $request->input('time');
+
+        foreach ($committees as $committee_id) {
+            $meeting->committees()->attach($committee_id,["meeting_time" => $time]);
         }
-    }
-    protected function create_school_meetings($meeting)
-    {
-        $schools = School::all();
-        foreach ($schools as $school) {
-            $schoolMeeting = SchoolMeeting::create([
-                "meeting_id" => $meeting->id,
-                "school_id" => $school->id,
-                "secretary_id" => null,
-                "meeting_time" => null
-            ]); 
-        }
-    }
-    protected function create_directorate_meetings($meeting)
-    {
-        return DB::table('directorate_meeting')->insertGetId(
-            array(
-                "meeting_id" => $meeting->id,
-                "directorate_id" => Auth::User()->department()->directorate[0]->id,
-                "secretary_id" => null,
-                "meeting_time" => null,
-            )
-        );
     }
 
     protected function create_document($docInfo){

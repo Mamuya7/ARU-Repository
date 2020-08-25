@@ -8,42 +8,43 @@
  
     <div class="col-md-7 col-lg-7">
         <div class="card shadow">
+            <div class="card-header">
+                <h3 class="card-title">Committees</h3>
+            </div>
             <div class="card-body">
-                <h4 class="card-title">AllCommittees</h4>
-
                 <div class="table-responsive">
                         <table class="table card-table text-nowrap">   
-                            @foreach($committee as $committees)
+                            @foreach($committees as $committee)
                                 <tr class="border-bottom">
-                                    <td><input type="radio" name="committee" value="{{$committees->id}}"></td>
-                                    <td style="margin-left:-20px;">{{ $committees->committee_name}}</td>
+                                    <td><input type="radio" name="committee" value="{{$committee->id}}"></td>
+                                    <td style="margin-left:-20px;">{{ $committee->committee_name}}</td>
                                 </tr>           
                              @endforeach
                         </table>
                 </div>
+            </div>
+            <div class="card-footer">
+                {{$committees->links()}}
             </div>
         </div>
     </div>
 
     <div class="col-md-5 col-lg-5">
         <div class="card  shadow">
+            <div class="card-header">
+                <h3 class="card-title">Roles</h3>
+            </div>
             <div class="table-responsive table-primary">
                 <table class="table card-table text-nowrap">
+                    @foreach($roles as $role)
                     <tr class="border-bottom">
-                        <th></th>
-                        <th>ROLES</th>
-                        <!-- <th>DEPARTMENT</th> -->
-                    </tr>
-                    @foreach($roles as $roles)
-                    <tr class="border-bottom">
-                        <td><input type="checkbox" name="role_id[]" value="{{ $roles->id }}"></td>
-                        <td class="text-left" >{{ $roles->role_name }}</td>
-                      
+                        <td><input type="checkbox" name="role_id[]" value="{{ $role->id }}"></td>
+                        <td class="text-left" >{{ $role->role_name }}</td>
                     </tr>
                     @endforeach
-                    
-            
                 </table>
+            </div>
+            <div class="card-footer">
             </div>
         </div>
     </div>
