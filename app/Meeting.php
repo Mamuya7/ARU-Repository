@@ -40,7 +40,7 @@ class Meeting extends Model
     }
     public function committees()
     {
-        return $this->belongsToMany('App\Committee','committee_meeting','meeting_id','committee_id')
+        return $this->belongsToMany('App\Committee','committee_meetings','meeting_id','committee_id')
                     ->withPivot('id as pivot_id','committee_id','meeting_id');;
     }
     public function departmentMeetings()

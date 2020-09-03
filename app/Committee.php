@@ -18,14 +18,20 @@ class Committee extends Model
     public function roles()
     {
         // return $this->hasMany('App\Roles');
-        return $this->belongsToMany('App\Roles','committee_role','committee_id','role_id');
+        return $this->belongsToMany('App\Roles','committee_role','committee_id','role_id')
+                    ->withPivot('id','committee_id','role_id','position');
     }
 
 
     public function meeting()
     {
-        return $this->belongsToMany('App\Meeting','committee_meeting','committee_id','meeting_id')
+        return $this->belongsToMany('App\Meeting','committee_meetings','committee_id','meeting_id')
                     ->withPivot('id as pivot_id','committee_id','meeting_id');
+    }
+
+    public function committeeMeetings()
+    {
+        return $this->hasMany('App\CommitteeMeeting');
     }
 
     public function users()
@@ -40,7 +46,7 @@ class Committee extends Model
         $roles = $this->roles;
         foreach ($users as $user) {
             foreach ($roles as $role) {
-                if($user->hasRoleType($role->role_name)){
+                if($user->hasRoleCode($role->role_code)){
                     array_push($committee_users,$user);
                     break;
                 }

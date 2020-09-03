@@ -17,7 +17,7 @@ class CreateCommitteeRoleTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('role_id')->unsigned();
             $table->bigInteger('committee_id')->unsigned();
-            $table->enum('position',['chairman','secretary','member']);
+            $table->enum('position',['chairman','secretary','member'])->default('member');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('role_id')->references('id')->on('roles');

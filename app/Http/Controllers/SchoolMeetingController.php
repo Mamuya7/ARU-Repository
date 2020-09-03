@@ -37,30 +37,48 @@ class SchoolMeetingController extends Controller
                 $query->where('id','=',Auth::User()->department_id);
             })->first()->id;
 
+        $data = [];
         $department = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
-                            ->select('meetings.*','department_meeting.*','department_meeting.id as child_id')
+                            ->select('meetings.*','department_meeting.id as child_id','department_meeting.department_id as entity_id')
                             ->where('department_meeting.department_id','=',Auth::User()->department_id)
                             ->orderBy('meetings.meeting_date','desc');
+
+        if($department->count() > 0){
+            $data["data"] = $department->get();
+            $data["url"] = url('show_department_meeting/');
+
+            array_push($resources["meetings"],$data);
+            $data = [];
+        }
+
         $school = DB::table('meetings')->join('school_meetings','meetings.id','=','school_meetings.meeting_id')
-                            ->select('meetings.*','school_meetings.*','school_meetings.id as child_id')
+                            ->select('meetings.*',"school_meetings.id as child_id","school_meetings.school_id as entity_id")
                             ->where('school_meetings.school_id','=',$sch_id)
                             ->orderBy('meetings.meeting_date','desc');
-        $com = false;
+                            
+        if($school->count() > 0){
+            $data["data"] = $school->get();
+            $data["url"] = url('show_school_meeting/');
+
+            array_push($resources["meetings"],$data);
+            $data = [];
+        }
+
         if(Auth::User()->isCommitteeMember()){
             $committees = Auth::User()->getCommittees();
             
-            $committee = DB::table('meetings')->join('committee_meeting','meetings.id','=','committee_meeting.meeting_id')
-                        ->select('meetings.*','committee_meeting.id','committee_meeting.meeting_id','committee_meeting.committee_id',
-                        'committee_meeting.secretary_id','committee_meeting.meeting_time','committee_meeting.created_at','committee_meeting.updated_at')
-                        ->whereIn('committee_meeting.committee_id',$committees->pluck("id"))
+            $committee = DB::table('meetings')->join('committee_meetings','meetings.id','=','committee_meetings.meeting_id')
+                        ->select('meetings.*','committee_meetings.id as child_id','committee_meetings.committee_id as entity_id')
+                        ->whereIn('committee_meetings.committee_id',$committees->pluck("id"))
                         ->orderBy('meetings.meeting_date','desc');
-            $com = true;
-        }
         
-        if(!$com){
-            $resources["meetings"] = $school->union($department)->get();
-        }else{
-            $resources["meetings"] = $school->union($department)->union($committee)->get();
+            if($committee->count() > 0){
+                $data["url"] = url('show_committee_meeting/');
+                $data["data"] = $committee->get();
+    
+                array_push($resources["meetings"],$data);
+                $data = [];
+            }
         }
                             
         return view('meeting.staff-view',["resources" => $resources]);
@@ -156,14 +174,21 @@ class SchoolMeetingController extends Controller
             }
         }
         
-        return view('meeting.show',["specificMeeting" => $schoolMeeting, 
-        "documents" => $schoolMeeting->documents,
-        "chair" => $chair, "secr" => $secr, "members" => $members,
-        "resources" => [
-            "urls" => ["change_secretary" => "change_school_meeting_secretary",
-            "invitation_link" => url('store_school_meeting_invitations/'.$schoolMeeting->id)
+        return view('meeting.show',[ 
+            "resources" => [
+                "chairman" => $chair,  
+                "secretary" => $secr,
+                "members" => $members,
+                "documents" => $schoolMeeting->documents,
+                "specificMeeting" => $schoolMeeting,
+                "urls" => [
+                    "change_secretary" => "change_school_meeting_secretary",
+                    "set_attendence" => json_encode(url("set_school_meeting_attendence/".$schoolMeeting->id)),
+                    "update_attendence" => json_encode(url("update_school_meeting_attendence/".$schoolMeeting->id)),
+                    "invitation_link" => url('store_school_meeting_invitations/'.$schoolMeeting->id)
+                ]
             ]
-        ]]);
+        ]);
     }
 
     /**
@@ -182,7 +207,7 @@ class SchoolMeetingController extends Controller
         $text = '%' . $request->input('search') . '%';
         $unit = $request->input('unit-filter');
         $time = $request->input('time-filter');
-        $dep = false; $sch = false; $com = false; $count = 0;
+        $count = 0;
 
         if(($unit === "all") || ($unit === "school")){
             $sch_id = School::whereHas('departments',function(Builder $query){
@@ -190,6 +215,7 @@ class SchoolMeetingController extends Controller
                 })->first()->id;
 
             $school = DB::table('meetings')->join('school_meetings','meetings.id','=','school_meetings.meeting_id')
+                    ->select('meetings.*',"school_meetings.id as child_id","school_meetings.school_id as entity_id")
                     ->where('school_meetings.school_id','=',$sch_id);
 
             if($time === "past"){
@@ -204,12 +230,20 @@ class SchoolMeetingController extends Controller
                 $query->where('meetings.meeting_title','like',$text)
                         ->orWhere('meetings.meeting_description','like',$text);
             })->orderBy('meetings.meeting_date','desc');
-
-            $count += $school->count();
-            $sch = true;
+                            
+            if($school->count() > 0){
+                $count += $school->count();
+                $data["data"] = $school->get();
+                $data["url"] = url('show_school_meeting/');
+    
+                array_push($resources["meetings"],$data);
+                $data = [];
+            }
         }
+
         if(($unit === "department") || ($unit === "all")){
             $department = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
+                        ->select('meetings.*','department_meeting.id as child_id','department_meeting.department_id as entity_id')
                         ->where('department_meeting.department_id','=',Auth::User()->department_id);
             
             if($time === "past"){
@@ -225,16 +259,22 @@ class SchoolMeetingController extends Controller
                         ->orWhere('meetings.meeting_description','like',$text);
             })->orderBy('meetings.meeting_date','desc');
 
-            $count += $department->count();
-            $dep = true;
+            if($department->count() > 0){
+                $count += $department->count();
+                $data["data"] = $department->get();
+                $data["url"] = url('show_department_meeting/');
+    
+                array_push($resources["meetings"],$data);
+                $data = [];
+            }
         }
+
         if(($unit === "committee") || ($unit === "all")){
             $committees = Auth::User()->getCommittees();
             
-            $committee = DB::table('meetings')->join('committee_meeting','meetings.id','=','committee_meeting.meeting_id')
-                        ->select('meetings.*','committee_meeting.id','committee_meeting.meeting_id','committee_meeting.committee_id',
-                        'committee_meeting.secretary_id','committee_meeting.meeting_time','committee_meeting.created_at','committee_meeting.updated_at')
-                        ->whereIn('committee_meeting.committee_id',$committees->pluck("id"))
+            $committee = DB::table('meetings')->join('committee_meetings','meetings.id','=','committee_meetings.meeting_id')
+                        ->select('meetings.*','committee_meetings.id as child_id','committee_meetings.committee_id as entity_id')
+                        ->whereIn('committee_meetings.committee_id',$committees->pluck("id"))
                         ->orderBy('meetings.meeting_date','desc');
             
             if($time === "past"){
@@ -249,25 +289,15 @@ class SchoolMeetingController extends Controller
                 $query->where('meetings.meeting_title','like',$text)
                         ->orWhere('meetings.meeting_description','like',$text);
             })->orderBy('meetings.meeting_date','desc');
-
-            $count += $committee->count();
-            $com = true;
-        }
-
-        if($dep && $sch && $com){
-            $resources["meetings"] = $department->union($school)->union($committee)->get();
-        }elseif($dep && $sch && !$com){
-            $resources["meetings"] = $department->union($school)->get();
-        }elseif($dep && !$sch && $com){
-            $resources["meetings"] = $department->union($committee)->get();
-        }elseif(!$dep && $sch && $com){
-            $resources["meetings"] = $school->union($committee)->get();
-        }elseif($dep && !$sch && !$com){
-            $resources["meetings"] = $department->get();
-        }elseif(!$dep && $sch && !$com){
-            $resources["meetings"] = $school->get();
-        }elseif(!$dep && !$sch && $com){
-            $resources["meetings"] = $committee->get();
+        
+            if($committee->count() > 0){
+                $count += $committee->count();
+                $data["url"] = url('show_committee_meeting/');
+                $data["data"] = $committee->get();
+    
+                array_push($resources["meetings"],$data);
+                $data = [];
+            }
         }
 
         if($count === 0){
@@ -312,5 +342,37 @@ class SchoolMeetingController extends Controller
     public function destroy(SchoolMeeting $schoolMeeting)
     {
         //
+    }
+
+    public function updateAttendence(Request $request, SchoolMeeting $schoolMeeting){
+        $data = $request->input('data');
+        DB::transaction(function() use($data,$schoolMeeting){
+            
+            DB::table('attendences')
+            ->updateOrInsert(
+                ["user_id" => intVal($data['user_id']), "attendenceable_id" => $schoolMeeting->id, "attendenceable_type" => 'App\SchoolMeeting'],
+                ["user_id" => intVal($data['user_id']),"status" => $data['status']]
+            );
+        });
+        
+        echo json_encode($data);
+    }
+
+    public function setAttendence(Request $request, SchoolMeeting $schoolMeeting){
+        $data = $request->input('data');
+
+        DB::transaction(function() use($data,$schoolMeeting){
+            foreach ($data as $status => $users) {
+                foreach ($users as $user) {
+                    DB::table('attendences')
+                    ->updateOrInsert(
+                        ["user_id" => intVal($user), "attendenceable_id" => $schoolMeeting->id, "attendenceable_type" => 'App\SchoolMeeting'],
+                        ["user_id" => intVal($user),"status" => $status]
+                    );
+                }
+            }
+        });
+
+        echo json_encode($data);
     }
 }

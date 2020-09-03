@@ -24,7 +24,7 @@
                             <span class="custom-switch-description text-capitalize text-white">Departmental</span>
                         </label>
                     </span>
-                    @if(Auth::User()->hasRoleType('director') || (Auth::User()->hasRoleType('head') && Auth::User()->department()->belongsToDirectorate()))
+                    @if(Auth::User()->hasRoleType('director') || (Auth::User()->hasRoleType('head') && Auth::User()->department->belongsToDirectorate()))
                     <span>
                         <label class="custom-switch btn-pill btn-default p-3 mb-1">
                             <input type="radio" name="unit-filter" value="directorate" class="custom-switch-input" {{(old('unit-filter') === 'directorate')? "checked":""}}>
@@ -33,7 +33,7 @@
                         </label>
                     </span>
                     @endif
-                    @if(Auth::User()->hasRoleType('dean') || (Auth::User()->hasRoleType('head') && Auth::User()->department()->belongsToSchool()))
+                    @if(Auth::User()->hasRoleType('dean') || (Auth::User()->hasRoleType('head') && Auth::User()->department->belongsToSchool()))
                     <span>
                         <label class="custom-switch btn-pill btn-default p-3 mb-1">
                             <input type="radio" name="unit-filter" value="school" class="custom-switch-input" {{(old('unit-filter') === 'school')? "checked":""}}>
@@ -97,32 +97,34 @@
         @endif
 
         @if($resources['meetings'])
-            @foreach($resources['meetings'] as $meeting)
-        <form action="show_meeting/{{$meeting->meeting_id}}" method="post" class="cursor-default meeting">
-        @csrf
-        <div class="card hover-text p-2 m-1">
-            <div class="row">
-                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                    <span class="text-lg text-uppercase border-bottom">{{$meeting->meeting_title}}</span>
-                    <div>{{$meeting->meeting_description}}</div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
-                    <div class="d-flex justify-content-around">
-                        <span class="text-lg">{{$meeting->meeting_date}}</span>
-                        @if($meeting->meeting_type === 'department')
-                        <span class="text-lg">DEP</span>
-                        @elseif($meeting->meeting_type === 'school')
-                        <span class="text-lg">SCH</span>
-                        @elseif($meeting->meeting_type === 'directorate')
-                        <span class="text-lg">DIR</span>
-                        @elseif($meeting->meeting_type === 'committee')
-                        <span class="text-lg">COM</span>
-                        @endif
+            @foreach($resources['meetings'] as $meetings)
+                @foreach($meetings["data"] as $meeting)
+                    <form action="{{$meetings['url']}}/{{$meeting->child_id}}" method="post" class="cursor-default meeting">
+                    @csrf
+                    <div class="card hover-text p-2 m-1">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
+                                <span class="text-lg text-uppercase border-bottom">{{$meeting->meeting_title}}</span>
+                                <div>{{$meeting->meeting_description}}</div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
+                                <div class="d-flex justify-content-around">
+                                    <span class="text-lg">{{$meeting->meeting_date}}</span>
+                                    @if($meeting->meeting_type === 'department')
+                                    <span class="text-lg">DEP</span>
+                                    @elseif($meeting->meeting_type === 'school')
+                                    <span class="text-lg">SCH</span>
+                                    @elseif($meeting->meeting_type === 'directorate')
+                                    <span class="text-lg">DIR</span>
+                                    @elseif($meeting->meeting_type === 'committee')
+                                    <span class="text-lg">COM</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        </form>
+                    </form>
+                @endforeach
             @endforeach
         @endif
     </div>
