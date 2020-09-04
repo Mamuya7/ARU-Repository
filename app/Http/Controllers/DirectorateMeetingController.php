@@ -28,12 +28,14 @@ class DirectorateMeetingController extends Controller
      */
     public function index()
     {
-        $resources = ["school_directorate" => Array(), "department" => Array(),
+        $resources = ["meetings" => Array(),
         "urls" => [
             "search_path" => url('search_directorate_meetings')
         ]];
 
         $dir = new Directorate;
+        
+        $data = [];
 
         if(Auth::User()->department->belongsToDirectorate()){
             $dir = Directorate::whereHas('departments',function(Builder $query){
@@ -44,30 +46,46 @@ class DirectorateMeetingController extends Controller
         }
 
         $directorate = DB::table('meetings')->join('directorate_meetings','meetings.id','=','directorate_meetings.meeting_id')
-                            ->where('directorate_meetings.directorate_id','=',$dir->id)
-                            ->orderBy('meetings.meeting_date','desc');
-
-        $department = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
-                        ->select('meetings.*','department_meeting.*','department_meeting.id as child_id')
-                        ->where('department_meeting.department_id','=',Auth::User()->department_id)
+                        ->select('meetings.*',"directorate_meetings.id as child_id","directorate_meetings.directorate_id as entity_id")
+                        ->where('directorate_meetings.directorate_id','=',$dir->id)
                         ->orderBy('meetings.meeting_date','desc');
 
-        $com = false;
+        if($directorate->count() > 0){
+            $data["url"] = url('show_directorate_meeting/');
+            $data["data"] = $directorate->get();
+
+            array_push($resources["meetings"],$data);
+            $data = [];
+        }
+
+        $department = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
+                        ->select('meetings.*','department_meeting.id as child_id','department_meeting.department_id as entity_id')
+                        ->where('department_meeting.department_id','=',Auth::User()->department_id)
+                        ->orderBy('meetings.meeting_date','desc');
+        
+        if($department->count() > 0){
+            $data["data"] = $department->get();
+            $data["url"] = url('show_department_meeting/');
+
+            array_push($resources["meetings"],$data);
+            $data = [];
+        }
+
         if(Auth::User()->isCommitteeMember()){
             $committees = Auth::User()->getCommittees();
             
-            $committee = DB::table('meetings')->join('committee_meeting','meetings.id','=','committee_meeting.meeting_id')
-                        ->select('meetings.*','committee_meeting.id','committee_meeting.meeting_id','committee_meeting.committee_id',
-                        'committee_meeting.secretary_id','committee_meeting.meeting_time','committee_meeting.created_at','committee_meeting.updated_at')
-                        ->whereIn('committee_meeting.committee_id',$committees->pluck("id"))
+            $committee = DB::table('meetings')->join('committee_meetings','meetings.id','=','committee_meetings.meeting_id')
+                        ->select('meetings.*','committee_meetings.id as child_id','committee_meetings.committee_id as entity_id')
+                        ->whereIn('committee_meetings.committee_id',$committees->pluck("id"))
                         ->orderBy('meetings.meeting_date','desc');
-            $com = true;
-        }
-        dd($directorate->get());
-        if(!$com){
-            $resources["meetings"] = $directorate->union($department)->get();
-        }else{
-            $resources["meetings"] = $directorate->union($department)->union($committee)->get();
+            
+            if($committee->count() > 0){
+                $data["url"] = url('show_committee_meeting/');
+                $data["data"] = $committee->get();
+    
+                array_push($resources["meetings"],$data);
+                $data = [];
+            }
         }
                             
         return view('meeting.staff-view',["resources" => $resources]);
@@ -164,14 +182,21 @@ class DirectorateMeetingController extends Controller
             array_push($members,$data);
         }
 
-        return view('meeting.show',["specificMeeting" => $directorateMeeting, 
-        "documents" => $directorateMeeting->documents,
-        "chair" => $chair, "secr" => $secr, "members" => $members,
-        "resources" => [
-            "urls" => ["change_secretary" => "change_directorate_meeting_secretary",
-            "invitation_link" => url('store_directorate_meeting_invitations/'.$directorateMeeting->id)
+        return view('meeting.show',[
+            "resources" => [
+                "chairman" => $chair, 
+                "secretary" => $secr, 
+                "members" => $members,
+                "specificMeeting" => $directorateMeeting, 
+                "documents" => $directorateMeeting->documents,
+                "urls" => [
+                    "change_secretary" => url("change_directorate_meeting_secretary".$directorateMeeting->id),
+                    "set_attendence" => json_encode(url("set_directorate_meeting_attendence/".$directorateMeeting->id)),
+                    "update_attendence" => json_encode(url("update_directorate_meeting_attendence/".$directorateMeeting->id)),
+                    "invitation_link" => url('store_directorate_meeting_invitations/'.$directorateMeeting->id)
+                ]
             ]
-        ]]);
+        ]);
     }
 
     /**
@@ -190,7 +215,7 @@ class DirectorateMeetingController extends Controller
         $text = '%' . $request->input('search') . '%';
         $unit = $request->input('unit-filter');
         $time = $request->input('time-filter');
-        $dep = false; $dir = false; $com = false; $count = 0;
+        $count = 0;
 
         if(($unit === "all") || ($unit === "directorate")){
             if(Auth::User()->department->belongsToDirectorate()){
@@ -202,6 +227,7 @@ class DirectorateMeetingController extends Controller
             }
 
             $directorate = DB::table('meetings')->join('directorate_meetings','meetings.id','=','directorate_meetings.meeting_id')
+                    ->select('meetings.*',"directorate_meetings.id as child_id","directorate_meetings.directorate_id as entity_id")
                     ->where('directorate_meetings.directorate_id','=',$dir_id);
 
             if($time === "past"){
@@ -217,11 +243,18 @@ class DirectorateMeetingController extends Controller
                         ->orWhere('meetings.meeting_description','like',$text);
             })->orderBy('meetings.meeting_date','desc');
 
-            $count += $directorate->count();
-            $dir = true;
+            if($directorate->count() > 0){
+                $count += $directorate->count();
+                $data["url"] = url('show_directorate_meeting/');
+                $data["data"] = $directorate->get();
+    
+                array_push($resources["meetings"],$data);
+                $data = [];
+            }
         }
         if(($unit === "department") || ($unit === "all")){
             $department = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
+                        ->select('meetings.*','department_meeting.id as child_id','department_meeting.department_id as entity_id')
                         ->where('department_meeting.department_id','=',Auth::User()->department_id);
             
             if($time === "past"){
@@ -237,16 +270,22 @@ class DirectorateMeetingController extends Controller
                         ->orWhere('meetings.meeting_description','like',$text);
             })->orderBy('meetings.meeting_date','desc');
 
-            $count += $department->count();
-            $dep = true;
+            if($department->count() > 0){
+                $count += $department->count();
+                $data["data"] = $department->get();
+                $data["url"] = url('show_department_meeting/');
+    
+                array_push($resources["meetings"],$data);
+                $data = [];
+            }
         }
+
         if(($unit === "committee") || ($unit === "all")){
             $committees = Auth::User()->getCommittees();
             
-            $committee = DB::table('meetings')->join('committee_meeting','meetings.id','=','committee_meeting.meeting_id')
-                        ->select('meetings.*','committee_meeting.id','committee_meeting.meeting_id','committee_meeting.committee_id',
-                        'committee_meeting.secretary_id','committee_meeting.meeting_time','committee_meeting.created_at','committee_meeting.updated_at')
-                        ->whereIn('committee_meeting.committee_id',$committees->pluck("id"))
+            $committee = DB::table('meetings')->join('committee_meetingss','meetings.id','=','committee_meetings.meeting_id')
+            ->select('meetings.*','committee_meetings.id as child_id','committee_meetings.committee_id as entity_id')
+                        ->whereIn('committee_meetings.committee_id',$committees->pluck("id"))
                         ->orderBy('meetings.meeting_date','desc');
             
             if($time === "past"){
@@ -261,25 +300,15 @@ class DirectorateMeetingController extends Controller
                 $query->where('meetings.meeting_title','like',$text)
                         ->orWhere('meetings.meeting_description','like',$text);
             })->orderBy('meetings.meeting_date','desc');
-
-            $count += $committee->count();
-            $com = true;
-        }
-
-        if($dep && $dir && $com){
-            $resources["meetings"] = $department->union($directorate)->union($committee)->get();
-        }elseif($dep && $dir && !$com){
-            $resources["meetings"] = $department->union($directorate)->get();
-        }elseif($dep && !$dir && $com){
-            $resources["meetings"] = $department->union($committee)->get();
-        }elseif(!$dep && $dir && $com){
-            $resources["meetings"] = $directorate->union($committee)->get();
-        }elseif($dep && !$dir && !$com){
-            $resources["meetings"] = $department->get();
-        }elseif(!$dep && $dir && !$com){
-            $resources["meetings"] = $directorate->get();
-        }elseif(!$dep && !$dir && $com){
-            $resources["meetings"] = $committee->get();
+        
+            if($committee->count() > 0){
+                $count += $committee->count();
+                $data["url"] = url('show_committee_meeting/');
+                $data["data"] = $committee->get();
+    
+                array_push($resources["meetings"],$data);
+                $data = [];
+            }
         }
 
         if($count === 0){
@@ -324,5 +353,37 @@ class DirectorateMeetingController extends Controller
     public function destroy(DirectorateMeeting $directorateMeeting)
     {
         //
+    }
+
+    public function updateAttendence(Request $request, DirectorateMeeting $directorateMeeting){
+        $data = $request->input('data');
+        DB::transaction(function() use($data,$directorateMeeting){
+            
+            DB::table('attendences')
+            ->updateOrInsert(
+                ["user_id" => intVal($data['user_id']), "attendenceable_id" => $directorateMeeting->id, "attendenceable_type" => 'App\DirectorateMeeting'],
+                ["user_id" => intVal($data['user_id']),"status" => $data['status']]
+            );
+        });
+        
+        echo json_encode($data);
+    }
+
+    public function setAttendence(Request $request, DirectorateMeeting $directorateMeeting){
+        $data = $request->input('data');
+
+        DB::transaction(function() use($data,$directorateMeeting){
+            foreach ($data as $status => $users) {
+                foreach ($users as $user) {
+                    DB::table('attendences')
+                    ->updateOrInsert(
+                        ["user_id" => intVal($user), "attendenceable_id" => $directorateMeeting->id, "attendenceable_type" => 'App\DirectorateMeeting'],
+                        ["user_id" => intVal($user),"status" => $status]
+                    );
+                }
+            }
+        });
+
+        echo json_encode($data);
     }
 }

@@ -36,7 +36,7 @@
             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12">
-                        <form action="{{url('update_general_meeting/'.$specificMeeting->meeting->id)}}" method="post">
+                        <form action="{{url('update_general_meeting/'.$resources['specificMeeting']->meeting_id)}}" method="post">
                             @csrf
                             <div class="row p-2">
                                 <div class="col-lg-3">
@@ -44,11 +44,11 @@
                                 </div>
                                 <div class="col-lg-8">
                                     <div class="d-flex justify-content-start">
-                                        <input type="text" id="title" name="title" class="form-control text-left text-uppercase text-xl" value="{{$specificMeeting->meeting->meeting_title}}" disabled>
+                                        <input type="text" id="title" name="title" class="form-control text-left text-uppercase text-xl" value="{{$resources['specificMeeting']->meeting->meeting_title}}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-lg-1">
-                                    @if((!$specificMeeting->meeting->wasHeld()) && (Auth::User()->id == $specificMeeting->meeting->user_id))
+                                    @if((!$resources['specificMeeting']->meeting->wasHeld()) && (Auth::User()->id == $resources['specificMeeting']->meeting->user_id))
                                     <div class="text-right p-2">
                                         <span id="edit-icon" class="text-right fab">
                                             <span class="fas fa-edit text-xl round-p5-ardhi color-ardhi hover-ardhi shadow"></span>
@@ -62,7 +62,7 @@
                                     <span class="text-lg">Meeting Date:</span>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input id="date" name="date" class="form-control datepicker text-lg" type="text" value="{{$specificMeeting->meeting->meeting_date}}" disabled>
+                                    <input id="date" name="date" class="form-control datepicker text-lg" type="text" value="{{$resources['specificMeeting']->meeting->meeting_date}}" disabled>
                                 </div>
                             </div>
                             <div class="row p-2">
@@ -72,7 +72,7 @@
                                 <div class="col-lg-8">
                                     <div>
                                         <textarea id="description" name="description" cols="30" rows="3" class="form-control text-left text-lg" disabled>{{
-                                            $specificMeeting->meeting->meeting_description
+                                            $resources['specificMeeting']->meeting->meeting_description
                                         }}</textarea>
                                     </div>
                                 </div>
@@ -82,10 +82,10 @@
                                     <span class="text-lg">Meeting Type:</span>
                                 </div>
                                 <div class="col-lg-7">
-                                    <span class="text-lg text-capitalize">{{$specificMeeting->meeting->meeting_type}} meeting</span>
+                                    <span class="text-lg text-capitalize">{{$resources['specificMeeting']->meeting->meeting_type}} meeting</span>
                                 </div>
                                 <div class="col-lg-2">
-                                    @if((!$specificMeeting->meeting->wasHeld()) && (Auth::User()->id == $specificMeeting->meeting->user_id))
+                                    @if((!$resources['specificMeeting']->meeting->wasHeld()) && (Auth::User()->id == $resources['specificMeeting']->meeting->user_id))
                                     <div class="text-right">
                                         <input id="update-meeting" type="submit" value="update" class="btn btn-primary" hidden>
                                     </div>
@@ -98,7 +98,7 @@
                                 <label class="text-lg" for="chairman">Chairman</label>
                             </div>
                             <div class="col-lg-7">
-                                <input type="text" id="chairman" value="{{($chair === null)? 'Not Selected': $chair->last_name.' '.$chair->first_name}}" class="form-control" disabled>
+                                <input type="text" id="chairman" value="{{($resources['chairman'] === null)? 'Not Selected': $resources['chairman']->last_name.' '.$resources['chairman']->first_name}}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="row p-2">
@@ -106,10 +106,10 @@
                                 <label class="text-lg" for="secretary">Secretary</label>
                             </div>
                             <div class="col-lg-7">
-                                <input type="text" id="secretary" value="{{($secr === null)? 'Not Selected': $secr->last_name.' '.$secr->first_name}}" class="form-control" disabled>
+                                <input type="text" id="secretary" value="{{($resources['secretary'] === null)? 'Not Selected': $resources['secretary']->last_name.' '.$resources['secretary']->first_name}}" class="form-control" disabled>
                             </div>
                             <div class="col-lg-2">
-                                @if((!$specificMeeting->meeting->wasHeld()) && (Auth::User()->id == $chair->id))
+                                @if((!$resources['specificMeeting']->meeting->wasHeld()) && ($resources['chairman'] !== null) && (Auth::User()->id == $resources['chairman']->id))
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Change</button>
                                 @endif
                             </div>
@@ -118,8 +118,8 @@
                             <div class="col-lg-3"><span class="text-lg">Attachments:</span></div>
                             <div class="col-lg-9">
                                 <div class="row">
-                                    @if(sizeof($documents) !== 0)
-                                        @foreach($documents as $document)
+                                    @if(sizeof($resources['documents']) !== 0)
+                                        @foreach($resources['documents'] as $document)
                                         <div class="col-lg-3">
                                             <div class="card shadow">
                                                 <div class="document card-body">
@@ -142,7 +142,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if(($secr !== null) && ($secr->id == Auth::User()->id))
+                        @if(($resources['secretary'] !== null) && ($resources['secretary']->id == Auth::User()->id))
                         <div class="row p-2">
                             <div class="col-lg-12">
                                 <div class="d-flex flex-column">
@@ -167,7 +167,7 @@
                             <!-- attendence list headings row-->
                             <div class="row">
                                 <div class="col-lg-7">
-                                    @if((!$specificMeeting->meeting->wasHeld()) && (Auth::User()->id == $chair->id))
+                                    @if((!$resources['specificMeeting']->meeting->wasHeld()) && ($resources['chairman'] !== null) && (Auth::User()->id == $resources['chairman']->id))
                                     <div id="invite" onclick="inviteMembers({{json_encode(url('invitation_details'))}})" class="border-ardhi box-fit hover-ardhi cursor-default mb-3" data-toggle="modal" data-target="#largeModal">
                                         <span class="fas fa-plus-square text-xl text-black pl-1 pt-1"></span>
                                         <span class="p-2 font-weight-800">Invite Member</span>
@@ -175,13 +175,12 @@
                                     @endif
                                 </div>
                                 <div class="col-lg-5">
-                                    @if(($secr !== null) && ($secr->id == Auth::User()->id))
+                                    @if(($resources['secretary'] !== null) && ($resources['secretary']->id == Auth::User()->id))
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="d-flex justify-content-between">
                                                 <span class="text-lg">Attendence</span>
-                                                <input type="button" value="Submit All" class="btn btn-success" 
-                                                onclick="submitAttendence({{json_encode($members)}},{{json_encode(url('create_attendence/'.$specificMeeting->meeting->id))}})">
+                                                <input type="button" value="Submit All" class="btn btn-success" onclick="submitAttendence({{$resources['urls']['set_attendence']}},{{json_encode($resources['members'])}})">
                                             </div>
                                         </div>
                                     </div>
@@ -225,7 +224,7 @@
                             <!-- end of attendence list headings row-->
 
                             <!-- start of list of members -->
-                            @foreach($members as $member)
+                            @foreach($resources['members'] as $member)
                             <div class="border-bottom hover-normal p-2 cursor-default row">
                                 <!-- column for member names and membership type -->
                                 <div class="col-lg-7">
@@ -235,9 +234,9 @@
                                             <span class="text-uppercase bg-green text-white ml-2 p-1">you</span>
                                             @endif
                                         </span>
-                                        @if(($chair !== null) && ($chair->id == $member['profile']->id))
+                                        @if(($resources['chairman'] !== null) && ($resources['chairman']->id == $member['profile']->id))
                                         <span class="text-capitalize text-red">Chairman</span>
-                                        @elseif(($secr !== null) && ($secr->id == $member['profile']->id))
+                                        @elseif(($resources['secretary'] !== null) && ($resources['secretary']->id == $member['profile']->id))
                                         <span class="text-capitalize text-green">Secretary</span>
                                         @else
                                         <span class="text-capitalize">Member</span>
@@ -249,8 +248,8 @@
                                 <!-- column for member attendence status and attendence form -->
                                 <div class="col-lg-5">
                                     <!-- start of attendence form seen by secretary alone -->
-                                    @if(($secr !== null) && ($secr->id == Auth::User()->id))
-                                    <form action="{{url('update_attendence/'.$specificMeeting->meeting->id)}}" method="post">
+                                    @if(($resources['secretary'] !== null) && ($resources['secretary']->id == Auth::User()->id))
+                                    <form action="{{$resources['urls']['update_attendence']}}" method="post">
                                         @csrf
                                         <div class="row">
                                             <div class="col-lg-3">
@@ -301,7 +300,7 @@
                                                     </span>
                                                 </div>
                                                 @else
-                                                <input type="submit" value="update" class="btn btn-primary">
+                                                <input type="button" value="update" class="btn btn-primary" onclick="updateAttendence({{$resources['urls']['update_attendence']}},{{json_encode($member['profile'])}})">
                                                 @endif
                                             </div>
                                         </div>
@@ -351,7 +350,7 @@
 <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form action="{{url($resources['urls']['change_secretary'].$specificMeeting->id)}}" method="post">
+            <form action="{{url($resources['urls']['change_secretary'].$resources['specificMeeting']->id)}}" method="post">
                 @csrf
                 <div class="modal-header">
                     <h2 class="modal-title" id="modal-title-default">Select Secretary</h2>
@@ -360,11 +359,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @foreach($members as $member)
+                    @foreach($resources['members'] as $member)
                     <div class="border-bottom hover-normal p-2 cursor-default">
                         <p class="font-weight-700"></p>
                         <div class="d-flex justify-content-between">
-                            @if(($chair !== null) && ($chair->id == $member['profile']->id))
+                            @if(($resources['chairman'] !== null) && ($resources['chairman']->id == $member['profile']->id))
                             <span class="text-capitalize text-red">{{$member['profile']->first_name}}, {{$member['profile']->last_name}}</span>
                             <span class="text-capitalize text-red">Chairman</span>
                             @else
@@ -475,7 +474,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="saveInvitation({{json_encode($resources['urls']['invitation_link'])}})">Invite Members</button>
+                <button type="button" class="btn btn-primary" onclick="saveInvitation({{$resources['urls']['invitation_link']}})">Invite Members</button>
             </div>
         </div>
     </div>
@@ -490,7 +489,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{url('store_meeting_documents').'/'.$specificMeeting->meeting->id}}" method="post" id="upload-form" enctype="multipart/form-data">
+                <form action="{{url('store_meeting_documents').'/'.$resources['specificMeeting']->meeting->id}}" method="post" id="upload-form" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-lg-6">
@@ -504,7 +503,7 @@
                             <div class="card h-75">
                                 <div class="card-header">
                                     <h2>Select File Type</h2>
-                                    <input type="text" name="meeting_id" value="{{$specificMeeting->meeting->id}}" hidden>
+                                    <input type="text" name="meeting_id" value="{{$resources['specificMeeting']->meeting->id}}" hidden>
                                 </div>
                                 <div class="card-body">
                                     <div class="d-flex flex-column justify-content-center h-100">
@@ -644,26 +643,38 @@
 
         }
 
-        const submitAttendence = (members,path) => {
+        const submitAttendence = (path,members) => {
             let data = {
                 "attended": Array(), "missed":Array(), "noreport":Array()
             }
             for (const member of members) {
-                let attendence = $('input[name=' + member.id + ']:checked').val();
+                let attendence = $('input[name=' + member.profile.id + ']:checked').val();
 
                 if(attendence == 'attended'){
-                    data.attended.push(member.id); 
+                    data.attended.push(eval(member.profile.id)); 
                 }else if(attendence == 'missed'){
-                    data.missed.push(member.id);
+                    data.missed.push(eval(member.profile.id));
                 }else if(attendence == 'noreport'){
-                    data.noreport.push(member.id);
+                    data.noreport.push(eval(member.profile.id));
                 }
             }
 
-            postdata(data,path,function(){
-                showSuccess('Recorded Successfully!!');
-                $('#but4').trigger('click');
-                $('#close-attendence').trigger('click');
+            postdata(data,path,function(response){
+                location.reload();
+            });
+        }
+
+        const updateAttendence = (path,member) => {
+
+            let status = $('input[name=' + member.id + ']:checked').val();
+
+            let data = {
+                "user_id": member.id, "status": status
+            }
+
+
+            postdata(data,path,function(response){
+                location.reload();
             });
         }
         const postdata = (data,path,method) => {

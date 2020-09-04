@@ -19,7 +19,8 @@ class Roles extends Model
 
     public function committees()
     {
-        return $this->belongsToMany('App\Committee','committee_role','role_id','committee_id');
+        return $this->belongsToMany('App\Committee','committee_role','role_id','committee_id')
+                    ->withPivot('id','committee_id','role_id','position');
     }
 
 

@@ -68,8 +68,6 @@ Route::post('update_general_meeting/{meeting}','MeetingsController@update');
 Route::post('show_meeting/{meeting}','MeetingsController@show');
 Route::post('downloadfile','MeetingsController@downloadFile');
 Route::post('changesecretary/{meeting}','MeetingsController@changeSecretary');
-Route::post('create_attendence/{meeting}','MeetingsController@submitAttendence');
-Route::post('update_attendence/{meeting}','MeetingsController@updateAttendence');
 Route::post('invitation_details','MeetingsController@invitation');
 
 Route::post('show_users','UsersController@show');
@@ -77,27 +75,39 @@ Route::post('show_users','UsersController@show');
 // SchoolMeeting routes
 Route::get('view_school_meetings','SchoolMeetingController@index')->name('viewSchoolMeetings');
 Route::get('create_school_meeting','SchoolMeetingController@create')->name('createSchoolMeeting');
-Route::get('show_school_meeting/{schoolMeeting}','SchoolMeetingController@show')->name('showSchoolMeeting');
+Route::post('show_school_meeting/{schoolMeeting}','SchoolMeetingController@show')->name('showSchoolMeeting');
 Route::get('store_school_meeting','SchoolMeetingController@store')->name('storeSchoolMeeting');
 Route::post('store_school_meeting_invitations/{schoolMeeting}','SchoolMeetingController@invite')->name('storeSchoolMeetingInvitation');
 Route::post('search_school_meetings','SchoolMeetingController@search')->name('searchSchoolMeetings');
+Route::post("set_school_meeting_attendence/{schoolMeeting}",'SchoolMeetingController@setAttendence');
+Route::post("update_school_meeting_attendence/{schoolMeeting}",'SchoolMeetingController@updateAttendence');
 
 // DirectorateMeeting routes
 Route::get('view_directorate_meeting','DirectorateMeetingController@index')->name('viewDirectorateMeetings');
 Route::get('create_directorate_meeting','DirectorateMeetingController@create')->name('createDirectorateMeeting');
-Route::get('show_directorate_meeting/{directorateMeeting}','DirectorateMeetingController@show')->name('showDirectorateMeeting');
+Route::post('show_directorate_meeting/{directorateMeeting}','DirectorateMeetingController@show')->name('showDirectorateMeeting');
 Route::get('store_directorate_meeting','DirectorateMeetingController@store')->name('storeDirectorateMeeting');
+Route::post('change_directorate_meeting_secretary/{directorateMeeting}','DirectorateMeetingController@changeSecretary');
 Route::get('store_directorate_meeting_invitations/{directorateMeeting}','DirectorateMeetingController@invite')->name('storeDirectorateMeetingInvitation');
 Route::post('search_directorate_meetings','DirectorateMeetingController@search')->name('searchDirectorateMeetings');
+Route::post("set_directorate_meeting_attendence/{directorateMeeting}",'DirectorateMeetingController@setAttendence');
+Route::post("update_directorate_meeting_attendence/{directorateMeeting}",'DirectorateMeetingController@updateAttendence');
 
 // DepartmentMeeting routes
 Route::get('view_department_meeting','DepartmentMeetingController@index')->name('viewDepartmentMeetings');
 Route::get('create_department_meeting','DepartmentMeetingController@create')->name('createDepartmentMeeting');
-Route::get('show_department_meeting/{departmentMeeting}','DepartmentMeetingController@show')->name('showDepartmentMeeting');
+Route::post('show_department_meeting/{departmentMeeting}','DepartmentMeetingController@show')->name('showDepartmentMeeting');
 Route::get('store_department_meeting','DepartmentMeetingController@store')->name('storeDepartmentMeeting');
 Route::post('change_department_meeting_secretary/{departmentMeeting}','DepartmentMeetingController@changeSecretary');
 Route::get('store_department_meeting_invitations/{departmentMeeting}','DepartmentMeetingController@invite')->name('storeDepartmentMeetingInvitation');
 Route::post('search_department_meetings','DepartmentMeetingController@search')->name('searchDepartmentMeetings');
+Route::post("set_department_meeting_attendence/{departmentMeeting}",'DepartmentMeetingController@setAttendence');
+Route::post("update_department_meeting_attendence/{departmentMeeting}",'DepartmentMeetingController@updateAttendence');
+
+// CommitteeMeeting routes
+Route::post('show_committee_meeting/{committeeMeeting}','CommitteeMeetingController@show')->name('showCommitteeMeeting');
+Route::post("set_committee_meeting_attendence/{committeeMeeting}",'CommitteeMeetingController@setAttendence');
+Route::post("update_committee_meeting_attendence/{committeeMeeting}",'CommitteeMeetingController@updateAttendence');
 
 // Documents routes
 Route::post('store_meeting_documents/{meeting}','DocumentsController@store')->name('storeMeetingDocuments');
@@ -133,7 +143,7 @@ Route::post('updateCommittee/{committee}', 'CommitteeController@update');
 Route::delete('deleteCommitee/{committee}','CommitteeController@destroy');
 Route::post('fetch_committees', 'CommitteeController@fetch');
 Route::get('assignCommittee','CommitteeController@display');
-Route::post('committee_staff/{committee}','CommitteesController@committeeStaff');
+Route::post('committee_staff/{committee}','CommitteeController@committeeStaff');
 
 // Route::get('commiteeUnasigned','CommitteeController@showUsers')->name('commiteeUnasigned');
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCommitteeUserTable extends Migration
+class CreateCommitteeMeetingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,16 @@ class CreateCommitteeUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('committee_user', function (Blueprint $table) {
+        Schema::create('committee_meetings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('meeting_id')->unsigned();
             $table->bigInteger('committee_id')->unsigned();
+            $table->bigInteger('secretary_id')->unsigned()->nullable();
+            $table->time('meeting_time')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->foreign('meeting_id')->references('id')->on('meetings');
             $table->foreign('committee_id')->references('id')->on('committees');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -31,6 +33,6 @@ class CreateCommitteeUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('committee_user');
+        Schema::dropIfExists('committee_meetings');
     }
 }

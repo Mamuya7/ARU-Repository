@@ -253,43 +253,8 @@ class MeetingsController extends Controller
     public function downloadFile(Request $request)
     {
         $document = $request->input('document');
-        response()->download(storage_path($document["document_url"]),$document["document_type"]);
-        echo json_encode($document);
-    }
-    public function submitAttendence(Request $request, Meeting $meeting){
-        $data = $request->input('data');
-        DB::transaction(function() use($data,$meeting){
-            $depMeeting = DepartmentMeeting::where('meeting_id',$meeting->id)
-                            ->where(function($query){
-                                    $query->where('department_id',Auth::User()->department_id);
-                            })->get();
-            
-            foreach ($data as $status => $users) {
-                foreach ($users as $user) {
-                    $depMeeting->first()->attendences()->updateOrCreate(
-                        ["user_id" => $user],
-                        ["user_id" => $user,"status" => $status]
-                    );
-                }
-            }
-        });
-
-        echo json_encode("success");
-    }
-    public function updateAttendence(Request $request, Meeting $meeting){
-        $data = $request->all();
-        DB::transaction(function() use($data,$meeting){
-            $depMeeting = DepartmentMeeting::where('meeting_id',$meeting->id)
-                            ->where(function($query){
-                                    $query->where('department_id',Auth::User()->department_id);
-                            })->get();
-            $user = array_key_last($data);
-            $depMeeting->first()->attendences()->updateOrCreate(
-                ["user_id" => $user],
-                ["user_id" => $user,"status" => $data[$user]]
-            );
-        });
-        return back();
+        response()->download(storage_path('app\\'.$document["document_url"]),$document["document_type"]);
+        echo json_encode(storage_path('app\\'.$document["document_url"]));
     }
 
     public function changeSecretary(Request $request, Meeting $meeting)

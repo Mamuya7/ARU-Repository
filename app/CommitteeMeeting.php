@@ -12,7 +12,10 @@ class CommitteeMeeting extends Model
     {
         return $this->belongsTo('App\Meeting');
     }
-
+    public function committee()
+    {
+        return $this->belongsTo('App\Committee');
+    }
     public function documents()
     {
         return $this->morphMany('App\Document','documentable');
