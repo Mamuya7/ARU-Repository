@@ -93,7 +93,7 @@
     <div class="col-md-12">
         <div class="card shadow">
             <div class="card-header">
-                <h2 class="mb-0">RAGISTER A NEW STAFF</h2>
+                <h2 class="mb-0">REGISTER A NEW STAFF</h2>
             </div>
             <div class="card-body">
             <form method="POST" action="{{ route('register') }}">

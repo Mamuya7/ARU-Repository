@@ -42,7 +42,7 @@
                     </div>
                     <div>
                         <button type="submit" class="btn btn-primary">Login <span class="ion-locked"></span></button>
-                        <a href="#" class="btn btn-secondary text-black">Student's help <span class="ion-help-circled"></span></a>
+                        <!-- <a href="#" class="btn btn-secondary text-black">Student's help <span class="ion-help-circled"></span></a> -->
                     </div>
                 </form>
             </div>

@@ -31,10 +31,8 @@
                                         <button type="button" onclick="displayRole({{ $users->id }})"  class="btn btn-primary btn-sm btn-square mt-1 mb-1" data-toggle="modal" data-target="#largeModal">Roles</button>
                                        
                                         <button type="button" onclick="editUser({{ $users->id }})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateUser">update</button> 
-                                    </td>
-										<!-- <button type="button" class="btn btn-primary btn-sm btn-square mt-1 mb-1">Update</button> -->
-                                    <td>    
-                                        <form action="deleteUser/{{$users->id }}" method="post" class="dis-inline">
+              
+                                        <form action="deleteUser/{{$users->id }}" method="post" class="dis-inline" style="display:inline">
                 
                                             {{csrf_field()}}
                                             {{method_field('DELETE')}}
@@ -55,13 +53,13 @@
     {{ $user->links() }}
 
     <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h2 class="modal-title" id="largeModalLabel">ASSIGN USER ROLES</h2>
                         <button type = "button" class="close" data-dismiss = "modal">×</button>
                     </div>
-                    <!-- <form action="assignRole" method="post"> -->
+             
                         <div class="modal-body">
                             
                                 <div class="row" style="margin-top:40px"> 
@@ -85,27 +83,27 @@
 
 
                                     <div class="col-md-6 col-lg-6">
-                                    <form action="assignRole" method="post" id="assign-form">
-                                        @csrf
-                                        <div class="card shadow">                                  
-                                            <div class="card-body">
-                                                <h4 class="card-title">All Roles</h4>
-                                                <div class="table-responsive">
-                                                    <table class="table card-table text-nowrap" style="height: 250px;overflow: auto;">   
-                                                    <input type="text" name="userId" id="user_details" value="$user->id" hidden>
-                                                        @foreach($roles as $role)
-                                                            <tr class="border-bottom">
-                                                                <td><input type="checkbox" name="roles[]" value="{{ $role->id}}" id="check-box"></td>
-                                                                <td id="check-click">{{ $role->role_name}}</td>    
-                                                            </tr>
-                                                        @endforeach 
-                                                        
-                                                    </table>
+                                        <form action="assignRole" method="post" id="assign-form">
+                                            @csrf
+                                            <div class="card shadow">                                  
+                                                <div class="card-body">
+                                                    <h4 class="card-title">All Roles</h4>
+                                                    <div class="table-responsive">
+                                                        <table class="table card-table text-nowrap" style="height: 250px;overflow: auto;">   
+                                                        <input type="text" name="userId" id="user_details" value="$user->id" hidden>
+                                                            @foreach($roles as $role)
+                                                                <tr class="border-bottom">
+                                                                    <td><input type="checkbox" name="roles[]" value="{{ $role->id}}" id="check-box"></td>
+                                                                    <td id="check-click">{{ $role->role_name}}</td>    
+                                                                </tr>
+                                                            @endforeach 
+                                                            
+                                                        </table>
+                                                    </div>
                                                 </div>
+                                        
                                             </div>
-                                    
-                                        </div>
-                                    </form> 
+                                        </form> 
                                     </div>
                                 </div>
                                             
@@ -114,7 +112,6 @@
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="button" class="btn btn-primary" id="assign-btn">Assign Role</button>
                         </div>
-                    <!-- </form>     -->
                 </div>
             </div>
         </div>
