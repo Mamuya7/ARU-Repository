@@ -18,6 +18,36 @@ Route::get('/', function () {
     return view('auth/login');
 });
 
+
+Route::get('/send-mail', function () {
+    $details = [
+        'title'=>'mail from Ardhi university',
+        'body'=>'This for notifying of meeting issues'
+    ];
+    \Mail::to('kilango12345@gmail.com')->send(new \App\Mail\MeetingCreated($details));
+    echo "email sent successiffully";
+});
+
+// \Mail::send(['text'=>'mail'], $details, function($message) {
+//     $message->to('mankilla12345@gmail.com', 'Kilango Ramadhani')->subject
+//        ('Laravel Basic Testing Mail');
+//     $message->from('kilango12345@gmail.com','Ramadhani Kilango');
+//  });
+//  echo "Basic Email Sent. Check your inbox.";
+
+
+
+
+
+    // $data = array();
+   
+    // Mail::send(['email.meetingCreated'], $data, function($message) use($data){
+    //     $message->from('');
+    //     $message->to('');
+    // });
+
+
+
 Auth::routes();
 
 

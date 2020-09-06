@@ -141,7 +141,7 @@ class DepartmentMeetingController extends Controller
                 "meeting_time" => $request->input('time'),
             ]);
         });
-
+        
         return redirect('create_department_meeting')->with("output","Department meeting created successfully!!");
     }
 

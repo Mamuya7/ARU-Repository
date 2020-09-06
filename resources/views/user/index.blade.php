@@ -78,6 +78,8 @@
                                             
                                                 </table>
                                             </div>
+                                            <div id="user-roles">
+                                            </div>
                                         </div>
                                     </div>
 
@@ -100,6 +102,20 @@
                                                             
                                                         </table>
                                                     </div>
+                                                    @foreach($roles as $role)
+                                                    <div class="row p-2 m-1 bg-secondary">
+                                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
+                                                            <button class="btn btn-icon btn-success btn-sm pr-2 pl-2 pt-1 pb-1" type="button"
+                                                             value="{{ $role->id}}" onclick="addRole({{json_encode($role)}})">
+                                                                <span class="btn-inner--icon"><i class="fe fe-chevrons-left"></i></span>
+                                                            </button>
+                                                            <!-- <span class="fas fa-angle-double-left pr-2 pl-2 pt-1 pb-1 bg-green text-white"></span> -->
+                                                        </div>
+                                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-9">
+                                                            <span>{{$role->role_name}}</span>
+                                                        </div>    
+                                                    </div>
+                                                    @endforeach
                                                 </div>
                                         
                                             </div>
@@ -317,39 +333,69 @@
             // $('#check-box:checked').each(function() {
             //     selected.push($(this).attr('value'));
             // });
-
-            // $.ajax({
-            //     url: '/assignRole',
-            //     type: 'post',
-            //     data:{
-            //         userId:id,
-            //         roles : selected
-            //     },
-            //     headers: {
-            //         'X-CSRF-TOKEN': '{{csrf_token()}}'
-            //     },
-            //     dataType: 'json',
-            //     success:function(response){
-            //         console.log(response);
-            //         $(document).reload();
-                    
-            //     },
-            //     error:function(xhr,status,err){
-            //         console.log(err);
-            //     }
-            // });
         });
+        const addRole = (role) =>{
+            let list = createRoleList(role,"add");
+            $('#user-roles').append(list);
+        }
+        const removeRole = (role) =>{
+            console.log(role);
+            let list = createRoleList(role,"remove");
+        }
+        const ajaxPost = (path,valuedata,method) =>{
+            $.ajax({
+                url: path,
+                type: 'post',
+                data:valuedata,
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success:function(response){
+                    method(response);
+                },
+                error:function(xhr,status,err){
+                    console.log(err);
+                }
+            });
+        }
+        const createRoleList = (role,type) =>{
+            let list = '<div class="row p-2 m-1 bg-secondary">';
 
+            let listname = '<div class="col-lg-10 col-md-10 col-sm-10 col-xs-9">';
+                listname += '<span>' + role.role_name + '</span>';
+                listname += '</div>';
 
+            let listbtn = createRoleButton(role,type);
 
+            if(type == "add"){
+                list += listname;
+                list += listbtn;
+            }else if(type == "remove"){
+                list += listbtn;
+                list += listname;
+            }
+                list += '</div>';
 
+            return list;
+        }
 
-        // function assignRole(id){
-        //     alert(id);
-           
-        //     alert("#role"+id);
-        // }
-
+        const createRoleButton = (role,type) =>{
+            let listbtn = '<div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">';
+                listbtn += '<button class="btn btn-icon';
+                if (type == "add") {
+                    listbtn += ' btn-danger btn-sm pr-2 pl-2 pt-1 pb-1" type="button" value="'+role.id+'"';
+                    listbtn += ' onclick="removeRole({{json_encode('+role)+')}})">';
+                    listbtn += '<span class="btn-inner--icon"><i class="fe fe-x"></i></span>';
+                }else if(type == "remove"){
+                    listbtn += ' btn-success btn-sm pr-2 pl-2 pt-1 pb-1" type="button" value="'+role.id+'"';
+                    listbtn += ' onclick="addRole({{json_encode('+role)+')}})">';
+                    listbtn += '<span class="btn-inner--icon"><i class="fe fe-chevrons-left"></i></span>';
+                }
+                listbtn += '</button>';
+                listbtn += '</div>';
+             return listbtn; 
+        }
     </script>
 
 @endsection
