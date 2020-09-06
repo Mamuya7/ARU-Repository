@@ -11,7 +11,7 @@ use App\Attendence;
 use App\DepartmentMeeting;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
-
+use Mail;
 class DepartmentMeetingController extends Controller
 {
     /**
@@ -71,7 +71,7 @@ class DepartmentMeetingController extends Controller
             array_push($resources["meetings"],$data);
             $data = [];
         }
-
+    
         if(Auth::User()->isCommitteeMember()){
             $committees = Auth::User()->getCommittees();
             
@@ -133,7 +133,7 @@ class DepartmentMeetingController extends Controller
             $meeting->user_id = Auth::User()->id;
 
             $meeting->save();
-    
+
             DepartmentMeeting::create([
                 "meeting_id" => $meeting->id,
                 "department_id" => Auth::User()->department_id,

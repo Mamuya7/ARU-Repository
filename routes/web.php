@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Mail;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,14 +21,18 @@ Route::get('/', function () {
 });
 
 
-Route::get('/send-mail', function () {
-    $details = [
-        'title'=>'mail from Ardhi university',
-        'body'=>'This for notifying of meeting issues'
-    ];
-    \Mail::to('kilango12345@gmail.com')->send(new \App\Mail\MeetingCreated($details));
-    echo "email sent successiffully";
-});
+// Route::get('/send-mail', function () {
+//         $details = [
+//          'title'=>'mail from Ardhi university',
+//          'body'=>'This for notifying of meeting issues'
+//          ];
+
+//          $data = array('mankilla12345@gmail.com','kilango12345@gmail.com');
+         
+//              \Mail::to($data)->send(new \App\Mail\MeetingCreated($details));
+//              echo "email sent successiffully";
+       
+// });
 
 // \Mail::send(['text'=>'mail'], $details, function($message) {
 //     $message->to('mankilla12345@gmail.com', 'Kilango Ramadhani')->subject
@@ -39,11 +45,12 @@ Route::get('/send-mail', function () {
 
 
 
-    // $data = array();
+    // $data = array('mankilla123452gmail.com','kilango123452gmail.com');
    
     // Mail::send(['email.meetingCreated'], $data, function($message) use($data){
-    //     $message->from('');
-    //     $message->to('');
+    //     // $message->from('');
+
+    //     $message->to($data)->subject('This is test e-mail'); 
     // });
 
 
