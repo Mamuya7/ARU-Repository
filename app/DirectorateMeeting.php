@@ -8,7 +8,7 @@ class DirectorateMeeting extends Model
 {
     public $table = "directorate_meetings";
     
-    protected $fillable = ["meeting_id","directorate_id"];
+    protected $fillable = ["meeting_id","directorate_id","secretary_id","meeting_time"];
     
     public function meeting()
     {

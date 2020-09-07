@@ -64,6 +64,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('view_meeting',function(){
     if(Auth::User()->hasRoleType('dean')){
         return redirect()->route('viewSchoolMeetings');
+    }elseif(Auth::User()->hasRoleType('administrative')){
+        return redirect()->route('viewSchoolMeetings');
     }elseif (Auth::User()->hasRoleType('director')) {
         return redirect()->route('viewDirectorateMeetings');
     }elseif (Auth::User()->hasRoleType('system administrator')) {
@@ -118,6 +120,7 @@ Route::post('store_school_meeting_invitations/{schoolMeeting}','SchoolMeetingCon
 Route::post('search_school_meetings','SchoolMeetingController@search')->name('searchSchoolMeetings');
 Route::post("set_school_meeting_attendence/{schoolMeeting}",'SchoolMeetingController@setAttendence');
 Route::post("update_school_meeting_attendence/{schoolMeeting}",'SchoolMeetingController@updateAttendence');
+Route::post("submit_school_meeting_attendence/{schoolMeeting}",'SchoolMeetingController@submitAttendence');
 
 // DirectorateMeeting routes
 Route::get('view_directorate_meeting','DirectorateMeetingController@index')->name('viewDirectorateMeetings');
@@ -129,6 +132,7 @@ Route::post('store_directorate_meeting_invitations/{directorateMeeting}','Direct
 Route::post('search_directorate_meetings','DirectorateMeetingController@search')->name('searchDirectorateMeetings');
 Route::post("set_directorate_meeting_attendence/{directorateMeeting}",'DirectorateMeetingController@setAttendence');
 Route::post("update_directorate_meeting_attendence/{directorateMeeting}",'DirectorateMeetingController@updateAttendence');
+Route::post("submit_directorate_meeting_attendence/{directorateMeeting}",'DirectorateMeetingController@submitAttendence');
 
 // DepartmentMeeting routes
 Route::get('view_department_meeting','DepartmentMeetingController@index')->name('viewDepartmentMeetings');
@@ -140,6 +144,7 @@ Route::post('store_department_meeting_invitations/{departmentMeeting}','Departme
 Route::post('search_department_meetings','DepartmentMeetingController@search')->name('searchDepartmentMeetings');
 Route::post("set_department_meeting_attendence/{departmentMeeting}",'DepartmentMeetingController@setAttendence');
 Route::post("update_department_meeting_attendence/{departmentMeeting}",'DepartmentMeetingController@updateAttendence');
+Route::post("submit_department_meeting_attendence/{departmentMeeting}",'DepartmentMeetingController@submitAttendence');
 
 // CommitteeMeeting routes
 Route::post('show_committee_meeting/{committeeMeeting}','CommitteeMeetingController@show')->name('showCommitteeMeeting');

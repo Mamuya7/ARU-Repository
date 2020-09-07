@@ -74,7 +74,7 @@
                 <div class="card-body">
                     <div class="widget text-center">
                         <small class="text-white-50">Invited</small>
-                        <h2 class="text-xxl text-white">2568</h2>
+                        <h2 class="text-xxl text-white">{{$invitations}}</h2>
                     </div>
                 </div>
             </div>

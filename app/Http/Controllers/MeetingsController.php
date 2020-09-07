@@ -18,6 +18,7 @@ use App\School;
 use App\Department;
 use App\Directorate;
 use App\Attendence;
+use Storage;
 use Response;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -252,9 +253,11 @@ class MeetingsController extends Controller
     }
     public function downloadFile(Request $request)
     {
-        $document = $request->input('document');
-        response()->download(storage_path('app\\'.$document["document_url"]),$document["document_type"]);
-        echo json_encode(storage_path('app\\'.$document["document_url"]));
+        $document = $request->input('data');
+        // echo json_encode(url('app/'.$document["document_url"]));url('ARU-Repository/storage/app/'.$document["document_url"])
+        // $document["document_url"];
+        return response()->download(asset("public/agenda/dissertation cover.pdf"),$document["document_type"]);
+        // echo json_encode(storage_path('app\\'.$document["document_url"]));
     }
 
     public function changeSecretary(Request $request, Meeting $meeting)

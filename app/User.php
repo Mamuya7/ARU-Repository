@@ -54,6 +54,10 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Attendence');
     }
+    public function invitations()
+    {
+        return $this->hasMany('App\Invitation');
+    }
 
     public function school()
     {
@@ -139,5 +143,19 @@ class User extends Authenticatable
             }
         }
         return $committees->unique();
+    }
+
+    public static function withRoleCode($role_code)
+    {
+        $users = User::all();
+        foreach($users as $user)
+        {
+            if($user->hasRoleCode($role_code))
+            {
+                return $user;
+            }
+        }
+
+        return null;
     }
 }

@@ -51,6 +51,8 @@ class HomeController extends Controller
             $missed = $this->missedMeetingsCount();
             $abscent = $this->abscentMeetingsCount();
 
+            $invited = $this->invitedMeetingsCount();
+           
             $all = $past + $coming;
         }
         
@@ -60,7 +62,8 @@ class HomeController extends Controller
                         "all_meetings" => $all,
                         "attended_meetings" => $attended,
                         "abscent_meetings" => $abscent,
-                        "missed_meetings" => $missed
+                        "missed_meetings" => $missed,
+                        "invitations" => $invited
                     ]);
     }
     public function directorateCount()
