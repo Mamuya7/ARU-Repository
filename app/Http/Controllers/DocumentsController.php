@@ -7,6 +7,7 @@ use App\Meeting;
 use App\Document;
 use App\SchoolMeeting;
 use App\DepartmentMeeting;
+use App\DirectorateMeeting;
 use Illuminate\Http\Request;
 
 class DocumentsController extends Controller

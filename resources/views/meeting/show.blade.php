@@ -45,7 +45,7 @@
                                     @if((!$resources['specificMeeting']->meeting->wasHeld()) && (Auth::User()->id == $resources['specificMeeting']->meeting->user_id))
                                     <div class="text-right p-2">
                                         <span id="edit-icon" class="text-right fab">
-                                            <span class="fas fa-edit text-xl round-p5-ardhi color-ardhi hover-ardhi shadow"></span>
+                                            <span class="fe fe-edit-3 text-xl round-p5-ardhi color-ardhi hover-ardhi shadow"></span>
                                         </span>
                                     </div>
                                     @endif
@@ -57,6 +57,15 @@
                                 </div>
                                 <div class="col-lg-8">
                                     <input id="date" name="date" class="form-control datepicker text-lg" type="text" value="{{$resources['specificMeeting']->meeting->meeting_date}}" disabled>
+                                </div>
+                                <div class="col-lg-1">
+                                    @if((!$resources['specificMeeting']->meeting->wasHeld()) && (Auth::User()->id == $resources['specificMeeting']->meeting->user_id))
+                                    <div class="text-right p-2">
+                                        <span id="delete-icon" class="text-right fab">
+                                            <span class="fe fe-trash-2 text-xl round-p5-ardhi color-ardhi hover-ardhi shadow"></span>
+                                        </span>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="row p-2">
@@ -103,8 +112,10 @@
                                 <input type="text" id="secretary" value="{{($resources['secretary'] === null)? 'Not Selected': $resources['secretary']->last_name.' '.$resources['secretary']->first_name}}" class="form-control" disabled>
                             </div>
                             <div class="col-lg-2">
-                                @if((!$resources['specificMeeting']->meeting->wasHeld()) && ($resources['chairman'] !== null) && (Auth::User()->id == $resources['chairman']->id))
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Change</button>
+                                @if(($resources['specificMeeting']->meeting->ofDepartment()) || ($resources['specificMeeting']->meeting->ofDirectorate()))
+                                    @if((!$resources['specificMeeting']->meeting->wasHeld()) && ($resources['chairman'] !== null) && (Auth::User()->id == $resources['chairman']->id))
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Change</button>
+                                    @endif
                                 @endif
                             </div>
                         </div>
@@ -174,7 +185,7 @@
                                         <div class="col-lg-12">
                                             <div class="d-flex justify-content-between">
                                                 <span class="text-lg">Attendence</span>
-                                                <input type="button" value="Submit All" class="btn btn-success" onclick="submitAttendence({{$resources['urls']['set_attendence']}},{{json_encode($resources['members'])}})">
+                                                <input type="button" value="Submit All" class="btn btn-success" onclick="submitAttendence({{$resources['urls']['submit_attendence']}},{{json_encode($resources['members'])}})">
                                             </div>
                                         </div>
                                     </div>
@@ -243,7 +254,7 @@
                                 <div class="col-lg-5">
                                     <!-- start of attendence form seen by secretary alone -->
                                     @if(($resources['secretary'] !== null) && ($resources['secretary']->id == Auth::User()->id))
-                                    <form action="{{$resources['urls']['update_attendence']}}" method="post">
+                                    <form action="{{$resources['urls']['set_attendence']}}" method="post">
                                         @csrf
                                         <div class="row">
                                             <div class="col-lg-3">
@@ -294,7 +305,7 @@
                                                     </span>
                                                 </div>
                                                 @else
-                                                <input type="button" value="update" class="btn btn-primary" onclick="updateAttendence({{$resources['urls']['update_attendence']}},{{json_encode($member['profile'])}})">
+                                                <input type="submit" value="update" class="btn btn-primary">
                                                 @endif
                                             </div>
                                         </div>
@@ -746,6 +757,7 @@
                 invites.push({"user_id" : this.value, "role_id" : $('#role'+this.value).val()});
             });
             postdata(invites,path,function(results){
+                showSuccess("Member Invited Successfully");
                 location.reload();
             });
         }
@@ -798,20 +810,9 @@
         }
 
         const downloadfile = (document,path) => {
-            $.ajax({
-                url: path,
-                type:'post',
-                headers: {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
-                },
-                data: {'document':document},
-                dataType:'json',
-                success: function(response){
-                    console.log(response);
-                },
-                error: function(xhr,status,error){
-
-                }
+            
+            postdata(document,path,function(response){
+                console.log(response);
             });
         }
 

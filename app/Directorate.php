@@ -36,4 +36,9 @@ class Directorate extends Model
 
         return null;
     }
+
+    public function director()
+    {
+        return User::withRoleCode(Roles::find($this->directorate_head)->role_code);
+    }
 }

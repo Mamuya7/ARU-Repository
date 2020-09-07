@@ -161,22 +161,34 @@ class SchoolMeetingController extends Controller
      */
     public function show(SchoolMeeting $schoolMeeting)
     {
-        $chair = new User;
-        $secr = new User;
+        $chair = null;
+        $secr = null;
         $members = Array(); $invitations = Array();
         $invitees = $schoolMeeting->invitations;
+        $attendence = $schoolMeeting->attendences;
         $school_departments = School::find($schoolMeeting->school_id)->departments;
 
         foreach ($school_departments as $department) {
             foreach ($department->users as $user) {
                 $data = array("profile" => $user, "attendence" => null);
+
+                if(sizeof($attendence) > 0){
+                    foreach ($attendence as $value) {
+                        if($value->user_id == $user->id){
+                            $data["attendence"] = $value->status;
+                            break;
+                        }
+                    }
+                }
+
                 if($user->hasRoleType('head')){
                     array_push($members,$data);
                 }elseif($user->hasRoleType('dean')){
                     $chair = $user;
                     array_push($members,$data);
-                }elseif($user->hasRoleType('administrative officer')){
+                }elseif($user->hasRoleType('administrative')){
                     $secr = $user;
+                    array_push($members,$data);
                 }
             }
         }
@@ -203,8 +215,9 @@ class SchoolMeetingController extends Controller
                 "invites" => $invitations,
                 "urls" => [
                     "change_secretary" => "change_school_meeting_secretary",
-                    "set_attendence" => json_encode(url("set_school_meeting_attendence/".$schoolMeeting->id)),
-                    "update_attendence" => json_encode(url("update_school_meeting_attendence/".$schoolMeeting->id)),
+                    "set_attendence" => url("set_school_meeting_attendence/".$schoolMeeting->id),
+                    // "update_attendence" => json_encode(url("update_school_meeting_attendence/".$schoolMeeting->id)),
+                    "submit_attendence" => json_encode(url("submit_school_meeting_attendence/".$schoolMeeting->id)),
                     "invitation_link" => json_encode(url('store_school_meeting_invitations/'.$schoolMeeting->id)),
                     "remove_invitation" => url('delete_invitation\/')
                 ]
@@ -365,21 +378,7 @@ class SchoolMeetingController extends Controller
         //
     }
 
-    public function updateAttendence(Request $request, SchoolMeeting $schoolMeeting){
-        $data = $request->input('data');
-        DB::transaction(function() use($data,$schoolMeeting){
-            
-            DB::table('attendences')
-            ->updateOrInsert(
-                ["user_id" => intVal($data['user_id']), "attendenceable_id" => $schoolMeeting->id, "attendenceable_type" => 'App\SchoolMeeting'],
-                ["user_id" => intVal($data['user_id']),"status" => $data['status']]
-            );
-        });
-        
-        echo json_encode($data);
-    }
-
-    public function setAttendence(Request $request, SchoolMeeting $schoolMeeting){
+    public function submitAttendence(Request $request, SchoolMeeting $schoolMeeting){
         $data = $request->input('data');
 
         DB::transaction(function() use($data,$schoolMeeting){
@@ -396,4 +395,21 @@ class SchoolMeetingController extends Controller
 
         echo json_encode($data);
     }
+
+    public function setAttendence(Request $request, SchoolMeeting $schoolMeeting){
+        $data = $request->except(['_token']);
+// dd($data);
+        DB::transaction(function() use($data,$schoolMeeting){
+            foreach ($data as $user_id => $status) {
+                DB::table('attendences')
+                ->updateOrInsert(
+                    ["user_id" => intVal($user_id), "attendenceable_id" => $schoolMeeting->id, "attendenceable_type" => 'App\SchoolMeeting'],
+                    ["user_id" => intVal($user_id),"status" => $status]
+                );
+            }
+        });
+        
+        return back();
+    }
+
 }

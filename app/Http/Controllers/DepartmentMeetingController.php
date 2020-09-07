@@ -9,6 +9,7 @@ use App\Roles;
 use App\School;
 use App\Meeting;
 use App\Attendence;
+use App\Directorate;
 use App\DepartmentMeeting;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -48,7 +49,7 @@ class DepartmentMeetingController extends Controller
     
                 $school_directorate = DB::table('meetings')->join('directorate_meetings','meetings.id','=','directorate_meetings.meeting_id')
                         ->select('meetings.*',"directorate_meetings.id as child_id","directorate_meetings.directorate_id as entity_id")
-                        ->where('directorate_meetings.school_id','=',$dir_id)
+                        ->where('directorate_meetings.directorate_id','=',$dir_id)
                         ->orderBy('meetings.meeting_date','desc');
                 $data["url"] = url('show_directorate_meeting/');
             }
@@ -142,7 +143,7 @@ class DepartmentMeetingController extends Controller
                 "meeting_time" => $request->input('time'),
             ]);
         });
-        
+
         $members = Auth::User()->department->users;
 
         return redirect('create_department_meeting')->with("output","Department meeting created successfully!!");
@@ -206,11 +207,12 @@ class DepartmentMeetingController extends Controller
                 "invites" => $invitations,
                 "urls" => [
                     "change_secretary" => url("change_department_meeting_secretary/".$departmentMeeting->id),
-                    "set_attendence" => json_encode(url("set_department_meeting_attendence/".$departmentMeeting->id)),
-                    "update_attendence" => json_encode(url("update_department_meeting_attendence/".$departmentMeeting->id)),
+                    "set_attendence" => url("set_department_meeting_attendence/".$departmentMeeting->id),
+                    // "update_attendence" => json_encode(url("update_department_meeting_attendence/".$departmentMeeting->id)),
+                    "submit_attendence" => json_encode(url("submit_department_meeting_attendence/".$departmentMeeting->id)),
                     "invitation_link" => json_encode(url('store_department_meeting_invitations/'.$departmentMeeting->id)),
                     "remove_invitation" => url('delete_invitation\/')
-            ]
+                ]
         ]]);
     }
 
@@ -367,21 +369,37 @@ class DepartmentMeetingController extends Controller
         echo json_encode($departmentMeeting);
     }
 
-    public function updateAttendence(Request $request, DepartmentMeeting $departmentMeeting){
-        $data = $request->input('data');
-        DB::transaction(function() use($data,$departmentMeeting){
+    // public function updateAttendence(Request $request, DepartmentMeeting $departmentMeeting){
+    //     $data = $request->input('data');
+    //     DB::transaction(function() use($data,$departmentMeeting){
             
-            DB::table('attendences')
-            ->updateOrInsert(
-                ["user_id" => intVal($data['user_id']), "attendenceable_id" => $departmentMeeting->id, "attendenceable_type" => 'App\DepartmentMeeting'],
-                ["user_id" => intVal($data['user_id']),"status" => $data['status']]
-            );
-        });
+    //         DB::table('attendences')
+    //         ->updateOrInsert(
+    //             ["user_id" => intVal($data['user_id']), "attendenceable_id" => $departmentMeeting->id, "attendenceable_type" => 'App\DepartmentMeeting'],
+    //             ["user_id" => intVal($data['user_id']),"status" => $data['status']]
+    //         );
+    //     });
         
-        echo json_encode($data);
-    }
+    //     echo json_encode($data);
+    // }
 
     public function setAttendence(Request $request, DepartmentMeeting $departmentMeeting){
+        $data = $request->except(['_token']);
+        // dd($data);
+        DB::transaction(function() use($data,$departmentMeeting){
+            foreach ($data as $user_id => $status) {
+                DB::table('attendences')
+                ->updateOrInsert(
+                    ["user_id" => intVal($user_id), "attendenceable_id" => $departmentMeeting->id, "attendenceable_type" => 'App\DepartmentMeeting'],
+                    ["user_id" => intVal($user_id),"status" => $status]
+                );
+            }
+        });
+        
+        return back();
+    }
+
+    public function submitAttendence(Request $request, DepartmentMeeting $departmentMeeting){
         $data = $request->input('data');
 
         DB::transaction(function() use($data,$departmentMeeting){

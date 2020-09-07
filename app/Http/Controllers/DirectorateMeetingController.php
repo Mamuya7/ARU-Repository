@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use DB;
 use App\User;
+use App\Roles;
 use App\Meeting;
 use App\Directorate;
 use App\DirectorateMeeting;
@@ -162,28 +163,65 @@ class DirectorateMeetingController extends Controller
      */
     public function show(DirectorateMeeting $directorateMeeting)
     {
-        $chair = new User;
+        $chair = null;
         $secr = new User;
-        $members = Array();
-        $directorate_departments = Directorate::find($directorateMeeting->directorate_id)->departments;
-        foreach ($directorate_departments as $department) {
+        $members = Array(); $invitations = Array();
+        $invitees = $directorateMeeting->invitations;
+        $attendence = $directorateMeeting->attendences;
+        $directorate = Directorate::find($directorateMeeting->directorate_id);
+        
+        foreach ($directorate->departments as $department) {
             foreach ($department->users as $user) {
                 $data = array("profile" => $user, "attendence" => null);
+
+                if(sizeof($attendence) > 0){
+                    foreach ($attendence as $value) {
+                        if($value->user_id == $user->id){
+                            $data["attendence"] = $value->status;
+                            break;
+                        }
+                    }
+                }
+
                 if($user->hasRoleType('head')){
                     array_push($members,$data);
                 }elseif($user->hasRoleType('director')){
                     $chair = $user;
                     array_push($members,$data);
-                }elseif($user->id === $directorateMeeting->secretary_id){
+                }
+                if($user->id == $directorateMeeting->secretary_id){
                     $secr = $user;
                 }
             }
         }
         
-        if(Auth::User()->hasRoleType('director')){
-            $data = array("profile" => Auth::User(), "attendence" => null);
-            $chair = Auth::User();
+        if($chair === null){
+            $director = $directorate->director();
+            $chair = ($director === null)? null: $director;
+            $data = array("profile" => $chair, "attendence" => null);
+
+            if((sizeof($attendence) > 0) && $chair !== null){
+                foreach ($attendence as $value) {
+                    if($value->user_id == $chair->id){
+                        $data["attendence"] = $value->status;
+                        break;
+                    }
+                }
+            }
+
             array_push($members,$data);
+        }
+
+        if(sizeof($invitees) > 0){
+            foreach ($invitees as $value) {
+                $data = array(
+                    "profile" => User::find($value->user_id), 
+                    "role" => Roles::find($value->role_id), 
+                    "invitation" => $value
+                );
+                
+                array_push($invitations,$data);
+            }
         }
 
         return view('meeting.show',[
@@ -195,10 +233,11 @@ class DirectorateMeetingController extends Controller
                 "documents" => $directorateMeeting->documents,
                 "invites" => $invitations,
                 "urls" => [
-                    "change_secretary" => url("change_directorate_meeting_secretary".$directorateMeeting->id),
-                    "set_attendence" => json_encode(url("set_directorate_meeting_attendence/".$directorateMeeting->id)),
-                    "update_attendence" => json_encode(url("update_directorate_meeting_attendence/".$directorateMeeting->id)),
-                    "invitation_link" => url('store_directorate_meeting_invitations/'.$directorateMeeting->id),
+                    "change_secretary" => url("change_directorate_meeting_secretary/".$directorateMeeting->id),
+                    "set_attendence" => url("set_directorate_meeting_attendence/".$directorateMeeting->id),
+                    // "update_attendence" => json_encode(url("update_directorate_meeting_attendence/".$directorateMeeting->id)),
+                    "submit_attendence" => json_encode(url("submit_directorate_meeting_attendence/".$directorateMeeting->id)),
+                    "invitation_link" => json_encode(url('store_directorate_meeting_invitations/'.$directorateMeeting->id)),
                     "remove_invitation" => url('delete_invitation\/')
                 ]
             ]
@@ -289,7 +328,7 @@ class DirectorateMeetingController extends Controller
         if(($unit === "committee") || ($unit === "all")){
             $committees = Auth::User()->getCommittees();
             
-            $committee = DB::table('meetings')->join('committee_meetingss','meetings.id','=','committee_meetings.meeting_id')
+            $committee = DB::table('meetings')->join('committee_meetings','meetings.id','=','committee_meetings.meeting_id')
             ->select('meetings.*','committee_meetings.id as child_id','committee_meetings.committee_id as entity_id')
                         ->whereIn('committee_meetings.committee_id',$committees->pluck("id"))
                         ->orderBy('meetings.meeting_date','desc');
@@ -361,21 +400,37 @@ class DirectorateMeetingController extends Controller
         //
     }
 
-    public function updateAttendence(Request $request, DirectorateMeeting $directorateMeeting){
-        $data = $request->input('data');
-        DB::transaction(function() use($data,$directorateMeeting){
+    // public function updateAttendence(Request $request, DirectorateMeeting $directorateMeeting){
+    //     $data = $request->input('data');
+    //     DB::transaction(function() use($data,$directorateMeeting){
             
-            DB::table('attendences')
-            ->updateOrInsert(
-                ["user_id" => intVal($data['user_id']), "attendenceable_id" => $directorateMeeting->id, "attendenceable_type" => 'App\DirectorateMeeting'],
-                ["user_id" => intVal($data['user_id']),"status" => $data['status']]
-            );
-        });
+    //         DB::table('attendences')
+    //         ->updateOrInsert(
+    //             ["user_id" => intVal($data['user_id']), "attendenceable_id" => $directorateMeeting->id, "attendenceable_type" => 'App\DirectorateMeeting'],
+    //             ["user_id" => intVal($data['user_id']),"status" => $data['status']]
+    //         );
+    //     });
         
-        echo json_encode($data);
-    }
+    //     echo json_encode($data);
+    // }
 
     public function setAttendence(Request $request, DirectorateMeeting $directorateMeeting){
+        $data = $request->except(['_token']);
+// dd($data);
+        DB::transaction(function() use($data,$directorateMeeting){
+            foreach ($data as $user_id => $status) {
+                DB::table('attendences')
+                ->updateOrInsert(
+                    ["user_id" => intVal($user_id), "attendenceable_id" => $directorateMeeting->id, "attendenceable_type" => 'App\DirectorateMeeting'],
+                    ["user_id" => intVal($user_id),"status" => $status]
+                );
+            }
+        });
+        
+        return back();
+    }
+
+    public function submitAttendence(Request $request, DirectorateMeeting $directorateMeeting){
         $data = $request->input('data');
 
         DB::transaction(function() use($data,$directorateMeeting){
@@ -391,5 +446,13 @@ class DirectorateMeetingController extends Controller
         });
 
         echo json_encode($data);
+    }
+
+    public function changeSecretary(Request $request, DirectorateMeeting $directorateMeeting)
+    {
+        $secretary_id = $request->input('secretary');
+        $directorateMeeting->update(["secretary_id" => intval($secretary_id)]);
+        
+        return back()->with("response","Secretary Updated Successfully");
     }
 }
