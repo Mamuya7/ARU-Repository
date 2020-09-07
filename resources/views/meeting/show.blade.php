@@ -17,23 +17,17 @@
                     <a class="nav-link mb-sm-3 mb-md-0 show mt-md-2 mt-0 mt-lg-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="true">
                         <i class="far fa-images mr-2"></i>History</a>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link mb-sm-3 mb-md-0 mt-md-2 mt-0 mt-lg-0" id="tabs-icons-text-4-tab" data-toggle="tab" href="#tabs-icons-text-4" role="tab" aria-controls="tabs-icons-text-4" aria-selected="false"><i class="fas fa-newspaper mr-2"></i>Timeline</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link mb-sm-0 mb-md-0 mt-md-2 mt-0 mt-lg-0" id="tabs-icons-text-5-tab" data-toggle="tab" href="#tabs-icons-text-5" role="tab" aria-controls="tabs-icons-text-5" aria-selected="false"><i class="fas fa-cog mr-2"></i>More</a>
-                </li> -->
             </ul>
         </div>
     </div>
     <div class="card-body">
-        @if(Session::has('response'))
-        <div id="response" class="bg-success p-1 text-center">
-                <span class="text-white text-capitalize">{{Session::get('response')}}</span>
-        </div>
-        @endif
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                @if(Session::has('response'))
+                <div id="response" class="bg-success p-1 text-center">
+                        <span class="text-white text-capitalize">{{Session::get('response')}}</span>
+                </div>
+                @endif
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12">
                         <form action="{{url('update_general_meeting/'.$resources['specificMeeting']->meeting_id)}}" method="post">
@@ -327,6 +321,43 @@
                             </div>
                             @endforeach
                             <!-- end of list of members -->
+                            <div class="border-bottom border-ardhi p-0 mt-2"></div>
+                            <!-- start of list of invitations -->
+                            @foreach($resources['invites'] as $invite)
+                                <div class="border-bottom p-2 cursor-default row">
+                                    <!-- column for member names and membership type -->
+                                    <div class="col-lg-7">
+                                        <div class="d-flex justify-content-between">
+                                            <span class="text-capitalize">{{$invite['profile']->last_name}}, {{$invite['profile']->first_name}}</span>
+                                            
+                                            <span class="text-capitalize color-ardhi">Invitee</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="text-center">
+                                            
+                                            <div class="d-flex justify-content-around">
+                                                <span class="text-capitalize">As <strong>{{$invite['role']->role_code}}</strong></span>
+                                                
+                                                @if(!$resources['specificMeeting']->meeting->wasHeld())
+                                                    @if(($resources['chairman'] !== null) && ($resources['chairman']->id == Auth::User()->id))
+                                                        <form action="{{$resources['urls']['remove_invitation'].$invite['invitation']->id}}" method="post">
+                                                            @method('DELETE')
+                                                            @csrf
+                                                            <button class="btn btn-icon btn-danger mt-1 mb-1" type="submit">
+                                                                <span class="btn-inner--icon"><i class="fe fe-trash-2"></i></span>
+                                                                <span class="btn-inner--text">Remove</span>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end column form member name and membership type -->
+                                </div>
+                            @endforeach
+                            <!-- end of list of invitations -->
                         </div>
                     </div>
                 </div>
@@ -335,12 +366,6 @@
             <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
                								
             </div>
-            <!-- <div class="tab-pane fade" id="tabs-icons-text-4" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab">
-                
-            </div>
-            <div class="tab-pane fade" id="tabs-icons-text-5" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab">
-
-            </div> -->
         </div>
         <!-- end tab-content -->
 
@@ -350,7 +375,7 @@
 <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form action="{{url($resources['urls']['change_secretary'].$resources['specificMeeting']->id)}}" method="post">
+            <form action="{{url($resources['urls']['change_secretary'])}}" method="post">
                 @csrf
                 <div class="modal-header">
                     <h2 class="modal-title" id="modal-title-default">Select Secretary</h2>
@@ -366,6 +391,9 @@
                             @if(($resources['chairman'] !== null) && ($resources['chairman']->id == $member['profile']->id))
                             <span class="text-capitalize text-red">{{$member['profile']->first_name}}, {{$member['profile']->last_name}}</span>
                             <span class="text-capitalize text-red">Chairman</span>
+                            @elseif(($resources['secretary'] !== null) && ($resources['secretary']->id == $member['profile']->id))
+                            <span class="text-capitalize text-green">{{$member['profile']->first_name}}, {{$member['profile']->last_name}}</span>
+                            <span class="text-capitalize text-green">Secretary</span>
                             @else
                             <label class="custom-switch">
                                 <input type="radio" name="secretary" value="{{$member['profile']->id}}" class="custom-switch-input">
@@ -718,7 +746,7 @@
                 invites.push({"user_id" : this.value, "role_id" : $('#role'+this.value).val()});
             });
             postdata(invites,path,function(results){
-                console.log(results);
+                location.reload();
             });
         }
 

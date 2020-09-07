@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Hash;
 use App\Department;
 use App\Roles;
+use Auth;
 use App\User;
 use Illuminate\Support\Facades\DB;
 
@@ -99,12 +102,13 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
-    {
-        $users = DB::table('users')
-        ->join('departments','departments.id','=','users.department_id')
-        ->where('users.id','=',$user->id)
-        ->first();
-        echo json_encode($users);
+    {   
+       // $users = DB::table('users')
+       // ->join('departments','departments.id','=','users.department_id')
+        //->where('users.id','=',$user->id)
+        //->first();
+        //echo json_encode($users);
+        echo $user;
     }
 
     public function fetch()
@@ -124,9 +128,24 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
+        //$first_name = $request->input('first_name');
+        //$last_name = $request->input('last_name');
+       // $gender = $request->input('gender');
+        $email = $request->input('email');
+        $department = $request->input('department');
+
+        $user->update([
+           // 'first_name' => $first_name,
+            //'last_name' => $last_name,
+            //'gender' => $gender,
+            'email' => $email,
+            'department_id' => $department
+        ]);
+        return back();
         
+        //return redirect('viewUsers');
     }
 
     /**
@@ -151,4 +170,53 @@ class UserController extends Controller
         User::find($userId)->roles()->detach($id);
         echo json_encode('successifully');
     }
+
+
+    public function userProfile()
+    {   
+       $user= Auth::User();
+       //dd($user);
+
+        $users = DB::table('departments')
+        ->join('users','users.department_id','=','departments.id')
+        ->select('users.id as user_id','users.*','departments.*')
+        ->where('users.id',$user->id)
+        ->get();
+
+        //dd($users);
+        
+        $roles = DB::table('roles')->get();
+        $departments = DB::table('departments')->get();
+
+
+        return view('profile.staffProfile',['user' => $users,'roles'=>$roles,'departments'=>$departments]);
+
+    }
+
+    public function updateProfile(Request $request)
+    {   
+        $id = $request->input('id');
+        $email = $request->input('email');
+        //$password = $request->input('password');
+       // $department = $request->input('department');
+        $password = Hash::make($request->input('password'));
+        //dd($id);
+
+    
+        DB::table('users')
+              ->where('id', $id)
+              ->update(['email' => $email,
+                        'password'=>$password
+              ]);
+        return back();
+        
+    }
+
+
+
+    
+
+
+
+
 }

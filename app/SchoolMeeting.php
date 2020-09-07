@@ -25,4 +25,22 @@ class SchoolMeeting extends Model
     {
         return $this->morphMany('App\Invitation','invitationable');
     }
+    public function boardMembers()
+    {
+        $members = Array();
+
+        foreach (School::find($this->school_id)->departments as $department) {
+            foreach ($department->users as $user) {
+                if($user->hasRoleType('head')){
+                    array_push($members,$user);
+                }elseif($user->hasRoleType('dean')){
+                    array_push($members,$user);
+                }elseif($user->hasRoleType('administrative officer')){
+                    array_push($members,$user);
+                }
+            }
+        }
+
+        return $members;
+    }
 }

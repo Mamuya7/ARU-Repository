@@ -2,7 +2,9 @@
 
 @section('content')
 
-
+<a href="{{ route('registerDirectorateForm') }}">
+    <button class="btn btn-sm btn-square btn-primary mt-1 mb-1">add Directorate</button>
+</a>
 <div class="card  shadow">
     <div class="card-body ">               
         <div class="card-header bg-transparent border-bottom-0">

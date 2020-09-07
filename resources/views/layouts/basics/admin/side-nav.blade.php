@@ -18,7 +18,7 @@
             </ul>
         </li>
         <li class="slide">
-            <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fe fe-grid"></i><span class="side-menu__label">schools</span><i class="angle fa fa-angle-right"></i></a>
+            <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fe fe-grid"></i><span class="side-menu__label">Schools</span><i class="angle fa fa-angle-right"></i></a>
             <ul class="slide-menu">
                 <li>
                     <a href="{{ route('AddSchool') }}" class="slide-item">Add school</a>
@@ -97,7 +97,7 @@
                 </li>
                 @endif
                 <li>
-                    <a href="{{ url('/send-mail')}}" class="slide-item">View Meeting</a>
+                <!--  <a href="" class="slide-item">View Meeting</a>  -->
                 </li>
             </ul>
         </li>

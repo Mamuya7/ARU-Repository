@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\User;
 use DB;
+use App\Roles;
 use App\Meeting;
 use App\School;
 use App\SchoolMeeting;
@@ -124,7 +125,7 @@ class SchoolMeetingController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function()use($request){
+        $result = DB::transaction(function()use($request){
             $meeting = new Meeting;
             $meeting->meeting_title =  $request->input('title');
             $meeting->meeting_description = $request->input('description');
@@ -137,13 +138,23 @@ class SchoolMeetingController extends Controller
                             $query->where('id','=',Auth::User()->department_id);
                         })->first()->id;
     
-            SchoolMeeting::create([
+            $schoolMeeting = SchoolMeeting::create([
                 "meeting_id" => $meeting->id,
                 "school_id" => $school_id,
                 "secretary_id" => $request->input('secretary'),
                 "meeting_time" => $request->input('time'),
             ]);
+
+            return compact('schoolMeeting');
         });
+
+        $members = $result['schoolMeeting']->boardMembers();
+        $details = [
+            'title'=>'mail from Ardhi university',
+            'body'=>'This for notifying of meeting issues'
+             ];
+        
+        \Mail::to($members)->send(new \App\Mail\MeetingCreated($details));
 
         return redirect('create_school_meeting')->with("output","School meeting created successfully!!");
     }
@@ -158,8 +169,10 @@ class SchoolMeetingController extends Controller
     {
         $chair = new User;
         $secr = new User;
-        $members = Array();
+        $members = Array(); $invitations = Array();
+        $invitees = $schoolMeeting->invitations;
         $school_departments = School::find($schoolMeeting->school_id)->departments;
+
         foreach ($school_departments as $department) {
             foreach ($department->users as $user) {
                 $data = array("profile" => $user, "attendence" => null);
@@ -173,6 +186,18 @@ class SchoolMeetingController extends Controller
                 }
             }
         }
+        // dd($secr->isDirty());
+        if(sizeof($invitees) > 0){
+            foreach ($invitees as $value) {
+                $data = array(
+                    "profile" => User::find($value->user_id), 
+                    "role" => Roles::find($value->role_id), 
+                    "invitation" => $value
+                );
+                
+                array_push($invitations,$data);
+            }
+        }
         
         return view('meeting.show',[ 
             "resources" => [
@@ -181,11 +206,13 @@ class SchoolMeetingController extends Controller
                 "members" => $members,
                 "documents" => $schoolMeeting->documents,
                 "specificMeeting" => $schoolMeeting,
+                "invites" => $invitations,
                 "urls" => [
                     "change_secretary" => "change_school_meeting_secretary",
                     "set_attendence" => json_encode(url("set_school_meeting_attendence/".$schoolMeeting->id)),
                     "update_attendence" => json_encode(url("update_school_meeting_attendence/".$schoolMeeting->id)),
-                    "invitation_link" => url('store_school_meeting_invitations/'.$schoolMeeting->id)
+                    "invitation_link" => json_encode(url('store_school_meeting_invitations/'.$schoolMeeting->id)),
+                    "remove_invitation" => url('delete_invitation\/')
                 ]
             ]
         ]);

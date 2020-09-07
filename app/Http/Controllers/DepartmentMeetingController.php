@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use DB;
 Use App\User;
+use App\Roles;
 use App\School;
 use App\Meeting;
 use App\Attendence;
@@ -142,6 +143,20 @@ class DepartmentMeetingController extends Controller
             ]);
         });
         
+        $members = Auth::User()->department->users;
+
+
+       // dd($members);
+        $details = [
+                'title'=>'mail from Ardhi university',
+                'body'=>'This for notifying of meeting issues'
+                 ];
+            
+               // $data = array('mankilla12345@gmail.com','kilango12345@gmail.com');
+            
+       \Mail::to($members)->send(new \App\Mail\MeetingCreated($details));
+        
+
         return redirect('create_department_meeting')->with("output","Department meeting created successfully!!");
     }
 
@@ -156,7 +171,8 @@ class DepartmentMeetingController extends Controller
         $users = Auth::User()->department->users;
         $chair = new User; $secretary = new User;
         $attendence = $departmentMeeting->attendences;
-        $members = Array();
+        $invitees = $departmentMeeting->invitations;
+        $members = Array(); $invitations = Array();
 
         foreach ($users as $user) {
             if($user->hasRoleType('head')){
@@ -180,6 +196,17 @@ class DepartmentMeetingController extends Controller
 
             array_push($members,$data);
         }
+        if(sizeof($invitees) > 0){
+            foreach ($invitees as $value) {
+                $data = array(
+                    "profile" => User::find($value->user_id), 
+                    "role" => Roles::find($value->role_id), 
+                    "invitation" => $value
+                );
+                
+                array_push($invitations,$data);
+            }
+        }
 
         return view('meeting.show',[
              "resources" => [
@@ -187,12 +214,14 @@ class DepartmentMeetingController extends Controller
                 "documents" => $departmentMeeting->documents,
                 "chairman" => $chair, 
                 "secretary" => $secretary, 
-                "members" => $members,
+                "members" => $members, 
+                "invites" => $invitations,
                 "urls" => [
                     "change_secretary" => url("change_department_meeting_secretary/".$departmentMeeting->id),
                     "set_attendence" => json_encode(url("set_department_meeting_attendence/".$departmentMeeting->id)),
                     "update_attendence" => json_encode(url("update_department_meeting_attendence/".$departmentMeeting->id)),
-                    "invitation_link" => json_encode(url('store_department_meeting_invitations/'.$departmentMeeting->id))
+                    "invitation_link" => json_encode(url('store_department_meeting_invitations/'.$departmentMeeting->id)),
+                    "remove_invitation" => url('delete_invitation\/')
             ]
         ]]);
     }

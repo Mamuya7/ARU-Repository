@@ -30,6 +30,10 @@
 
 	<!-- sweetalert css-->
 	<link href="{{ asset('ansta/plugins/sweet-alert/sweetalert.css') }}" rel="stylesheet" />
+	
+	<link href="{{ asset('kiaalap/js/pdf/style.css')}}" rel="stylesheet" />
+
+	
 
 	@guest
 	<link href="{{ asset('fonts/montserrat/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap')}}" rel="stylesheet">

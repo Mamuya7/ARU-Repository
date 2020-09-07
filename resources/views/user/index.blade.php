@@ -1,9 +1,14 @@
-@extends('layouts.admin')
+
 
 @section('content')
+
+<a href="{{ route('register') }}">
+        <button class="btn btn-sm btn-square btn-primary mt-1 mb-1">add User</button>
+</a>
 								
     <div class="card shadow">
-        <div class="card-header table-primary border-0">
+   
+        <div class="card-header border-0">
             <h2 class=" mb-0">All Staffs</h2>
         </div>
         <div class="">
@@ -141,77 +146,78 @@
     
                 <form id="update-user" method="post">
                     {{csrf_field()}}
-                    <div class = "modal-header bg-primary">      
-                        <button type = "button" class="close" data-dismiss = "modal">×</button> 
-                    </div>
+                        <div class = "modal-header bg-primary">  
+                            <h3>Update Staff Records </h3>   
+                            <button type = "button" class="close" data-dismiss = "modal">×</button> 
+                        </div>
                     <div class = "modal-body">
-                    <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="form-label">First Name</label>
-                            <input id="first_name" type="text" class="form-control @error('name') is-invalid @enderror" name="first_name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-                        
-                           @error('name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Gender</label>
-                            <select id="gender" name="gender" class="form-control select2 w-100" >
-                                <option value="none" selected="selected" disabled>Select Gender</option>
-                                <option value="male" class="text-md">Male</option>
-                                <option value="female" class="text-md">Female</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">email</label>
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
-                                @error('email')
+                        <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">First Name</label>
+                                <input id="first_name" type="text" class="form-control @error('name') is-invalid @enderror" name="first_name" value="{{ old('name') }}" required autocomplete="name" autofocus disabled> 
+                            
+                            @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                        </div>
+                            </div>
 
+                            <div class="form-group">
+                                <label class="form-label">Gender</label>
+                                <select id="gender" name="gender" class="form-control select2 w-100" disabled>
+                                    <option value="none" selected="selected" disabled>Select Gender</option>
+                                    <option value="male" class="text-md">Male</option>
+                                    <option value="female" class="text-md">Female</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">email</label>
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+
+                                    @error('email')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Last Name</label>
+                                <input id="last_name" type="text" class="form-control @error('name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}" required autocomplete="last_name" autofocus disabled>
+
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror          
+                            </div>
+
+                        
+
+                            <div class="form-group">
+                                <label class="form-label">Department</label>
+                                <select id="department" name="department" class="form-control select2 w-100" >
+                                    <option   selected="selected" disabled></option>
+                                @foreach($departments as $department)
+                                    <option value="{{$department->id}}" class="text-md">{{$department->department_name}}</option>
+                                @endforeach
+                                </select>
+                            </div>
+
+                        </div>
+                            
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="form-label">Last Name</label>
-                            <input id="last_name" type="text" class="form-control @error('name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}" required autocomplete="last_name" autofocus>
-
-                            @error('name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror          
-                        </div>
-
-                      
-
-                        <div class="form-group">
-                            <label class="form-label">Department</label>
-                            <select id="department" name="department" class="form-control select2 w-100" >
-                                <option   selected="selected" disabled></option>
-                            @foreach($departments as $department)
-                                <option value="{{$department->id}}" class="text-md">{{$department->department_name}}</option>
-                            @endforeach
-                            </select>
-                        </div>
-
-                    </div>
-                         
-                </div>
-                <div class = "modal-footer">
-                    
+                    <div class = "modal-footer">
+                        
                         <button type="submit" class="btn btn-primary mt-1 mb-1">update</button>
-                
-                    <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
-                </div>
+                    
+                        <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
+                    </div>
                 </form> 
             </div>
         </div>
@@ -223,6 +229,7 @@
 
 
         function editUser(id){
+
             $.ajax({
                 url: '/editUser/'+id,
                 type: 'POST',
@@ -242,6 +249,9 @@
                         // $('#department').val(response.department_name);
                         $('#department').val(response.department_id);
                         // $(this).children("option:selected").val();
+
+
+                        $('#update-user').attr('action',"updateUser/"+response.id);
 
                         
                         

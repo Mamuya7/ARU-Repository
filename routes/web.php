@@ -112,7 +112,7 @@ Route::post('show_users','UsersController@show');
 // SchoolMeeting routes
 Route::get('view_school_meetings','SchoolMeetingController@index')->name('viewSchoolMeetings');
 Route::get('create_school_meeting','SchoolMeetingController@create')->name('createSchoolMeeting');
-Route::post('show_school_meeting/{schoolMeeting}','SchoolMeetingController@show')->name('showSchoolMeeting');
+Route::any('show_school_meeting/{schoolMeeting}','SchoolMeetingController@show')->name('showSchoolMeeting');
 Route::get('store_school_meeting','SchoolMeetingController@store')->name('storeSchoolMeeting');
 Route::post('store_school_meeting_invitations/{schoolMeeting}','SchoolMeetingController@invite')->name('storeSchoolMeetingInvitation');
 Route::post('search_school_meetings','SchoolMeetingController@search')->name('searchSchoolMeetings');
@@ -122,10 +122,10 @@ Route::post("update_school_meeting_attendence/{schoolMeeting}",'SchoolMeetingCon
 // DirectorateMeeting routes
 Route::get('view_directorate_meeting','DirectorateMeetingController@index')->name('viewDirectorateMeetings');
 Route::get('create_directorate_meeting','DirectorateMeetingController@create')->name('createDirectorateMeeting');
-Route::post('show_directorate_meeting/{directorateMeeting}','DirectorateMeetingController@show')->name('showDirectorateMeeting');
+Route::any('show_directorate_meeting/{directorateMeeting}','DirectorateMeetingController@show')->name('showDirectorateMeeting');
 Route::get('store_directorate_meeting','DirectorateMeetingController@store')->name('storeDirectorateMeeting');
 Route::post('change_directorate_meeting_secretary/{directorateMeeting}','DirectorateMeetingController@changeSecretary');
-Route::get('store_directorate_meeting_invitations/{directorateMeeting}','DirectorateMeetingController@invite')->name('storeDirectorateMeetingInvitation');
+Route::post('store_directorate_meeting_invitations/{directorateMeeting}','DirectorateMeetingController@invite')->name('storeDirectorateMeetingInvitation');
 Route::post('search_directorate_meetings','DirectorateMeetingController@search')->name('searchDirectorateMeetings');
 Route::post("set_directorate_meeting_attendence/{directorateMeeting}",'DirectorateMeetingController@setAttendence');
 Route::post("update_directorate_meeting_attendence/{directorateMeeting}",'DirectorateMeetingController@updateAttendence');
@@ -133,10 +133,10 @@ Route::post("update_directorate_meeting_attendence/{directorateMeeting}",'Direct
 // DepartmentMeeting routes
 Route::get('view_department_meeting','DepartmentMeetingController@index')->name('viewDepartmentMeetings');
 Route::get('create_department_meeting','DepartmentMeetingController@create')->name('createDepartmentMeeting');
-Route::post('show_department_meeting/{departmentMeeting}','DepartmentMeetingController@show')->name('showDepartmentMeeting');
+Route::any('show_department_meeting/{departmentMeeting}','DepartmentMeetingController@show')->name('showDepartmentMeeting');
 Route::get('store_department_meeting','DepartmentMeetingController@store')->name('storeDepartmentMeeting');
 Route::post('change_department_meeting_secretary/{departmentMeeting}','DepartmentMeetingController@changeSecretary');
-Route::get('store_department_meeting_invitations/{departmentMeeting}','DepartmentMeetingController@invite')->name('storeDepartmentMeetingInvitation');
+Route::post('store_department_meeting_invitations/{departmentMeeting}','DepartmentMeetingController@invite')->name('storeDepartmentMeetingInvitation');
 Route::post('search_department_meetings','DepartmentMeetingController@search')->name('searchDepartmentMeetings');
 Route::post("set_department_meeting_attendence/{departmentMeeting}",'DepartmentMeetingController@setAttendence');
 Route::post("update_department_meeting_attendence/{departmentMeeting}",'DepartmentMeetingController@updateAttendence');
@@ -226,7 +226,12 @@ Route::post('fetch_all_users','UserController@fetch');
 
 
 
+//userProfile
+Route::get('viewProfile','UserController@userProfile')->name('view-Users');
+Route::post('updateProfile', 'UserController@updateProfile');
 
+//invitations
+Route::delete('delete_invitation/{invitation}','InvitationController@destroy');
 
 
 

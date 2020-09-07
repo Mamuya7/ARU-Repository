@@ -6,7 +6,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h2 class="modal-title" id="largeModalLabel">Modal title</h2>
+                <h2 class="modal-title" id="largeModalLabel">Update Department</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -59,6 +59,10 @@
         </div>
     </div>
 </div>
+
+<a href="{{ route('AddDepartment') }}">
+        <button class="btn btn-sm btn-square btn-primary mt-1 mb-1">add Department</button>
+</a>
 <div class="nav-wrapper">
     <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
         <li class="nav-item">

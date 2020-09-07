@@ -127,7 +127,7 @@ class DirectorateMeetingController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function()use($request){
+        $result = DB::transaction(function()use($request){
             $meeting = new Meeting;
             $meeting->meeting_title =  $request->input('title');
             $meeting->meeting_description = $request->input('description');
@@ -145,7 +145,17 @@ class DirectorateMeetingController extends Controller
             $directorateMeeting->meeting_time = $request->input('time');
 
             $directorateMeeting->save();
+
+            return compact('directorateMeeting');
         });
+
+        $members = $result['directorateMeeting']->boardMembers();
+        $details = [
+            'title'=>'mail from Ardhi university',
+            'body'=>'This for notifying of meeting issues'
+            ]; 
+        
+        \Mail::to($members)->send(new \App\Mail\MeetingCreated($details));
 
         return redirect('create_directorate_meeting')->with("output","Directorate meeting created successfully!!");
     }
@@ -170,7 +180,7 @@ class DirectorateMeetingController extends Controller
                 }elseif($user->hasRoleType('director')){
                     $chair = $user;
                     array_push($members,$data);
-                }elseif($user->hasRoleType('administrative officer')){
+                }elseif($user->id === $directorateMeeting->secretary_id){
                     $secr = $user;
                 }
             }
@@ -189,11 +199,13 @@ class DirectorateMeetingController extends Controller
                 "members" => $members,
                 "specificMeeting" => $directorateMeeting, 
                 "documents" => $directorateMeeting->documents,
+                "invites" => $invitations,
                 "urls" => [
                     "change_secretary" => url("change_directorate_meeting_secretary".$directorateMeeting->id),
                     "set_attendence" => json_encode(url("set_directorate_meeting_attendence/".$directorateMeeting->id)),
                     "update_attendence" => json_encode(url("update_directorate_meeting_attendence/".$directorateMeeting->id)),
-                    "invitation_link" => url('store_directorate_meeting_invitations/'.$directorateMeeting->id)
+                    "invitation_link" => url('store_directorate_meeting_invitations/'.$directorateMeeting->id),
+                    "remove_invitation" => url('delete_invitation\/')
                 ]
             ]
         ]);

@@ -59,7 +59,7 @@
                 <div class="row">
                     <div class="col-lg-10 col-md-10"></div>
                     <div class="col-lg-2 col-md-2">
-                        <button style="margin-left:80px" type="submit" class="btn btn-success">Assign</button>
+                        <button style="margin-left:80px" type="submit" class="btn btn-primary">Assign</button>
                     </div>
                 </div>
             </form>
