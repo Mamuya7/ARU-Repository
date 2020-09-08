@@ -228,11 +228,12 @@ Route::delete('deleteUser/{user}','UserController@destroy');
 Route::post('editUser/{user}','UserController@edit');
 Route::post('removeRole/{id}','UserController@removeRole');
 Route::post('fetch_all_users','UserController@fetch');
+Route::post('updateUser/{user}', 'UserController@update');
 
 
 
 //userProfile
-Route::get('viewProfile','UserController@userProfile')->name('view-Users');
+Route::get('viewProfile','UserController@userProfile');
 Route::post('updateProfile', 'UserController@updateProfile');
 
 //invitations
