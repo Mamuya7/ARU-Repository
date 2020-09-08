@@ -200,8 +200,18 @@ class MeetingsController extends Controller
             }elseif(Auth::User()->department->belongsToSchool()){
                 $directorate = Directorate::withDirectorAs(Auth::User()->roles()->where('role_type','director')->first()->role_code);
             }
-            $directorateMeeting = $meeting->directorateMeetings()->where('directorate_id',$directorate->id)->first();
-            return redirect()->route('showDirectorateMeeting',[$directorateMeeting]);
+            $next = DB::table('meetings')->join('directorate_meetings','meetings.id','=','directorate_meetings.meeting_id')
+            ->where('meetings.meeting_date','>',$meeting->meeting_date)
+            ->where(function($query)use($directorate){
+                $query->where("meetings.meeting_type","directorate");
+                $query->where("directorate_meetings.directorate_id",'=',$directorate->id);
+            })->orderBy('meetings.meeting_date','asc');
+
+            if($next->exists()){
+                $directorateMeeting = DirectorateMeeting::find($next->first()->id);
+                return redirect()->route('showDirectorateMeeting',[$directorateMeeting]);
+            }
+            return back()->with("nextresponse","No Next Meeting");
         }elseif ($meeting->ofCommittee()) {
             // dd($meeting->committees);
         }
