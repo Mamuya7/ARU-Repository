@@ -1,9 +1,12 @@
 @extends('layouts.admin')
 
 @section('content')
-                        
-    
+                
+
     <div class="col-xl-12">
+    <a href="{{ url('AddSchool') }}">
+        <button class="btn btn-sm btn-square btn-primary mt-1 mb-1">add school</button>
+    </a>
         <div class="card  shadow">
             <div class="card-header bg-transparent">
                 <div class="row align-items-center">
@@ -21,7 +24,7 @@
                             <th>School Code</th>
                             <th>Departments</th>
                             <th>Action</th>
-                            <th>Action</th>
+                            <!-- <th>Action</th> -->
                         </tr>
 
                         @foreach($schools as $school)
@@ -31,14 +34,9 @@
                                 <td>{{$school->school_code}}</td>
                                 <td>{{$school->departments_count}}</td>
                 <td>
-                <button type="button" class="btn btn-sm btn-square btn-primary mt-1 mb-1" onclick="editSchool({{ $school->id}})" data-toggle="modal" data-target="#updateSchool">update</button> 
-                </td>
-                
-                <td>
-                 
-                    <form action="deleteschool/{{$school->id}}" method="post" class="dis-inline">
-                
-                    {{csrf_field()}}
+                    <button type="button" class="btn btn-sm btn-square btn-primary mt-1 mb-1" onclick="editSchool({{ $school->id}})" data-toggle="modal" data-target="#updateSchool">update</button> 
+                    <form action="deleteschool/{{$school->id}}" method="post" class="dis-inline" style="display:inline">
+                        {{csrf_field()}}
                         {{method_field('DELETE')}}
                         <button type="submit" class="btn btn-sm btn-square btn-primary mt-1 mb-1">Delete</button>
                     </form>                                 

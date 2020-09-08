@@ -149,6 +149,12 @@ class SchoolMeetingController extends Controller
         });
 
         $members = $result['schoolMeeting']->boardMembers();
+        $details = [
+            'title'=>'mail from Ardhi university',
+            'body'=>'This for notifying of meeting issues'
+             ];
+        
+        \Mail::to($members)->send(new \App\Mail\MeetingCreated($details));
 
         return redirect('create_school_meeting')->with("output","School meeting created successfully!!");
     }

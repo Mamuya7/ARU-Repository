@@ -6,7 +6,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h2 class="modal-title" id="largeModalLabel">Modal title</h2>
+                <h2 class="modal-title" id="largeModalLabel">Update Department</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -59,6 +59,10 @@
         </div>
     </div>
 </div>
+
+<a href="{{ route('AddDepartment') }}">
+        <button class="btn btn-sm btn-square btn-primary mt-1 mb-1">add Department</button>
+</a>
 <div class="nav-wrapper">
     <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
         <li class="nav-item">
@@ -102,13 +106,12 @@
                                         <td>{{$department->department_name}}</td>
                                         <td>{{$department->department_code}}</td>
                                         <!-- <td>{{$department->school_name}}</td> -->
-                                        <td>   <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button>
-                                        </td>
-                                        <td>
-                                            <form action="/deletedepartment/{{$department->id}}" method="post">
+                                        <td>   
+                                            <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button>
+                                            <form action="/deletedepartment/{{$department->id}}" method="post" style="display:inline">
                                                 {{csrf_field()}}
                                                 {{method_field('DELETE')}} 
-                                                <button type="submit" class="btn btn-sm btn-square btn-danger mt-1 mb-1">Delete</button>
+                                                <button type="submit" class="btn btn-sm btn-square btn-primary mt-1 mb-1">Delete</button>
                                             </form>                                
                                         </td>
                                     </tr>
@@ -145,14 +148,11 @@
                                         <td>{{$department->department_code}}</td>
                                         <!-- <td>{{$department->directorate_name}}</td> -->
                                         <td> 
-                                          <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button> 
-                                        </td>
-
-                                        <td>
-                                            <form action="/deletedepartment/{{$department->id}}" method="post" class="dis-inline">
+                                            <button type="button" onclick="editDepartment({{$department->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDepartment">update</button> 
+                                            <form action="/deletedepartment/{{$department->id}}" method="post" class="dis-inline" style="display:inline">
                                                 {{csrf_field()}}
                                                 {{method_field('DELETE')}}
-                                                <button type="submit" class="btn btn-sm btn-square btn-danger mt-1 mb-1">Delete</button>
+                                                <button type="submit" class="btn btn-sm btn-square btn-primary mt-1 mb-1">Delete</button>
                                             </form>                                
                                         </td>
                                     </tr>

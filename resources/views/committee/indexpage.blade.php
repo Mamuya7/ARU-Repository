@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="col-xl-12">
+<a href="{{url('showsCommittee')}}">
+        <button class="btn btn-sm btn-square btn-primary mt-1 mb-1">add Committee</button>
+</a>
     <div class="card  shadow">
         <div class="card-header bg-transparent">
             <div class="row align-items-center">
@@ -27,16 +30,15 @@
                         <td>{{ $committee->committee_name }}</td>
                         <td>{{ $committee->committee_code }}</td>
                         <td>  
-                             <button type="button" onclick="showCommitteeMembers({{$committee->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1"  data-toggle="modal" data-target="#largeModal">Members</button>
-                             <button type="button" onclick="editCommittee({{$committee->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateRole">update</button> 
-                        </td>
-                         <td>
-                            <form action="/deleteCommitee/{{$committee->id}}" method="post" class="dis-inline">             
+                            <button type="button" onclick="showCommitteeMembers({{$committee->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1"  data-toggle="modal" data-target="#largeModal">Members</button>
+                            <button type="button" onclick="editCommittee({{$committee->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateRole">update</button>
+                            <form action="/deleteCommitee/{{$committee->id}}" method="post" class="dis-inline" style="display:inline">             
                                 {{csrf_field()}}
                                 {{method_field('DELETE')}}
                                 <button type="submit" class="btn btn-sm btn-square btn-primary mt-1 mb-1">Delete</button>
-                            </form>                                 
+                            </form>                                                                              
                         </td>
+
                     </tr>
                     @endforeach
                 </table>
@@ -53,7 +55,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 style="font-weight:bold;font-size:18px;align:center;">USERS FOUND IN THE COMMITTEE</h4>
+                <h4 style="font-weight:bold;font-size:18px;align:center;">COMMITTEE MEMBERS</h4>
                 <button type="button btn-primary" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -96,7 +98,8 @@
     <div class = "modal-dialog modal-md">
         <div class = "modal-content">
             <form id="update-committee" method="post">
-                <div class = "modal-header bg-gradient-cyan">      
+                <div class = "modal-header bg-primary"> 
+                    <h4>UPDATE COMMITTEE</h4>     
                     <button type = "button" class="close" data-dismiss = "modal">×</button>
                 </div>
                 <div class="modal-body">
@@ -121,7 +124,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-md btn-primary mt-1 mb-1" >update</button>
-                    <button type = "button" class = "btn btn-md btn-danger mt-1 mb-1" data-dismiss = "modal">Close</button>
+                    <button type = "button" class = "btn btn-md btn-primary mt-1 mb-1" data-dismiss = "modal">Close</button>
                 </div>
             </form> 
         </div>

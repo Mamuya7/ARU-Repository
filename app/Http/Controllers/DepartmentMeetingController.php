@@ -13,7 +13,7 @@ use App\Directorate;
 use App\DepartmentMeeting;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
-
+use Mail;
 class DepartmentMeetingController extends Controller
 {
     /**
@@ -73,7 +73,7 @@ class DepartmentMeetingController extends Controller
             array_push($resources["meetings"],$data);
             $data = [];
         }
-
+    
         if(Auth::User()->isCommitteeMember()){
             $committees = Auth::User()->getCommittees();
             
@@ -135,7 +135,7 @@ class DepartmentMeetingController extends Controller
             $meeting->user_id = Auth::User()->id;
 
             $meeting->save();
-    
+
             DepartmentMeeting::create([
                 "meeting_id" => $meeting->id,
                 "department_id" => Auth::User()->department_id,
@@ -145,6 +145,18 @@ class DepartmentMeetingController extends Controller
         });
 
         $members = Auth::User()->department->users;
+
+
+       // dd($members);
+        $details = [
+                'title'=>'mail from Ardhi university',
+                'body'=>'This for notifying of meeting issues'
+                 ];
+            
+               // $data = array('mankilla12345@gmail.com','kilango12345@gmail.com');
+            
+       \Mail::to($members)->send(new \App\Mail\MeetingCreated($details));
+        
 
         return redirect('create_department_meeting')->with("output","Department meeting created successfully!!");
     }

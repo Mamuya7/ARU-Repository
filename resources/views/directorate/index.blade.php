@@ -2,7 +2,9 @@
 
 @section('content')
 
-
+<a href="{{ route('registerDirectorateForm') }}">
+    <button class="btn btn-sm btn-square btn-primary mt-1 mb-1">add Directorate</button>
+</a>
 <div class="card  shadow">
     <div class="card-body ">               
         <div class="card-header bg-transparent border-bottom-0">
@@ -28,15 +30,13 @@
                         <td>{{$directorate->directorate_name}}</td>
                         <td>{{$directorate->directorate_code}}</td>
                         <td>{{$directorate->departments_count}}</td>
-                        <td>   <button type="button" onclick="editDirectorate({{$directorate->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDirectorate">update</button> 
-                        </td>
-                        <td>
-                                <form action="/deletedirectorate/{{$directorate->id}}" method="post" class="dis-inline">
-                                        {{csrf_field()}}
-                                        {{method_field('DELETE')}}
+                        <td>   
+                            <button type="button" onclick="editDirectorate({{$directorate->id}})" class="btn btn-sm btn-square btn-primary mt-1 mb-1" data-toggle="modal" data-target="#updateDirectorate">update</button> 
+                            <form action="/deletedirectorate/{{$directorate->id}}" method="post" class="dis-inline" style="display:inline">
+                                {{csrf_field()}}
+                                {{method_field('DELETE')}}
                                 <button type="submit" class="btn btn-sm btn-square btn-primary mt-1 mb-1">Delete</button>
                             </form>  
-
                         </td>
                     </tr>
                     @endforeach

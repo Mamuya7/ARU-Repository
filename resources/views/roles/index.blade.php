@@ -2,7 +2,11 @@
 
 @section('content')
 
+<a href="{{'registerRolesForm'}}">
+    <button class="btn btn-sm btn-square btn-primary mt-1 mb-1">register Role</button>
+</a>
 <div class="card  shadow">
+
     <div class="card-body ">               
         <div class="card-header bg-transparent border-bottom-0">
             <h2>REGISTERED ROLES</h2>

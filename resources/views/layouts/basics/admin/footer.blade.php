@@ -40,3 +40,5 @@
 
 <script src="{{ asset('ansta/plugins/sortable/jquery.sortable.js') }}"></script>
 <script src="{{ asset('ansta/plugins/sortable/jquery.sortable.min.js') }}"></script>
+
+<!--<script src="{{ asset('kiaalap/js/pdf/tab.js')}}"></script> -->

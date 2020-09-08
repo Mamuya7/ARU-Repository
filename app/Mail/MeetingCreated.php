@@ -10,15 +10,17 @@ use Illuminate\Queue\SerializesModels;
 class MeetingCreated extends Mailable
 {
     use Queueable, SerializesModels;
+    public $details;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+  
+    public function __construct($details)
     {
-        //
+        $this->details = $details;
     }
 
     /**
@@ -28,6 +30,6 @@ class MeetingCreated extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->from('kilango12345@gmail.com','Ramadhani Kilango')->subject('Mail from Ardhi university')-> view('email.meetingCreated');
     }
 }

@@ -137,13 +137,13 @@ class DepartmentsController extends Controller
     public function destroy(Department $departments)
     {
          DB::transaction(function() use($departments){
-            DB::table('users')->where('department_id',$departments->id)->delete(); 
+            DB::table('users')->where('department_id',$departments->id)->delete();           
+            DB::table('department_meeting')->where('department_id',$departments->id)->delete(); 
             DB::table('departments')->where('id',$departments->id)->delete(); 
         });
 
         return redirect()->route('showDepartment');
-
-        
+       
     }
     public function departmentStaff(Department $departments)
     {  

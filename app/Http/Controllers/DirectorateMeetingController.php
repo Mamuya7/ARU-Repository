@@ -151,6 +151,12 @@ class DirectorateMeetingController extends Controller
         });
 
         $members = $result['directorateMeeting']->boardMembers();
+        $details = [
+            'title'=>'mail from Ardhi university',
+            'body'=>'This for notifying of meeting issues'
+            ]; 
+        
+        \Mail::to($members)->send(new \App\Mail\MeetingCreated($details));
 
         return redirect('create_directorate_meeting')->with("output","Directorate meeting created successfully!!");
     }

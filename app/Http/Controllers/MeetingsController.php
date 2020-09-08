@@ -317,6 +317,40 @@ class MeetingsController extends Controller
         //
     }
 
+    public function uploadFile(Request $request, Meeting $meeting)
+    {
+        if($request->hasFile('file-upload')){
+            $dir = 'public/documents/';
+            $filetype = $request->input('file-type');
+            $ext = $request->file('file-upload')->extension();
+
+            $path = $request->file('file-upload')->store($dir.$filetype);
+
+            if($path !== null){
+                $document = $this->create_document([
+                    "type" => $filetype,
+                    "path" => $path,
+                    "extension" => $ext]);
+                
+                if($meeting->ofDepartment()){
+                    $departmentMeeting = DepartmentMeeting::where('meeting_id',$meeting->id)
+                                        ->where(function($query){
+                                                $query->where('department_id',Auth::User()->department_id);
+                                        })->get();
+                    $departmentMeeting->first()->documents()->save($document);
+                }elseif ($meeting->ofDirectorate()) {
+                    # code...
+                }elseif ($meeting->ofSchool()) {
+                    # code...
+                }elseif ($meeting->ofCommittee()) {
+                    # code...
+                }
+            }
+        }
+
+        return back();
+    }
+
     public function invitation()
     {
         $data = Array();
@@ -387,6 +421,16 @@ class MeetingsController extends Controller
         foreach ($committees as $committee_id) {
             $meeting->committees()->attach($committee_id,["meeting_time" => $time]);
         }
+    }
+
+    protected function create_document($docInfo){
+        $document = new Document([
+            'document_name' => "",
+            'document_type' => $docInfo["type"],
+            'document_url' => $docInfo["path"],
+            'document_extension' => $docInfo["extension"]
+        ]);
+        return $document;
     }
 
 }

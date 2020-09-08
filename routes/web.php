@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Mail;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +19,41 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('auth/login');
 });
+
+
+// Route::get('/send-mail', function () {
+//         $details = [
+//          'title'=>'mail from Ardhi university',
+//          'body'=>'This for notifying of meeting issues'
+//          ];
+
+//          $data = array('mankilla12345@gmail.com','kilango12345@gmail.com');
+         
+//              \Mail::to($data)->send(new \App\Mail\MeetingCreated($details));
+//              echo "email sent successiffully";
+       
+// });
+
+// \Mail::send(['text'=>'mail'], $details, function($message) {
+//     $message->to('mankilla12345@gmail.com', 'Kilango Ramadhani')->subject
+//        ('Laravel Basic Testing Mail');
+//     $message->from('kilango12345@gmail.com','Ramadhani Kilango');
+//  });
+//  echo "Basic Email Sent. Check your inbox.";
+
+
+
+
+
+    // $data = array('mankilla123452gmail.com','kilango123452gmail.com');
+   
+    // Mail::send(['email.meetingCreated'], $data, function($message) use($data){
+    //     // $message->from('');
+
+    //     $message->to($data)->subject('This is test e-mail'); 
+    // });
+
+
 
 Auth::routes();
 
@@ -193,6 +230,13 @@ Route::delete('deleteUser/{user}','UserController@destroy');
 Route::post('editUser/{user}','UserController@edit');
 Route::post('removeRole/{id}','UserController@removeRole');
 Route::post('fetch_all_users','UserController@fetch');
+Route::post('updateUser/{user}', 'UserController@update');
+
+
+
+//userProfile
+Route::get('viewProfile','UserController@userProfile');
+Route::post('updateProfile', 'UserController@updateProfile');
 
 //invitations
 Route::delete('delete_invitation/{invitation}','InvitationController@destroy');
