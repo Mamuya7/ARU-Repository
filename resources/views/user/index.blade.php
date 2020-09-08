@@ -107,20 +107,20 @@
                                                             
                                                         </table>
                                                     </div>
-                                                    @foreach($roles as $role)
-                                                    <div class="row p-2 m-1 bg-secondary">
+                                                    
+                                                    <!-- <div class="row p-2 m-1 bg-secondary">
                                                         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
                                                             <button class="btn btn-icon btn-success btn-sm pr-2 pl-2 pt-1 pb-1" type="button"
-                                                             value="{{ $role->id}}" onclick="addRole({{json_encode($role)}})">
+                                                             value="">
                                                                 <span class="btn-inner--icon"><i class="fe fe-chevrons-left"></i></span>
-                                                            </button>
+                                                            </button> -->
                                                             <!-- <span class="fas fa-angle-double-left pr-2 pl-2 pt-1 pb-1 bg-green text-white"></span> -->
-                                                        </div>
+                                                        <!-- </div>
                                                         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-9">
-                                                            <span>{{$role->role_name}}</span>
+                                                            <span></span>
                                                         </div>    
-                                                    </div>
-                                                    @endforeach
+                                                    </div> -->
+                                                    
                                                 </div>
                                         
                                             </div>
