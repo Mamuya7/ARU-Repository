@@ -13,10 +13,10 @@
                     <a class="nav-link mb-sm-3 mb-md-0 mt-md-2 mt-0 mt-lg-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false">
                         <i class="fas fa-user mr-2"></i>Members & Attendence</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link mb-sm-3 mb-md-0 show mt-md-2 mt-0 mt-lg-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="true">
                         <i class="far fa-images mr-2"></i>History</a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>
@@ -61,9 +61,12 @@
                                 <div class="col-lg-1">
                                     @if((!$resources['specificMeeting']->meeting->wasHeld()) && (Auth::User()->id == $resources['specificMeeting']->meeting->user_id))
                                     <div class="text-right p-2">
-                                        <span id="delete-icon" class="text-right fab">
-                                            <span class="fe fe-trash-2 text-xl round-p5-ardhi color-ardhi hover-ardhi shadow"></span>
-                                        </span>
+                                        <form id="del-mtng" action="{{url('delete_meeting').'/'.$resources['specificMeeting']->meeting->id}}" method="post">
+                                            @csrf
+                                            <!-- <span class="text-right fab">
+                                                <span id="delete-icon" class="fe fe-trash-2 text-xl round-p5-ardhi color-ardhi hover-ardhi shadow"></span>
+                                            </span> -->
+                                        </form>
                                     </div>
                                     @endif
                                 </div>
@@ -128,10 +131,15 @@
                                         <div class="col-lg-3">
                                             <div class="card shadow">
                                                 <div class="document card-body">
-                                                    <img src="{{ $document->icon($document->document_extension)}}" alt="document" />
-                                                    <span onclick="downloadfile({{json_encode($document)}},{{json_encode(url('downloadfile'))}})">
-                                                        <i class="fe fe-download"></i>
-                                                    </span>
+                                                    <form action="{{url('downloadfile').'/'.$document->id}}" method="post">
+                                                    @csrf
+                                                        <img src="{{ $document->icon($document->document_extension)}}" alt="document" />
+                                                        <button type="submit">
+                                                            <span>
+                                                                <i class="fe fe-download"></i>
+                                                            </span>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                                 <div class="card-footer p-1">
                                                     <h3 class="text-capitalize text-center">{{$document->document_type}}</h3>
@@ -374,12 +382,21 @@
                 </div>
             </div>
             <!-- End of attendence tab content -->
-            <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+            <!-- <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
                								
-            </div>
+            </div> -->
         </div>
         <!-- end tab-content -->
-
+                                        <!-- <div class="d-flex justify-content-around p-3">
+                                            <form action="{{url('navback').'/'.$resources['specificMeeting']->meeting->id}}" method="post">
+                                                @csrf
+                                                <button type="submit" class="btn btn-primary">Previous</button>
+                                            </form>
+                                            <form action="{{url('navnext').'/'.$resources['specificMeeting']->meeting->id}}" method="post">
+                                                @csrf
+                                                <button type="submit" class="btn btn-success">Next</button>
+                                            </form>
+                                        </div> -->
     </div>
 </div>
 
@@ -611,6 +628,10 @@
                 format: "yyyy/mm/dd"
             });
 
+            $('#delete-icon').click(function(){
+                $('#del-mtng').trigger('submit');
+            });
+
             $('#upload').click(function(){
                 let file = filetype();
                 if(file.isSet){
@@ -808,9 +829,20 @@
             });
 
         }
-
+        
+        function downloadURI(uri, name) 
+        {
+            var link = document.createElement("a");
+            // If you don't know the name or want to use
+            // the webserver default set name = ''
+            link.setAttribute('download', name);
+            link.href = uri;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        }
         const downloadfile = (document,path) => {
-            
+            // downloadURI(path,document.document_type);
             postdata(document,path,function(response){
                 console.log(response);
             });

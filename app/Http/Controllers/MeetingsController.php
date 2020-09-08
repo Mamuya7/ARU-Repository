@@ -150,13 +150,75 @@ class MeetingsController extends Controller
             $directorateMeeting = $meeting->directorateMeetings()->where('directorate_id',$directorate->id)->first();
             return redirect()->route('showDirectorateMeeting',[$directorateMeeting]);
         }elseif ($meeting->ofCommittee()) {
-            dd($meeting->committees);
+            // dd($meeting->committees);
         }
         $chair = $meeting->getChairman();
         $secr = $meeting->getSecretary();
 
         return view('meeting.show',["meeting" => $meeting, "members" => $members, "documents" => $documents,
          'chair' => $chair, 'secr' => $secr ] );
+    }
+    public function next(Meeting $meeting)
+    {
+        if($meeting->ofDepartment()){
+            $departmentMeeting = $meeting->departmentMeetings()->where(function($query) use($meeting){
+                $query->where('department_id',Auth::User()->department_id);
+                $query->whereDate('created_at','>',$meeting->meeting_date);
+            });
+            if($departmentMeeting->exists()){
+                return redirect()->route('showDepartmentMeeting',[$departmentMeeting->first()]);
+            }
+            return back()->with("response","No next meeting");
+        }elseif ($meeting->ofSchool()) {
+            $schoolMeeting = $meeting->schoolMeetings()->where('school_id',Auth::User()->school()->id)->first();
+            // return redirect('show_school_meeting/'.$schoolmeeting->id);
+            return redirect()->route('showSchoolMeeting',[$schoolMeeting]);
+        }elseif ($meeting->ofDirectorate()) {
+            $directorate = new Directorate;
+
+            if(Auth::User()->department->belongsToDirectorate()){
+                $directorate = Directorate::whereHas('departments',function(Builder $query){
+                        $query->where('id','=',Auth::User()->department_id);
+                    })->first();
+            }elseif(Auth::User()->department->belongsToSchool()){
+                $directorate = Directorate::withDirectorAs(Auth::User()->roles()->where('role_type','director')->first()->role_code);
+            }
+            $directorateMeeting = $meeting->directorateMeetings()->where('directorate_id',$directorate->id)->first();
+            return redirect()->route('showDirectorateMeeting',[$directorateMeeting]);
+        }elseif ($meeting->ofCommittee()) {
+            // dd($meeting->committees);
+        }
+    }
+    public function back(Meeting $meeting)
+    {
+        if($meeting->ofDepartment()){
+            $departmentMeeting = $meeting->departmentMeetings()->where(function($query) use($meeting){
+                $query->where('department_id',Auth::User()->department_id);
+                $query->whereDate('created_at','<',$meeting->meeting_date);
+            });
+            if($departmentMeeting->exists()){dd($departmentMeeting->get());
+                return redirect()->route('showDepartmentMeeting',[$departmentMeeting->first()]);
+            }
+            return back()->with("response","No next meeting");
+        }elseif ($meeting->ofSchool()) {
+            $schoolMeeting = $meeting->schoolMeetings()->where('school_id',Auth::User()->school()->id)->first();
+            // return redirect('show_school_meeting/'.$schoolmeeting->id);
+            return redirect()->route('showSchoolMeeting',[$schoolMeeting]);
+        }elseif ($meeting->ofDirectorate()) {
+            $directorate = new Directorate;
+
+            if(Auth::User()->department->belongsToDirectorate()){
+                $directorate = Directorate::whereHas('departments',function(Builder $query){
+                        $query->where('id','=',Auth::User()->department_id);
+                    })->first();
+            }elseif(Auth::User()->department->belongsToSchool()){
+                $directorate = Directorate::withDirectorAs(Auth::User()->roles()->where('role_type','director')->first()->role_code);
+            }
+            $directorateMeeting = $meeting->directorateMeetings()->where('directorate_id',$directorate->id)->first();
+            return redirect()->route('showDirectorateMeeting',[$directorateMeeting]);
+        }elseif ($meeting->ofCommittee()) {
+            // dd($meeting->committees);
+        }
     }
 
     /**
@@ -217,12 +279,12 @@ class MeetingsController extends Controller
             "roletypes" => Roles::select(['role_type'])->distinct('role_type')->get()
         ]);
     }
-    public function downloadFile(Request $request)
+    public function downloadFile(Request $request, Document $document)
     {
-        $document = $request->input('data');
+        // $document = $request->input('data');
         // echo json_encode(url('app/'.$document["document_url"]));url('ARU-Repository/storage/app/'.$document["document_url"])
         // $document["document_url"];
-        return response()->download(asset("public/agenda/dissertation cover.pdf"),$document["document_type"]);
+        return Storage::download($document->document_url,$document["document_type"].".".$document->document_extension);
         // echo json_encode(storage_path('app\\'.$document["document_url"]));
     }
 

@@ -22,9 +22,9 @@
                     @csrf
                     <div>
                         <label for="username">Username <span class="text-red">*</span></label>
-                        <input type="text" id="username" class="form-control @error('email') is-invalid @enderror"  name="username" required autocomplete="on" autofocus>
+                        <input type="text" id="username" class="form-control @error('username') is-invalid @enderror" value="{{old('username')}}"  name="username" required autocomplete="on" autofocus>
                     
-                        @error('email')
+                        @error('username')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -32,7 +32,7 @@
                     </div>
                     <div>
                         <label for="password">{{ __('Password') }} <span class="text-red">*</span></label>
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"  name="password" required autocomplete="current-password">
                     
                         @error('password')
                             <span class="invalid-feedback" role="alert">
@@ -42,7 +42,6 @@
                     </div>
                     <div>
                         <button type="submit" class="btn btn-primary">Login <span class="ion-locked"></span></button>
-                        <a href="#" class="btn btn-secondary text-black">Student's help <span class="ion-help-circled"></span></a>
                     </div>
                 </form>
             </div>

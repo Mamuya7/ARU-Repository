@@ -68,9 +68,11 @@ Route::get('view_general_meetings','MeetingsController@view')->name('viewGeneral
 Route::get('store_general_meetings','MeetingsController@store')->name('storeGeneralMeetings');
 Route::post('update_general_meeting/{meeting}','MeetingsController@update');
 Route::post('show_meeting/{meeting}','MeetingsController@show');
-Route::post('downloadfile','MeetingsController@downloadFile');
+Route::post('downloadfile/{document}','MeetingsController@downloadFile');
 Route::post('changesecretary/{meeting}','MeetingsController@changeSecretary');
 Route::post('invitation_details','MeetingsController@invitation');
+Route::post('navnext/{meeting}','MeetingsController@next');
+Route::post('navback/{meeting}','MeetingsController@back');
 
 Route::post('show_users','UsersController@show');
 
