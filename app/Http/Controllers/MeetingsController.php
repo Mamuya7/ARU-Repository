@@ -161,18 +161,35 @@ class MeetingsController extends Controller
     public function next(Meeting $meeting)
     {
         if($meeting->ofDepartment()){
-            $departmentMeeting = $meeting->departmentMeetings()->where(function($query) use($meeting){
-                $query->where('department_id',Auth::User()->department_id);
-                $query->whereDate('created_at','>',$meeting->meeting_date);
-            });
-            if($departmentMeeting->exists()){
-                return redirect()->route('showDepartmentMeeting',[$departmentMeeting->first()]);
+            $next = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
+                ->where('meetings.meeting_date','>',$meeting->meeting_date)
+                ->where(function($query){
+                    $query->where("meetings.meeting_type","department");
+                    $query->where("department_meeting.department_id",'=',Auth::User()->department->id);
+                })->orderBy('meetings.meeting_date','asc');
+            
+            if($next->exists()){
+                $departmentMeeting = DepartmentMeeting::find($next->first()->id);
+                return redirect()->route('showDepartmentMeeting',[$departmentMeeting]);
             }
-            return back()->with("response","No next meeting");
+            return back()->with("backresponse","No Next Meeting");
         }elseif ($meeting->ofSchool()) {
-            $schoolMeeting = $meeting->schoolMeetings()->where('school_id',Auth::User()->school()->id)->first();
-            // return redirect('show_school_meeting/'.$schoolmeeting->id);
-            return redirect()->route('showSchoolMeeting',[$schoolMeeting]);
+            $sch_id = School::whereHas('departments',function(Builder $query){
+                $query->where('id','=',Auth::User()->department_id);
+            })->first()->id;
+
+            $next = DB::table('meetings')->join('school_meetings','meetings.id','=','school_meetings.meeting_id')
+            ->where('meetings.meeting_date','>',$meeting->meeting_date)
+            ->where(function($query)use($sch_id){
+                $query->where("meetings.meeting_type","school");
+                $query->where("school_meetings.school_id",'=',$sch_id);
+            })->orderBy('meetings.meeting_date','asc');
+
+            if($next->exists()){
+                $schoolMeeting = SchoolMeeting::find($next->first()->id);
+                return redirect()->route('showSchoolMeeting',[$schoolMeeting]);
+            }
+            return back()->with("nextresponse","No Next Meeting");
         }elseif ($meeting->ofDirectorate()) {
             $directorate = new Directorate;
 
@@ -192,18 +209,36 @@ class MeetingsController extends Controller
     public function back(Meeting $meeting)
     {
         if($meeting->ofDepartment()){
-            $departmentMeeting = $meeting->departmentMeetings()->where(function($query) use($meeting){
-                $query->where('department_id',Auth::User()->department_id);
-                $query->whereDate('created_at','<',$meeting->meeting_date);
-            });
-            if($departmentMeeting->exists()){dd($departmentMeeting->get());
-                return redirect()->route('showDepartmentMeeting',[$departmentMeeting->first()]);
+            $previous = DB::table('meetings')->join('department_meeting','meetings.id','=','department_meeting.meeting_id')
+            ->where('meetings.meeting_date','<',$meeting->meeting_date)
+            ->where(function($query){
+                $query->where("meetings.meeting_type","department");
+                $query->where("department_meeting.department_id",'=',Auth::User()->department->id);
+            })->orderBy('meetings.meeting_date','desc');
+            
+            if($previous->exists()){
+                $departmentMeeting = DepartmentMeeting::find($previous->first()->id);
+            
+                return redirect()->route('showDepartmentMeeting',[$departmentMeeting]);
             }
-            return back()->with("response","No next meeting");
+            return back()->with("nextresponse","No Earlier Meeting");
         }elseif ($meeting->ofSchool()) {
-            $schoolMeeting = $meeting->schoolMeetings()->where('school_id',Auth::User()->school()->id)->first();
-            // return redirect('show_school_meeting/'.$schoolmeeting->id);
-            return redirect()->route('showSchoolMeeting',[$schoolMeeting]);
+            $sch_id = School::whereHas('departments',function(Builder $query){
+                $query->where('id','=',Auth::User()->department_id);
+            })->first()->id;
+
+            $previous = DB::table('meetings')->join('school_meetings','meetings.id','=','school_meetings.meeting_id')
+            ->where('meetings.meeting_date','<',$meeting->meeting_date)
+            ->where(function($query)use($sch_id){
+                $query->where("meetings.meeting_type","school");
+                $query->where("school_meetings.school_id",'=',$sch_id);
+            })->orderBy('meetings.meeting_date','desc');
+
+            if($previous->exists()){
+                $schoolMeeting = SchoolMeeting::find($previous->first()->id);
+                return redirect()->route('showSchoolMeeting',[$schoolMeeting]);
+            }
+            return back()->with("nextresponse","No Earlier Meeting");
         }elseif ($meeting->ofDirectorate()) {
             $directorate = new Directorate;
 

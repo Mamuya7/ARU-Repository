@@ -24,4 +24,8 @@ class CommitteeMeeting extends Model
     {
         return $this->morphMany('App\Attendence','attendenceable');
     }
+    public function invitations()
+    {
+        return $this->morphMany('App\Invitation','invitationable');
+    }
 }

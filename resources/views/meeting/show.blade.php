@@ -28,6 +28,16 @@
                         <span class="text-white text-capitalize">{{Session::get('response')}}</span>
                 </div>
                 @endif
+                @if(Session::has('nextresponse'))
+                <div id="response" class="bg-danger p-1 text-center">
+                        <span class="text-white text-capitalize">{{Session::get('nextresponse')}}</span>
+                </div>
+                @endif
+                @if(Session::has('backresponse'))
+                <div id="response" class="bg-danger p-1 text-center">
+                        <span class="text-white text-capitalize">{{Session::get('backresponse')}}</span>
+                </div>
+                @endif
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12">
                         <form action="{{url('update_general_meeting/'.$resources['specificMeeting']->meeting_id)}}" method="post">
@@ -387,16 +397,16 @@
             </div> -->
         </div>
         <!-- end tab-content -->
-                                        <!-- <div class="d-flex justify-content-around p-3">
-                                            <form action="{{url('navback').'/'.$resources['specificMeeting']->meeting->id}}" method="post">
-                                                @csrf
-                                                <button type="submit" class="btn btn-primary">Previous</button>
-                                            </form>
-                                            <form action="{{url('navnext').'/'.$resources['specificMeeting']->meeting->id}}" method="post">
-                                                @csrf
-                                                <button type="submit" class="btn btn-success">Next</button>
-                                            </form>
-                                        </div> -->
+        <div class="d-flex justify-content-around p-3">
+            <form action="{{url('navback').'/'.$resources['specificMeeting']->meeting->id}}" method="post">
+                @csrf
+                <button type="submit" class="btn btn-primary">Previous</button>
+            </form>
+            <form action="{{url('navnext').'/'.$resources['specificMeeting']->meeting->id}}" method="post">
+                @csrf
+                <button type="submit" class="btn btn-success">Next</button>
+            </form>
+        </div>
     </div>
 </div>
 
