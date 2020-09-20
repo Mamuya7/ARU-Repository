@@ -608,9 +608,6 @@
         </div>
     </div>
 </div>
-<input type="button" value="" id="alert-type" hidden>
-<input type="button" value="" id="alert-title" hidden>
-<input type="button" value="" id="alert-timer" hidden>
 @endsection
 
 @section('scripts')

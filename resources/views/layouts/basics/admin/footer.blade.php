@@ -33,12 +33,17 @@
 <script src="{{ asset('ansta/plugins/peitychart/jquery.peity.min.js') }}"></script>
 <script src="{{ asset('ansta/plugins/peitychart/peitychart.init.js') }}"></script>
 
+<!-- Sweet alert Plugin -->
+<script src="{{ asset('ansta/plugins/sweet-alert/sweetalert.min.js')}}"></script>
+<script src="{{ asset('ansta/js/sweet-alert.js')}}"></script>
+
 <!-- Ansta JS -->
 <script src="{{ asset('ansta/js/custom.js') }}"></script>
-
-<script src="{{ asset('ansta/plugins/sweet-alert/sweetalert.min.js') }}"></script>
 
 <script src="{{ asset('ansta/plugins/sortable/jquery.sortable.js') }}"></script>
 <script src="{{ asset('ansta/plugins/sortable/jquery.sortable.min.js') }}"></script>
 
 <!--<script src="{{ asset('kiaalap/js/pdf/tab.js')}}"></script> -->
+
+<!-- Staff JS -->
+<script src="{{ asset('js/staff.js') }}"></script>

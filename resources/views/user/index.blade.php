@@ -57,81 +57,43 @@
     </div>
     {{ $user->links() }}
 
-    <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade modal-xl" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h2 class="modal-title" id="largeModalLabel">ASSIGN USER ROLES</h2>
                         <button type = "button" class="close" data-dismiss = "modal">×</button>
                     </div>
-             
+                        <input type="text" id="user_id" value="" hidden>
                         <div class="modal-body">
-                            
                                 <div class="row" style="margin-top:40px"> 
-                            
                                     <div class="col-md-6 col-lg-6">
                                         <div class="card  shadow">
-                                            <div class="table-responsive table-primary">
-                                                <table class="table card-table text-nowrap">
-                                                    <tr class="border-bottom">
-                                                        <!-- <th></th> -->
-                                                        <th>User Roles</th>
-                                                    </tr>
-                                                    <tbody id='tabe-data'>
-                                                
-                                                    </tbody>
-                                            
-                                                </table>
+                                            <div class="card-header">
+                                                <h2>User Roles</h2>
                                             </div>
-                                            <div id="user-roles">
-                                            </div>
+                                            <form action="assignRole" method="post" id="assign-form">
+                                                @csrf
+                                                <div class="card-body" id="user-roles">
+                                                </div>
+                                            </form> 
                                         </div>
                                     </div>
-
-
                                     <div class="col-md-6 col-lg-6">
-                                        <form action="assignRole" method="post" id="assign-form">
-                                            @csrf
-                                            <div class="card shadow">                                  
-                                                <div class="card-body">
-                                                    <h4 class="card-title">All Roles</h4>
-                                                    <div class="table-responsive">
-                                                        <table class="table card-table text-nowrap" style="height: 250px;overflow: auto;">   
-                                                        <input type="text" name="userId" id="user_details" value="$user->id" hidden>
-                                                            @foreach($roles as $role)
-                                                                <tr class="border-bottom">
-                                                                    <td><input type="checkbox" name="roles[]" value="{{ $role->id}}" id="check-box"></td>
-                                                                    <td id="check-click">{{ $role->role_name}}</td>    
-                                                                </tr>
-                                                            @endforeach 
-                                                            
-                                                        </table>
-                                                    </div>
-                                                    
-                                                    <!-- <div class="row p-2 m-1 bg-secondary">
-                                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
-                                                            <button class="btn btn-icon btn-success btn-sm pr-2 pl-2 pt-1 pb-1" type="button"
-                                                             value="">
-                                                                <span class="btn-inner--icon"><i class="fe fe-chevrons-left"></i></span>
-                                                            </button> -->
-                                                            <!-- <span class="fas fa-angle-double-left pr-2 pl-2 pt-1 pb-1 bg-green text-white"></span> -->
-                                                        <!-- </div>
-                                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-9">
-                                                            <span></span>
-                                                        </div>    
-                                                    </div> -->
-                                                    
-                                                </div>
-                                        
+                                        <div class="card  shadow">
+                                            <div class="card-header">
+                                                <h2>Roles</h2>
                                             </div>
-                                        </form> 
+                                            <div class="card-body" id="other-roles">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                             
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="assign-btn">Assign Role</button>
+                            <button type="button" class="btn btn-primary" id="assign-btn">Assign</button>
                         </div>
                 </div>
             </div>
@@ -223,135 +185,7 @@
         </div>
     </div>
 
-    
-
     <script>
-
-
-        function editUser(id){
-
-            $.ajax({
-                url: '/editUser/'+id,
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                },
-                dataType: 'json',
-                success:function(response){
-                     console.log(response);
-                    
-                    
-
-                        $('#first_name').val(response.first_name);
-                        $('#email').val(response.email);
-                        $('#last_name').val(response.last_name);
-                        $('#gender').val(response.gender);
-                        // $('#department').val(response.department_name);
-                        $('#department').val(response.department_id);
-                        // $(this).children("option:selected").val();
-
-
-                        $('#update-user').attr('action',"updateUser/"+response.id);
-
-                        
-                        
-              
-                
-                },
-                error:function(xhr,status,err){
-                    console.log(err);
-                }
-        });
-        }
-
-    
-
-        function displayRole(id){
-
-            $.ajax({
-                url: '/getUserRole/'+id,
-                type: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                },
-                dataType: 'json',
-                success:function(response){
-                    // console.log(response);
-                    displayUserRoles(response);
-                    
-                },
-                error:function(xhr,status,err){
-                    console.log(err);
-                }
-            });
-
-        }
-
-        function displayUserRoles(data){
-             $('#user_details').val(data.users); 
-            var list ="";
-            data.roles.forEach(role => {
-
-                list+="<tr id='role"+role.id+"'>";
-                // list+="<td id='user-role'><input type='checkbox' name='' value='"+role.id+"'></td>";
-                list+="<td >"+role.role_name+"</td>";   
-                list+="<td><button type='button' onclick='unAssignRole("+role.id+")' class='btn btn-rol btn-primary'>un Assign</button></td>";
-                list+="</tr>";
-                
-            });
-            $('#tabe-data').empty();
-            $('#tabe-data').append(list);
-      
-        }
-
-        function unAssignRole(id){
-         var userId = $('#user_details').val();
-            $("#role"+id).remove();
-            $.ajax({
-                url: '/removeRole/'+id,
-                type: 'POST',
-                data:{
-                    userID : userId
-                },
-                headers: {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                },
-                dataType: 'json',
-                success:function(response){
-                     console.log(response);
-                                   
-                },
-                error:function(xhr,status,err){
-                    console.log(err);
-                }
-            });
-        }
-
-        $('#check-clck').click(function(){
-            // $('#check-box').checked = true;
-            $("#check-box").click(function(){
-                $("#myCheck").prop("checked", true);
-            });
-        })
-        
-
-        $('#assign-btn').click(function(){
-            $('#assign-form').trigger("submit");
-
-            // var id = $('#user_details').val();
-            // var selected = [];
-            // $('#check-box:checked').each(function() {
-            //     selected.push($(this).attr('value'));
-            // });
-        });
-        const addRole = (role) =>{
-            let list = createRoleList(role,"add");
-            $('#user-roles').append(list);
-        }
-        const removeRole = (role) =>{
-            console.log(role);
-            let list = createRoleList(role,"remove");
-        }
         const ajaxPost = (path,valuedata,method) =>{
             $.ajax({
                 url: path,
@@ -369,8 +203,94 @@
                 }
             });
         }
+        const ajaxGet = (path,valuedata,method) =>{
+            $.ajax({
+                url: path,
+                type: 'get',
+                data:valuedata,
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success:function(response){
+                    method(response);
+                },
+                error:function(xhr,status,err){
+                    console.log(err);
+                }
+            });
+        }
+        function editUser(id){
+            ajaxPost('/editUser/'+id,null,function(response){
+                $('#first_name').val(response.first_name);
+                $('#email').val(response.email);
+                $('#last_name').val(response.last_name);
+                $('#gender').val(response.gender);
+                // $('#department').val(response.department_name);
+                $('#department').val(response.department_id);
+                // $(this).children("option:selected").val();
+
+                $('#update-user').attr('action',"updateUser/"+response.id);
+            });
+        }
+
+        function displayRole(id){
+            $('#user_id').val(id);
+            ajaxGet('/getUserRole/'+id,null,function(response){
+                var userroles ="", otherroles ="";
+                response.roles.forEach(role => {
+                    userroles += createRoleList(role,"add");
+                });
+                response.otherroles.forEach(role => {
+                    otherroles += createRoleList(role,"remove");
+                });
+                $('#other-roles').empty();
+                $('#other-roles').append(otherroles);
+
+                $('#user-roles').empty();
+                $('#user-roles').append(userroles);
+            });
+        }
+
+        $('#check-clck').click(function(){
+            // $('#check-box').checked = true;
+            $("#check-box").click(function(){
+                $("#myCheck").prop("checked", true);
+            });
+        })
+        
+
+        $('#assign-btn').click(function(){
+            let userroles = [];
+            let user_id = $('#user_id').val();
+
+            $('#user-roles').find('button').each(function(){
+                userroles.push(eval($(this).val()));
+            });
+
+            ajaxPost('assign_user_role/'+user_id,{"roles_id":userroles},function(response){
+                showSuccess("Roles Assigned Successfully");
+                clearAlert();
+            });
+        });
+
+        const addRole = (id,name) =>{
+            let list = createRoleList({"id":id, "role_name": name},"add");
+            $('#role'+id).fadeOut("slow",function(){
+                $(this).remove();
+            });
+            $('#user-roles').append(list);
+        }
+        const removeRole = (id,name) =>{
+            let list = createRoleList({"id":id, "role_name": name},"remove");
+            $('#role'+id).fadeOut("slow",function(){
+                $(this).remove();
+            });
+            $('#other-roles').append(list);
+        }
+        
         const createRoleList = (role,type) =>{
-            let list = '<div class="row p-2 m-1 bg-secondary">';
+            let list = '<div id="role'+role.id+'" class="row p-2 m-1 bg-secondary">';
 
             let listname = '<div class="col-lg-10 col-md-10 col-sm-10 col-xs-9">';
                 listname += '<span>' + role.role_name + '</span>';
@@ -395,11 +315,11 @@
                 listbtn += '<button class="btn btn-icon';
                 if (type == "add") {
                     listbtn += ' btn-danger btn-sm pr-2 pl-2 pt-1 pb-1" type="button" value="'+role.id+'"';
-                    listbtn += ' onclick="removeRole({{json_encode('+role)+')}})">';
+                    listbtn += ' onclick="removeRole('+role.id+',\''+role.role_name+'\')">';
                     listbtn += '<span class="btn-inner--icon"><i class="fe fe-x"></i></span>';
                 }else if(type == "remove"){
                     listbtn += ' btn-success btn-sm pr-2 pl-2 pt-1 pb-1" type="button" value="'+role.id+'"';
-                    listbtn += ' onclick="addRole({{json_encode('+role)+')}})">';
+                    listbtn += ' onclick="addRole('+role.id+',\''+role.role_name+'\')">';
                     listbtn += '<span class="btn-inner--icon"><i class="fe fe-chevrons-left"></i></span>';
                 }
                 listbtn += '</button>';
@@ -409,49 +329,3 @@
     </script>
 
 @endsection
-								
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--                                 
-    <script>
-            
-            $(document).ready(function(){
-                $("#sortable1, #sortable2").sortable({
-                    connectWith: ".connectedSortable"
-                });
-            });
-    
-            function displayRole(id){
-    
-                $.ajax({
-                    url: '/getUserRole/'+id,
-                    type: 'GET',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
-                    },
-                    dataType: 'json',
-                    success:function(response){
-                        DisplayUserRoles(response);
-                        
-                    },
-                    error:function(xhr,status,err){
-                        console.log(err);
-                    }
-                });
-    
-            }
-    
-            
-    
-    </script> -->
