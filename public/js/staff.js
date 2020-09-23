@@ -31,6 +31,7 @@ const showSuccess = (message) => {
         type: 'success',
         timer: 2500
     });
+    $('#but4').trigger('click');
 }
 const showFailure = (message) => {
     setAlert({
@@ -39,10 +40,14 @@ const showFailure = (message) => {
         type: 'danger',
         timer: 3500
     });
+    $('#but4').trigger('click');
 }
 const clearAlert = () => {
     $("#alert-title").val("");
     $("#alert-message").val("");
     $("#alert-type").val("");
     $("#alert-timer").val("");
+}
+const showAlert = () => {
+    $('#but4').trigger('click');
 }

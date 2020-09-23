@@ -223,9 +223,9 @@ Route::post('directorate_staff/{directorate}','DirectoratesController@directorat
 
 
 //users
-Route::get('getUserRole/{id}','UserController@show')->name('getUserRole');
+Route::get('getUserRole/{user}','UserController@show')->name('getUserRole');
 Route::get('viewUsers','UserController@index')->name('view-Users');
-Route::post('assignRole', 'UserController@store');
+Route::post('assign_user_role/{user}', 'UserController@store');
 Route::delete('deleteUser/{user}','UserController@destroy');
 Route::post('editUser/{user}','UserController@edit');
 Route::post('removeRole/{id}','UserController@removeRole');

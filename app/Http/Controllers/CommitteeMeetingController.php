@@ -47,14 +47,34 @@ class CommitteeMeetingController extends Controller
     public function show(CommitteeMeeting $committeeMeeting)
     {
         $roles = $committeeMeeting->committee->roles();
+        $invitees = $committeeMeeting->invitations;
+        $attendence = $committeeMeeting->attendences;
+        $members = Array(); $invitations = Array();
         $chairman = ($roles->where("position","chairman")->count() > 0)? $roles->where("position","chairman")->first()->user->first(): null;
         $secretary = ($roles->where("position","secretary")->count() > 0)? $roles->where("position","secretary")->first()->user->first(): null;
         
-        
-        $members = Array();
         foreach ($committeeMeeting->committee->committeeUsers() as $user) {
             $data = array("profile" => $user, "attendence" => null);
+            if(sizeof($attendence) > 0){
+                foreach ($attendence as $value) {
+                    if($value->user_id == $user->id){
+                        $data["attendence"] = $value->status;
+                        break;
+                    }
+                }
+            }
             array_push($members,$data);
+        }
+        if(sizeof($invitees) > 0){
+            foreach ($invitees as $value) {
+                $data = array(
+                    "profile" => User::find($value->user_id), 
+                    "role" => Roles::find($value->role_id), 
+                    "invitation" => $value
+                );
+                
+                array_push($invitations,$data);
+            }
         }
 
         return view('meeting.show',[ 
@@ -64,6 +84,7 @@ class CommitteeMeetingController extends Controller
                 "members" => $members,
                 "specificMeeting" => $committeeMeeting,
                 "documents" => $committeeMeeting->documents,
+                "invites" => $invitations,
                 "urls" => [
                     "change_secretary" => "change_committee_meeting_secretary",
                     "set_attendence" => json_encode(url("set_committee_meeting_attendence/".$committeeMeeting->id)),

@@ -90,7 +90,10 @@
     		@endauth
 		</div>
 	</div>
-	<input type="button" id="but4" value="">
+	<input type="button" id="but4" value="" hidden>
+	<input type="button" value="" id="alert-type" hidden>
+	<input type="button" value="" id="alert-title" hidden>
+	<input type="button" value="" id="alert-timer" hidden>
     @include('layouts.basics.staff.footer')
 
 	@if(View::hasSection('scripts'))

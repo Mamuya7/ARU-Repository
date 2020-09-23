@@ -64,15 +64,15 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, User $user)
     {
-        $userId = $request->input('userId');
-        $roleId = $request->input('roles');
+        // $userId = $request->input('userId');
+        $roleId = $request->input('roles_id');
 
-        User::find($userId)->roles()->attach($roleId);
+        $user->roles()->sync($roleId);
 
-        return redirect('viewUsers');
-        
+        // return redirect('viewUsers');
+        echo json_encode($user->roles);
             // echo json_encode("Role inserted successifully");
         
         // return redirect('viewUsers');
@@ -85,12 +85,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {   
-        $user = $id;
-        $roles = User::find($id)->roles;
-        $role = DB::table('roles')->get();
-        echo json_encode(['roles'=>$roles,'users'=>$user]);
+        $userroles = $user->roles;
+
+        $otherroles = Roles::all()->except($user->roles()->pluck("role_id")->toArray());
+
+        echo json_encode(['roles'=>$userroles,'otherroles' => $otherroles,'users'=>$user]);
     
         // return view('department/index',['departments' => $departments])
     }
