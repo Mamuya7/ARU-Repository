@@ -67,8 +67,7 @@
              
                         <div class="modal-body">
                             
-                                <div class="row" style="margin-top:40px"> 
-                            
+                                <div class="row" style="margin-top:40px">                          
                                     <div class="col-md-6 col-lg-6">
                                         <div class="card  shadow">
                                             <div class="table-responsive table-primary">
