@@ -188,9 +188,13 @@ class UserController extends Controller
         $roles = DB::table('roles')->get();
         $departments = DB::table('departments')->get();
 
-
-        return view('profile.staffProfile',['user' => $users,'roles'=>$roles,'departments'=>$departments]);
-
+        if(Auth::User()->hasRoleType('system administrator')){
+             return view('profile.staffProfile',['user' => $users,'roles'=>$roles,'departments'=>$departments]);
+        }
+        else{
+             return view('profile.staffAllProfile',['user' => $users,'roles'=>$roles,'departments'=>$departments]);
+        }
+       
     }
 
     public function updateProfile(Request $request)
